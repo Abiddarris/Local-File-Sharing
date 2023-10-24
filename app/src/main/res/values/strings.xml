@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Local File Sharing</string>
+    <string name="edit">Edit</string>
+    <string name="create_folder">Create Folder</string>
+    <string name="sort">Sort</string>
+    <string name="settings">Settings</string>
+    <string name="general">General</string>
+    <string name="theme">Theme</string>
+    <string name="theme_pref_key">theme</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
+    <string name="follow_system">Follow System</string>
+    <string name="scan">Scan</string>
+    <string name="home">Home</string>
+    <string name="start_share">Start Share</string>
+    <string name="stop_share">Stop Share</string>
+    <string name="start_scan">Start Scan</string>
+    <string name="stop_scan">Stop Scan</string>
+    <string name="files">Files</string>
+    <string name="add">Add</string>
+    <string name="root_files">Main Files</string>
+    <string name="upload">Upload</string>
+    
+</resources>
