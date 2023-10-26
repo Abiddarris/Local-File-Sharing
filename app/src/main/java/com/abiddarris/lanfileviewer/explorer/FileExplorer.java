@@ -6,6 +6,7 @@ import android.net.Network;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.abiddarris.lanfileviewer.file.File;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,8 @@ public class FileExplorer {
     final NavigateMode navigateMode = new NavigateMode(this);
     final SelectMode selectMode = new SelectMode(this);
 
-    private ActionGroup actionGroup;
     private BaseExplorerFragment fragment;
+    private BottomNavigationProvider provider;
     private File parent;
     private FileAdapter adapter;
     private int targetCount;
@@ -23,9 +24,9 @@ public class FileExplorer {
     private Mode mode = navigateMode;
     private SwipeRefreshLayout refresher;
 
-    public FileExplorer(BaseExplorerFragment fragment, ActionGroup actionGroup, SwipeRefreshLayout refresher) {
+    public FileExplorer(BaseExplorerFragment fragment, BottomNavigationProvider provider, SwipeRefreshLayout refresher) {
         this.fragment = fragment;
-        this.actionGroup = actionGroup;
+        this.provider = provider;
         this.refresher = refresher;
 
         adapter = new FileAdapter(this);
@@ -107,8 +108,8 @@ public class FileExplorer {
         adapter.notifyDataSetChanged();
     }
 
-    public ActionGroup getActionGroup() {
-        return this.actionGroup;
+    public BottomNavigationProvider getButtomNavigation() {
+        return provider;
     }
 
     public Context getContext() {

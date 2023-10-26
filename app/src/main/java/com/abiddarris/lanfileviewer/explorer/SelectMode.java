@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Set;
 import kotlin.jvm.internal.Lambda;
 
-public class SelectMode extends Mode implements TopNavigationView.Callback {
+public class SelectMode extends Mode implements ActionMode.Callback {
     
-    private TopNavigationView view;
+    private ActionMode view;
     private boolean programaticlyEvent;
     private Set<File> checked = new HashSet<>();
     private LayoutSelectBinding actionModeLayout;
@@ -36,13 +36,11 @@ public class SelectMode extends Mode implements TopNavigationView.Callback {
     public void onModeSelected() {
         super.onModeSelected();
         
-        getExplorer().getFragment()
-            .showTopNavigationView(this);
         Context context = getExplorer().getContext();
         AppCompatActivity compat = (AppCompatActivity)context;
         compat.startSupportActionMode(this);
         
-        getExplorer().getActionGroup()
+        getExplorer().getButtomNavigation()
             .show();
     }
     
@@ -90,15 +88,38 @@ public class SelectMode extends Mode implements TopNavigationView.Callback {
         super.onModeDeselected();
         
         checked.clear();
-        getExplorer().getActionGroup()
+        getExplorer().getButtomNavigation()
             .hide();
+        
         view.finish();
         view = null;
     }
     
+    public void select(int pos) {
+    	File file = getExplorer().getAdapter().get(pos);
+        checked.add(file);
+    }
+    
+    private void updateActionModeView() {
+        CheckBox selectAll = actionModeLayout.selectAll;
+        
+        boolean check = checked.size() == getExplorer().getAdapter().getItemCount();
+        if(check != selectAll.isChecked()) {
+            programaticlyEvent = true;
+            selectAll.setChecked(check);
+        }
+        
+        if(checked.size() == 0) {
+            selectAll.setText(" Select item");
+        } else {
+            selectAll.setText(checked.size() + " selected");
+        }
+    }
+    
+
     @Override
-    public void onShow(TopNavigationView nav) {
-        this.view = nav;
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        this.view = mode;
         
         LayoutInflater inflater = LayoutInflater.from(getExplorer().getContext());
         View view = inflater.inflate(R.layout.layout_select, null);
@@ -124,33 +145,28 @@ public class SelectMode extends Mode implements TopNavigationView.Callback {
             adapter.notifyDataSetChanged();
         });
         
-        nav.setCustomView(view);
+        this.view.setCustomView(view);
+        
+        
+        return true;
     }
     
+
     @Override
-    public void onHide(TopNavigationView view) {
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+    
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem menu) {
+        return false;
+    }
+    
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
         getExplorer().setMode(getExplorer().navigateMode);
-    }
-    
-    public void select(int pos) {
-    	File file = getExplorer().getAdapter().get(pos);
-        checked.add(file);
-    }
-    
-    private void updateActionModeView() {
-        CheckBox selectAll = actionModeLayout.selectAll;
-        
-        boolean check = checked.size() == getExplorer().getAdapter().getItemCount();
-        if(check != selectAll.isChecked()) {
-            programaticlyEvent = true;
-            selectAll.setChecked(check);
-        }
-        
-        if(checked.size() == 0) {
-            selectAll.setText(" Select item");
-        } else {
-            selectAll.setText(checked.size() + " selected");
-        }
     }
     
 }

@@ -1,37 +1,7 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/LocalExplorerFragment.java",
-      "selection": {
-        "end": {
-          "column": 49,
-          "index": -1,
-          "line": 17
-        },
-        "start": {
-          "column": 49,
-          "index": -1,
-          "line": 17
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/dialog/LocalExplorerDialog.java",
-      "selection": {
-        "end": {
-          "column": 22,
-          "index": -1,
-          "line": 28
-        },
-        "start": {
-          "column": 22,
-          "index": -1,
-          "line": 28
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/FileExplorer.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/BottomNavigationProvider.java",
       "selection": {
         "end": {
           "column": 0,
@@ -49,47 +19,32 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/NetworkExplorerFragment.java",
       "selection": {
         "end": {
-          "column": 0,
+          "column": 12,
           "index": -1,
-          "line": 0
+          "line": 41
         },
         "start": {
-          "column": 0,
+          "column": 12,
           "index": -1,
-          "line": 0
+          "line": 41
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/ActionModeNavigationView.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/upload/UploadBottomNavigationProvider.java",
       "selection": {
         "end": {
-          "column": 0,
+          "column": 13,
           "index": -1,
-          "line": 0
+          "line": 18
         },
         "start": {
-          "column": 0,
+          "column": 13,
           "index": -1,
-          "line": 0
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/TopNavigationView.java",
-      "selection": {
-        "end": {
-          "column": 0,
-          "index": -1,
-          "line": 0
-        },
-        "start": {
-          "column": 0,
-          "index": -1,
-          "line": 0
+          "line": 18
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/TopNavigationView.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/upload/UploadBottomNavigationProvider.java"
 }

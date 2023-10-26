@@ -24,6 +24,7 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.network.NetworkFile;
 import com.abiddarris.lanfileviewer.file.network.NetworkFileClient;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gretta.util.log.Log;
 
 public abstract class BaseExplorerFragment extends Fragment {
@@ -50,7 +51,7 @@ public abstract class BaseExplorerFragment extends Fragment {
         
         binding = FragmentFileExplorerBinding.bind(view);
         
-        explorer = new FileExplorer(getContext(), new ActionGroup(binding.bottomAction), binding.refreshlayout);
+        explorer = new FileExplorer(this, getNavigationProvider(binding.bottomAction), binding.refreshlayout);
         explorer.open(root);
        
         binding.filesList.setAdapter(explorer.getAdapter());
@@ -97,9 +98,11 @@ public abstract class BaseExplorerFragment extends Fragment {
         }
     }
     
-    public abstract FileSource getSource();
+    public BottomNavigationProvider getNavigationProvider(BottomNavigationView view) {
+    	return new BottomNavigationProvider(view);
+    }
     
-    public abstract void showTopNavigationView(TopNavigationView.Callback callback);
+    public abstract FileSource getSource();
     
     public class OnBackPressed extends OnBackPressedCallback {
 

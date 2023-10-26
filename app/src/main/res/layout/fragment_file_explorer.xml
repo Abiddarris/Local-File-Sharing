@@ -10,14 +10,12 @@
          android:layout_height="match_parent"
          android:layout_width="match_parent">
 
-        <RelativeLayout
+        <com.google.android.material.bottomnavigation.BottomNavigationView
              android:layout_height="50dp"
              android:layout_width="match_parent"
              android:visibility="gone"
              android:layout_alignParentBottom="true"
-             android:id="@+id/bottomAction">
-
-        </RelativeLayout>
+             android:id="@+id/bottomAction"/>
 
         <androidx.recyclerview.widget.RecyclerView
              android:layout_height="match_parent"

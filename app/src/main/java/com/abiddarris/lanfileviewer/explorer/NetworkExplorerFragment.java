@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.R;
-import com.abiddarris.lanfileviewer.explorer.dialog.LocalExplorerDialog;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.network.NetworkFileClient;
 
@@ -26,12 +25,6 @@ public class NetworkExplorerFragment extends BaseExplorerFragment {
     }
     
     @Override
-    public void showTopNavigationView(TopNavigationView.Callback callback) {
-        ((AppCompatActivity) requireActivity())
-            .startSupportActionMode(new ActionModeNavigationView(callback));
-    }
-    
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         
@@ -41,8 +34,12 @@ public class NetworkExplorerFragment extends BaseExplorerFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item == upload) {
-            new LocalExplorerDialog().show(
-                getChildFragmentManager(), "uploadDialog");
+            getParentFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragmentContainer, LocalExplorerFragment.class, null)
+                .addToBackStack(null)
+                .commit();
+            
             return true;
         }
         return super.onOptionsItemSelected(item);
