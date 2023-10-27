@@ -1,11 +1,14 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import androidx.appcompat.app.AppCompatActivity;
@@ -176,30 +179,47 @@ public class ModifyMode extends Mode implements ActionMode.Callback {
     	onModifyOptionsCreated(group);
         
         group.setVisibility(View.VISIBLE);
-        
-     /*   ValueAnimator animator = ValueAnimator.ofFloat(group.getY() - group.getHeight(), group.getY());
-        animator.setDuration(500);
-        animator.addUpdateListener((vAnimator) -> {
-            Log.debug.log("anim", vAnimator.getAnimatedValue());    
-            group.setY((float)vAnimator.getAnimatedValue());
+        group.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ValueAnimator animator = ValueAnimator.ofFloat(group.getY() + group.getHeight(), group.getY());
+                animator.setDuration(500);
+                animator.addUpdateListener((vAnimator) -> {
+                    Log.debug.log("anim", vAnimator.getAnimatedValue());    
+                    group.setY((float)vAnimator.getAnimatedValue());
+                });
+                animator.start();
+                group.getViewTreeObserver().removeOnGlobalLayoutListener(this); 
+            }
         });
-        animator.start();*/
     }
     
     private void hideModifyOptions() {
         RelativeLayout group = getExplorer().getUI()
             .bottomAction;
         
-      /*  ValueAnimator animator = ValueAnimator.ofFloat(group.getY(), group.getY() - group.getHeight());
+        float initialY = group.getY();
+        
+        ValueAnimator animator = ValueAnimator.ofFloat(initialY, initialY + group.getHeight());
         animator.setDuration(500);
         animator.addUpdateListener((vAnimator) -> {
             group.setY((float)vAnimator.getAnimatedValue());
         });
-        animator.start();*/
-        //bottomNavigation.setVisibility(View.GONE);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                super.onAnimationEnd(animator);
+                    
+                group.setY(initialY); 
+                group.removeAllViews();
+                group.setVisibility(View.GONE);
+            }
+        });
+        animator.start();
     }
     
     public void onModifyOptionsCreated(RelativeLayout group) {
     }
     
 }
+    
