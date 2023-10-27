@@ -15,9 +15,6 @@ public class UploadExplorerFragment extends LocalExplorerFragment {
         requireActivity().setTitle("Upload");
     }
     
-    @Override
-    public BottomNavigationProvider getNavigationProvider(BottomNavigationView view) {
-        return new UploadBottomNavigationProvider(view);
-    }
+   
     
 }

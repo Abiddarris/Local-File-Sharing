@@ -16,8 +16,8 @@ public class UploadBottomNavigationProvider extends BottomNavigationProvider {
     public void onNavigationProviderShown(BottomNavigationView view) {
         super.onNavigationProviderShown(view);
         
-        view.(LayoutInflater.from(view.getContext())
-            .inflate(R.layout.layout_upload_button,null));
+        //view.(LayoutInflater.from(view.getContext())
+           // .inflate(R.layout.layout_upload_button,null));
     }
     
 }

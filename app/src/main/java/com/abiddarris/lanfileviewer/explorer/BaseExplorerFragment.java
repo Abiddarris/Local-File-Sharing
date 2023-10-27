@@ -51,7 +51,8 @@ public abstract class BaseExplorerFragment extends Fragment {
         
         binding = FragmentFileExplorerBinding.bind(view);
         
-        explorer = new FileExplorer(this, getNavigationProvider(binding.bottomAction), binding.refreshlayout);
+        explorer = new FileExplorer(this, 
+            binding, binding.refreshlayout);
         explorer.open(root);
        
         binding.filesList.setAdapter(explorer.getAdapter());
@@ -98,8 +99,8 @@ public abstract class BaseExplorerFragment extends Fragment {
         }
     }
     
-    public BottomNavigationProvider getNavigationProvider(BottomNavigationView view) {
-    	return new BottomNavigationProvider(view);
+    public ModifyMode getModifyMode(FileExplorer explorer) {
+    	return new ModifyMode(explorer);
     }
     
     public abstract FileSource getSource();

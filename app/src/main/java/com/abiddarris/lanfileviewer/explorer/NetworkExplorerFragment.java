@@ -34,9 +34,9 @@ public class NetworkExplorerFragment extends BaseExplorerFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item == upload) {
-            getParentFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.fragmentContainer, LocalExplorerFragment.class, null)
+            LocalSelectorExplorerFragment.replace(
+                getParentFragmentManager().beginTransaction(), 
+                R.id.fragmentContainer, "")
                 .addToBackStack(null)
                 .commit();
             

@@ -39,8 +39,7 @@ public class FileExplorerActivity extends AppCompatActivity
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle("n");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 

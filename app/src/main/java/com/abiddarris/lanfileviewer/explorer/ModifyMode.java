@@ -1,11 +1,13 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import com.abiddarris.lanfileviewer.R;
@@ -19,16 +21,16 @@ import java.util.List;
 import java.util.Set;
 import kotlin.jvm.internal.Lambda;
 
-public class SelectMode extends Mode implements ActionMode.Callback {
+public class ModifyMode extends Mode implements ActionMode.Callback {
     
     private ActionMode view;
     private boolean programaticlyEvent;
     private Set<File> checked = new HashSet<>();
     private LayoutSelectBinding actionModeLayout;
     
-    public static final String TAG = Log.getTag(SelectMode.class);
+    public static final String TAG = Log.getTag(ModifyMode.class);
     
-    public SelectMode(FileExplorer explorer) {
+    public ModifyMode(FileExplorer explorer) {
         super(explorer);
     }
    
@@ -40,8 +42,7 @@ public class SelectMode extends Mode implements ActionMode.Callback {
         AppCompatActivity compat = (AppCompatActivity)context;
         compat.startSupportActionMode(this);
         
-        getExplorer().getButtomNavigation()
-            .show();
+        showModifyOptions();
     }
     
     @Override
@@ -88,8 +89,8 @@ public class SelectMode extends Mode implements ActionMode.Callback {
         super.onModeDeselected();
         
         checked.clear();
-        getExplorer().getButtomNavigation()
-            .hide();
+        
+        hideModifyOptions();
         
         view.finish();
         view = null;
@@ -147,7 +148,6 @@ public class SelectMode extends Mode implements ActionMode.Callback {
         
         this.view.setCustomView(view);
         
-        
         return true;
     }
     
@@ -167,6 +167,39 @@ public class SelectMode extends Mode implements ActionMode.Callback {
     @Override
     public void onDestroyActionMode(ActionMode mode) {
         getExplorer().setMode(getExplorer().navigateMode);
+    }
+    
+    private void showModifyOptions() {
+        RelativeLayout group = getExplorer().getUI()
+            .bottomAction;
+        
+    	onModifyOptionsCreated(group);
+        
+        group.setVisibility(View.VISIBLE);
+        
+     /*   ValueAnimator animator = ValueAnimator.ofFloat(group.getY() - group.getHeight(), group.getY());
+        animator.setDuration(500);
+        animator.addUpdateListener((vAnimator) -> {
+            Log.debug.log("anim", vAnimator.getAnimatedValue());    
+            group.setY((float)vAnimator.getAnimatedValue());
+        });
+        animator.start();*/
+    }
+    
+    private void hideModifyOptions() {
+        RelativeLayout group = getExplorer().getUI()
+            .bottomAction;
+        
+      /*  ValueAnimator animator = ValueAnimator.ofFloat(group.getY(), group.getY() - group.getHeight());
+        animator.setDuration(500);
+        animator.addUpdateListener((vAnimator) -> {
+            group.setY((float)vAnimator.getAnimatedValue());
+        });
+        animator.start();*/
+        //bottomNavigation.setVisibility(View.GONE);
+    }
+    
+    public void onModifyOptionsCreated(RelativeLayout group) {
     }
     
 }
