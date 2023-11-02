@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/move"
+        android:showAsAction="always"
+        android:title="@string/move" />
+
+    <item
+        android:title="@string/copy"
+        android:id="@+id/copy"
+        android:showAsAction="always"/>
+    
+    <item
+        android:title="@string/download"
+        android:id="@+id/download"
+        android:showAsAction="always"/>
+    
+    <item
+        android:title="@string/delete"
+        android:id="@+id/delete"
+        android:showAsAction="always"/>
+    
+    <item
+        android:title="@string/detail"
+        android:showAsAction="never"
+        android:id="@+id/detail"/>
+    
+ 
+    
+</menu>

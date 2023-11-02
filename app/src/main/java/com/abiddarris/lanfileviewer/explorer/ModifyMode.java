@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import com.abiddarris.lanfileviewer.R;
+import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.LayoutSelectBinding;
 import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
 import com.abiddarris.lanfileviewer.file.File;
@@ -33,7 +34,7 @@ public class ModifyMode extends Mode implements ActionMode.Callback {
     
     public static final String TAG = Log.getTag(ModifyMode.class);
     
-    public ModifyMode(FileExplorer explorer) {
+    public ModifyMode(Explorer explorer) {
         super(explorer);
     }
    
@@ -219,6 +220,8 @@ public class ModifyMode extends Mode implements ActionMode.Callback {
     }
     
     public void onModifyOptionsCreated(RelativeLayout group) {
+        LayoutInflater.from(getExplorer().getContext())
+            .inflate(R.layout.layout_modify, group, true);
     }
     
 }

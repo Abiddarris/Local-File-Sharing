@@ -21,5 +21,9 @@
             app:title="@string/root_files"/>
         
     </PreferenceCategory>
+    
+    <PreferenceCategory
+        
+    </PreferenceCategory>
   
 </PreferenceScreen>

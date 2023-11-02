@@ -1,4 +1,4 @@
-package com.abiddarris.lanfileviewer;
+package com.abiddarris.lanfileviewer.utils;
 
 import com.gretta.util.log.Log;
 

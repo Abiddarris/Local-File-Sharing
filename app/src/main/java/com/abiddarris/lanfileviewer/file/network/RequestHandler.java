@@ -1,6 +1,6 @@
 package com.abiddarris.lanfileviewer.file.network;
 
-import com.abiddarris.lanfileviewer.BaseRunnable;
+import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;

@@ -10,6 +10,15 @@
     <item name="windowNoTitle">true</item>
     <item name="windowActionModeOverlay">true</item>
   </style>
-
+    
+  <style name ="Base.DialogActivity" parent="Theme.Material3.DayNight.Dialog"> 
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+    <item name="windowActionModeOverlay">true</item>
+  </style>
+    
+    
+  <style name="DialogActivity" parent="Base.DialogActivity"/>
+    
   <style name="AppTheme" parent="Base.AppTheme" />
 </resources>

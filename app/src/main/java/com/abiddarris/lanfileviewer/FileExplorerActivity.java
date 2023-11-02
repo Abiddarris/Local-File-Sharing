@@ -14,17 +14,18 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import com.abiddarris.lanfileviewer.ConnectionService.ConnectionServiceBridge;
-import com.abiddarris.lanfileviewer.databinding.ActivityFileExplorerBinding;
-import com.abiddarris.lanfileviewer.explorer.BaseExplorerFragment;
-import com.abiddarris.lanfileviewer.explorer.NetworkExplorerFragment;
+import com.abiddarris.lanfileviewer.databinding.LayoutFileExplorerBinding;
+import com.abiddarris.lanfileviewer.explorer.ExplorerActivity;
+import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
+import com.abiddarris.lanfileviewer.ui.NetworkExplorerFragment;
 import com.abiddarris.lanfileviewer.file.network.NetworkFile;
 import com.abiddarris.lanfileviewer.file.network.NetworkFileClient;
 import com.gretta.util.log.Log;
 
-public class FileExplorerActivity extends AppCompatActivity
+public class FileExplorerActivity extends ExplorerActivity
         implements ServiceConnection {
 
-    private ActivityFileExplorerBinding binding;
+    private LayoutFileExplorerBinding binding;
     private NetworkFileClient clientThread;
     private ConnectionService bridge;
     
@@ -33,23 +34,13 @@ public class FileExplorerActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle bundle) {
+        binding = LayoutFileExplorerBinding.inflate(getLayoutInflater());
+        setSupportActionBar(binding.toolbar);
+        setContentView(binding.getRoot());
+     
         super.onCreate(bundle);
         
-        binding = ActivityFileExplorerBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbar);
-        
-        getSupportActionBar().setTitle("n");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         bindService(new Intent(this, ConnectionService.class), this, 0);
-    }
-    
-    @Override
-    public boolean onSupportNavigateUp() {
-        getSupportFragmentManager().setFragmentResult(BaseExplorerFragment.BACK_PRESSED_EVENT, new Bundle());
-        return true;
     }
     
 

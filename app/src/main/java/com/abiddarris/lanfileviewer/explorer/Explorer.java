@@ -11,12 +11,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileExplorer {
+public class Explorer {
 
     final NavigateMode navigateMode = new NavigateMode(this);
     ModifyMode selectMode;
     
-    private BaseExplorerFragment fragment;
+    private ExplorerFragment fragment;
     private FragmentFileExplorerBinding ui;
     private File parent;
     private FileAdapter adapter;
@@ -25,7 +25,7 @@ public class FileExplorer {
     private Mode mode = navigateMode;
     private SwipeRefreshLayout refresher;
 
-    public FileExplorer(BaseExplorerFragment fragment, FragmentFileExplorerBinding ui, SwipeRefreshLayout refresher) {
+    public Explorer(ExplorerFragment fragment, FragmentFileExplorerBinding ui, SwipeRefreshLayout refresher) {
         this.fragment = fragment;
         this.ui = ui;
         this.refresher = refresher;
@@ -87,6 +87,10 @@ public class FileExplorer {
 
         adapter.getMainThread().post(() -> refresher.setRefreshing(false));
     }
+    
+    public File getParent() {
+    	return parent;
+    }
 
     public boolean onBackPressed() {
         return mode.onBackPressed();
@@ -118,7 +122,7 @@ public class FileExplorer {
         return fragment.getContext();
     }
        
-    public BaseExplorerFragment getFragment() {
+    public ExplorerFragment getFragment() {
         return this.fragment;
       
     }

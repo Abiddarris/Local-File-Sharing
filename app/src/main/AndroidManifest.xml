@@ -27,7 +27,8 @@
         </activity>
         
         <activity
-            android:name=".SettingsActivity"
+            android:name=".explorer.LocalSelectorExplorerActivity"
+            android:theme="@style/DialogActivity"
             android:exported="true"/>
         
         <activity

@@ -4,7 +4,7 @@ import static com.abiddarris.lanfileviewer.file.network.JSONRequest.*;
 
 import android.os.Handler;
 import android.os.Looper;
-import com.abiddarris.lanfileviewer.BaseRunnable;
+import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.FileExplorerActivity;
 import com.abiddarris.lanfileviewer.file.File;
 import com.gretta.util.log.Log;

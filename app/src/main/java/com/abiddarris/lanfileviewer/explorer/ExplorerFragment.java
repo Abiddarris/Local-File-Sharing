@@ -10,6 +10,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -27,16 +28,18 @@ import com.abiddarris.lanfileviewer.file.network.NetworkFileClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gretta.util.log.Log;
 
-public abstract class BaseExplorerFragment extends Fragment {
+public abstract class ExplorerFragment extends Fragment {
     
-    private FileExplorer explorer;
+    private Explorer explorer;
     private FragmentFileExplorerBinding binding;
     private OnBackPressed pressed;
     
     public static final String BACK_PRESSED_EVENT = "backPressedEvent";
     public static final String TAG = Log.getTag(FileExplorerActivity.class);
+    public static final String PARENT = "parent";
+    public static final String TITLE = "title";
     
-    public BaseExplorerFragment() {
+    public ExplorerFragment() {
         super(R.layout.fragment_file_explorer);
     }
     
@@ -44,14 +47,20 @@ public abstract class BaseExplorerFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceBundle) {
         super.onViewCreated(view, savedInstanceBundle);
         
-        File root = getSource()
-            .getRoot();
+        File root = (savedInstanceBundle == null ? 
+            getSource().getRoot() :
+            getSource().getFile(savedInstanceBundle.getString(PARENT)));
         
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         
         binding = FragmentFileExplorerBinding.bind(view);
-        
-        explorer = new FileExplorer(this, 
+       
+        setHasOptionsMenu(true);
+
+       // binding.toolbar.setTitle(requireArguments().getString(TITLE,)); 
+       
+
+        explorer = new Explorer(this, 
             binding, binding.refreshlayout);
         explorer.open(root);
        
@@ -72,22 +81,20 @@ public abstract class BaseExplorerFragment extends Fragment {
             .setFragmentResultListener(BACK_PRESSED_EVENT,this, (key,bundle) -> {
                 navigateUp();
             });
+    }
+    
+    @Override
+    @MainThread
+    public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
         
-        setHasOptionsMenu(true);
+        bundle.putString(PARENT, explorer.getParent().getPath());
     }
     
     @Override
     @MainThread
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu,inflater);
-        
         inflater.inflate(R.menu.fragment_explorer_menu, menu);
-    }
-    
-    @Override
-    @MainThread
-    public boolean onOptionsItemSelected(MenuItem arg0) {
-        return super.onOptionsItemSelected(arg0);
     }
     
     public void navigateUp() {
@@ -99,7 +106,7 @@ public abstract class BaseExplorerFragment extends Fragment {
         }
     }
     
-    public ModifyMode getModifyMode(FileExplorer explorer) {
+    public ModifyMode getModifyMode(Explorer explorer) {
     	return new ModifyMode(explorer);
     }
     

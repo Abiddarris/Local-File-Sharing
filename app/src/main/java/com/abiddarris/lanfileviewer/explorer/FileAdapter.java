@@ -23,13 +23,13 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     private boolean showBox;
     private Context context;
     private File[] files = new File[0];
-    private FileExplorer explorer;
+    private Explorer explorer;
     private Handler handler = new Handler(Looper.getMainLooper());
     private LayoutInflater inflater;
     private static final SimpleDateFormat anotherYear = new SimpleDateFormat("dd LLL YYYY HH.mm");
     private static final SimpleDateFormat currentYear = new SimpleDateFormat("dd LLL HH.mm");
     
-    public FileAdapter(FileExplorer explorer) {
+    public FileAdapter(Explorer explorer) {
         this.explorer = explorer;
         this.context = explorer.getContext();
         inflater = LayoutInflater.from(context);

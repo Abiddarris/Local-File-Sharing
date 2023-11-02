@@ -6,7 +6,7 @@ import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
 
 public class NavigateMode extends Mode {
     
-    public NavigateMode(FileExplorer explorer) {
+    public NavigateMode(Explorer explorer) {
         super(explorer);
     }
     

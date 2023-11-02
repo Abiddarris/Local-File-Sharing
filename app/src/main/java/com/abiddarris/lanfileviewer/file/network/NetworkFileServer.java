@@ -3,7 +3,7 @@ package com.abiddarris.lanfileviewer.file.network;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import com.abiddarris.lanfileviewer.BaseRunnable;
+import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.ConnectionService;
 import com.gretta.util.log.Log;
 import java.io.BufferedReader;

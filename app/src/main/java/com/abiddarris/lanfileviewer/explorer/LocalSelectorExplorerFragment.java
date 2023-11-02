@@ -1,18 +1,20 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import android.os.Bundle;
+import android.view.View;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import com.gretta.util.Random;
+import com.gretta.util.Randoms;
 
 public class LocalSelectorExplorerFragment extends LocalExplorerFragment {
     
-    @Override
-    public ModifyMode getModifyMode(FileExplorer explorer) {
-        return new GetFileMode(explorer);
-    }
+    public static final String ACTION_TEXT = "actionText";
+    public static final String RESULT_KEY = "resultKey";
     
-    public static FragmentTransaction replace(FragmentTransaction transaction, int id, String requestCode) {
-        
-        return transaction.setReorderingAllowed(true)
-            .replace(id, LocalSelectorExplorerFragment.class, null);
+    @Override
+    public ModifyMode getModifyMode(Explorer explorer) {
+        return new GetFileMode(this, explorer);
     }
     
 }

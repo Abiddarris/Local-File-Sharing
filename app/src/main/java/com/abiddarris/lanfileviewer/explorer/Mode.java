@@ -4,9 +4,9 @@ import java.util.NavigableSet;
 
 public abstract class Mode {
 
-    private FileExplorer explorer;
+    private Explorer explorer;
     
-    public Mode(FileExplorer explorer) {
+    public Mode(Explorer explorer) {
         this.explorer = explorer;
     }
 
@@ -22,7 +22,7 @@ public abstract class Mode {
     
     public void onModeDeselected() {}
     
-    public FileExplorer getExplorer() {
+    public Explorer getExplorer() {
         return this.explorer;
     }
 
