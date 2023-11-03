@@ -28,4 +28,11 @@
     <string name="detail">Detail</string>
     <string name="rename">Rename</string>
     <string name="compress">Compress</string>
+    <string name="allow">Allow</string>
+    <string name="disallow">Disallow</string>
+    <string name="ask">Ask</string>
+    <string name="write_access">Write Access</string>
+    <string name="delete_access">Delete Access</string>
+    <string name="permission">Permission</string>
+    
 </resources>

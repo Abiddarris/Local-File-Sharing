@@ -21,10 +21,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         setPreferencesFromResource(R.xml.preferences,rootKey);
         
         final ListPreference theme = findPreference("theme");
-        theme.setSummaryProvider((t) -> {
-            return theme.getEntry();
-        });
+        final ListPreference writeAccess = findPreference("writeAccess");
+        final ListPreference deleteAccess = findPreference("deleteAccess");
         
+        theme.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
+        writeAccess.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
+        deleteAccess.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
     }
     
     @Override

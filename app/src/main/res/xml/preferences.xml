@@ -23,6 +23,21 @@
     </PreferenceCategory>
     
     <PreferenceCategory
+        app:title="@string/permission">
+        
+         <ListPreference
+            app:defaultValue="1"
+            app:entries="@array/modify_permission"
+            app:entryValues="@array/modify_permission_values"
+            app:key="writeAccess"
+            app:title="@string/write_access"/>
+        
+         <ListPreference
+            app:defaultValue="1"
+            app:entries="@array/modify_permission"
+            app:entryValues="@array/modify_permission_values"
+            app:key="deleteAccess"
+            app:title="@string/delete_access"/>
         
     </PreferenceCategory>
   
