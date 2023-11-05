@@ -23,11 +23,17 @@ public class LocalFile implements File {
 
     @Override
     public boolean isDirectory() {
+        source.getSecurityManager()
+            .checkRead(this);
+        
         return file.isDirectory();
     }
 
     @Override
     public boolean isFile() {
+        source.getSecurityManager()
+            .checkRead(this);
+        
         return file.isFile();
     }
 
@@ -38,11 +44,17 @@ public class LocalFile implements File {
 
     @Override
     public String getName() {
+        source.getSecurityManager()
+            .checkRead(this);
+        
         return file.getName();
     }
 
     @Override
     public File[] listFiles() {
+        source.getSecurityManager()
+            .checkRead(this);
+        
         java.io.File[] javaFiles = file.listFiles();
         if(javaFiles == null) return null;
         
@@ -62,6 +74,9 @@ public class LocalFile implements File {
 
     @Override
     public Uri toUri() {
+        source.getSecurityManager()
+            .checkRead(this);
+        
         return Uri.fromFile(file);
     }
 
@@ -81,11 +96,17 @@ public class LocalFile implements File {
     
     @Override
     public long length() {
+        source.getSecurityManager()
+            .checkRead(this);
+        
         return file.length();
     }
     
     @Override
     public long lastModified() {
+        source.getSecurityManager()
+            .checkRead(this);
+        
         return file.lastModified();
     }
     

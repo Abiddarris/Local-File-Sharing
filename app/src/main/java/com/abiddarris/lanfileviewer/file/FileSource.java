@@ -8,10 +8,11 @@ import java.util.Map;
 
 public abstract class FileSource {
     
-    private Map<String,File> cache = new HashMap<>();
-    
     private static LocalFileSource localFileSource;
     public static final String TAG = Log.getTag(FileSource.class);
+    
+    private Map<String,File> cache = new HashMap<>();
+    private SecurityManager securityManager = new SecurityManager();
     
     public abstract File getRoot();
     
@@ -40,5 +41,13 @@ public abstract class FileSource {
             localFileSource = new LocalFileSource(context);
         }
         return localFileSource;
+    }
+
+    public SecurityManager getSecurityManager() {
+        return this.securityManager;
+    }
+    
+    public void setSecurityManager(SecurityManager securityManager) {
+        this.securityManager = securityManager;
     }
 }
