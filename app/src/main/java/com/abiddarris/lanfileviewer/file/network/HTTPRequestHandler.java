@@ -24,16 +24,9 @@ public class HTTPRequestHandler extends RequestHandler {
             .getFile(new String(decodedPath));
         
         long rangeOffset = findRangeOffset(getRequest());
+        String response = createResponse(file, rangeOffset);
         rangeOffset = Math.max(0, rangeOffset);
-        long length = file.length();
-        long contentLength = length - rangeOffset;
         
-        String response = "HTTP/1.1 206 PARTIAL CONTENT\r\n" +
-            "Accept-Ranges: bytes\r\n" +
-            "Content-Type: " + file.getMimeType() + "\r\n" +
-            "Content-Range: bytes " + rangeOffset + "-" + (length) + "/" + length + "\r\n" +
-            "Content-Length: " + contentLength + "\r\n\r\n";
-               
         getOutputStream().write(response.getBytes(StandardCharsets.UTF_8));
         getOutputStream().flush();
         
@@ -48,6 +41,26 @@ public class HTTPRequestHandler extends RequestHandler {
             getOutputStream().write(buf,0,len);                   
         }
         getOutputStream().flush();           
+    }
+
+    private String createResponse(File file, long rangeOffset) {
+        if(rangeOffset == -1) {
+            String response = "HTTP/1.1 200 OK\r\n" +
+                  "Accept-Ranges: bytes\r\n" +
+                  "Content-Type: " + file.getMimeType() + "\r\n" +
+                  "Content-Length: " + file.length() + "\r\n\r\n";
+            return response;
+        }
+        
+        long length = file.length();
+        long contentLength = length - rangeOffset;
+        String response = "HTTP/1.1 206 PARTIAL CONTENT\r\n" +
+            "Accept-Ranges: bytes\r\n" +
+            "Content-Type: " + file.getMimeType() + "\r\n" +
+            "Content-Range: bytes " + rangeOffset + "-" + (length) + "/" + length + "\r\n" +
+            "Content-Length: " + contentLength + "\r\n\r\n";
+               
+        return response;
     }
        
     private long findRangeOffset(String request) {

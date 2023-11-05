@@ -31,6 +31,7 @@ import com.gretta.util.log.Log;
 public abstract class ExplorerFragment extends Fragment {
     
     private Explorer explorer;
+    private FileSource source;
     private FragmentFileExplorerBinding binding;
     private OnBackPressed pressed;
     
@@ -39,8 +40,10 @@ public abstract class ExplorerFragment extends Fragment {
     public static final String PARENT = "parent";
     public static final String TITLE = "title";
     
-    public ExplorerFragment() {
+    public ExplorerFragment(FileSource source) {
         super(R.layout.fragment_file_explorer);
+        
+        this.source = source;
     }
     
     @Override
@@ -110,7 +113,9 @@ public abstract class ExplorerFragment extends Fragment {
     	return new ModifyMode(explorer);
     }
     
-    public abstract FileSource getSource();
+    public final FileSource getSource() {
+        return source;
+    }
     
     public class OnBackPressed extends OnBackPressedCallback {
 

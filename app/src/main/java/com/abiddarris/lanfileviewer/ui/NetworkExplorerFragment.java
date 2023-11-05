@@ -5,33 +5,38 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.R;
-import com.abiddarris.lanfileviewer.explorer.ExplorerSelectDialog;
 import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
-import com.abiddarris.lanfileviewer.explorer.LocalSelectorExplorerActivity;
-import com.abiddarris.lanfileviewer.explorer.LocalSelectorExplorerFragment;
+import com.abiddarris.lanfileviewer.explorer.SelectorExplorerFragment;
+import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.file.network.NetworkFileClient;
 
 public class NetworkExplorerFragment extends ExplorerFragment {
     
+    
+    private ActivityResultLauncher<Bundle> uploadLauncher = registerForActivityResult(
+        new SelectorExplorerFragment.FileContract(LocalFileSource.getDefaultLocalSource(getContext()), LocalExplorerDialog.class), new ActivityResultCallback<File[]>(){
+            @Override
+            public void onActivityResult(File[] file) {
+                
+            }
+        });
+    
     private MenuItem upload;
     
-    public NetworkExplorerFragment() {
-        super();
+    public NetworkExplorerFragment(FileSource source) {
+        super(source);
     }
-    
-    @Override
-    public FileSource getSource() {
-        ApplicationCore app = (ApplicationCore)getContext().getApplicationContext();
-        NetworkFileClient client = app.getNetworkFileClient();
-        return client.getSource();
-    }
-    
+   
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -45,19 +50,12 @@ public class NetworkExplorerFragment extends ExplorerFragment {
         if(item == upload) {
             Bundle bundle = new Bundle();
             bundle.putString(ExplorerFragment.TITLE, getString(R.string.upload));
-            bundle.putString(LocalSelectorExplorerFragment.ACTION_TEXT, getString(R.string.upload));
+            bundle.putString(SelectorExplorerFragment.ACTION_TEXT, getString(R.string.upload));
             
-            Intent intent = new Intent(getContext(), LocalSelectorExplorerActivity.class);
-            intent.putExtra("extra", bundle);
-            startActivity(intent);
-            
-            /*new ExplorerSelectDialog()
-                .show(getChildFragmentManager(), null);
-           */
-            
+            uploadLauncher.launch(bundle);
+           
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-    
 }

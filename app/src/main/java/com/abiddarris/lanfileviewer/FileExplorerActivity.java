@@ -12,7 +12,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentFactory;
 import com.abiddarris.lanfileviewer.ConnectionService.ConnectionServiceBridge;
 import com.abiddarris.lanfileviewer.databinding.LayoutFileExplorerBinding;
 import com.abiddarris.lanfileviewer.explorer.ExplorerActivity;
@@ -64,12 +67,30 @@ public class FileExplorerActivity extends ExplorerActivity
         NsdServiceInfo info = bridge.getAdapter().getServer(name);
 
         clientThread = new NetworkFileClient(info.getHost(), info.getPort());
-        clientThread.setConnectedCallback(files -> {
+        clientThread.setConnectedCallback(source -> {
+            NetworkExplorerFragment fragment = new NetworkExplorerFragment(source);
+                
             getSupportFragmentManager().beginTransaction()
             .setReorderingAllowed(true)
-            .add(R.id.fragmentContainer, NetworkExplorerFragment.class, null)
+            .add(R.id.fragmentContainer, fragment)
             .commit();
+                
+            getSupportFragmentManager().setFragmentFactory(new FragmentFactory(){
+               
+                @Override
+                @NonNull
+                public Fragment instantiate(ClassLoader loader, String name) {
+                    Class<? extends Fragment> fragmentClass = loadFragmentClass(loader,name);
+                    if(fragmentClass == NetworkExplorerFragment.class) {
+                        return new NetworkExplorerFragment(source);
+                    }   
+                            
+                    return super.instantiate(loader, name);
+                }
+                
+            });
         });
+        
         
         ApplicationCore app = (ApplicationCore)getApplicationContext();
         app.setNetworkFileClient(clientThread);

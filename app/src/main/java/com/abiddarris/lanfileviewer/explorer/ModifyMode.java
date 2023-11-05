@@ -105,6 +105,10 @@ public class ModifyMode extends Mode implements ActionMode.Callback {
         checked.add(file);
     }
     
+    public File[] getSelection() {
+        return checked.toArray(new File[0]);
+    }
+    
     private void updateActionModeView() {
         CheckBox selectAll = actionModeLayout.selectAll;
         
