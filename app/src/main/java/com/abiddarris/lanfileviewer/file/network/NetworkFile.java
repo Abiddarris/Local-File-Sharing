@@ -12,6 +12,7 @@ import com.gretta.util.log.Log;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,7 +55,7 @@ public class NetworkFile implements File {
                 ApplicationCore.getMainHandler().post(() -> callback.onDataUpdated());
         });
     }
-
+    
     protected void onCreateUpdateRequest(JSONObject request) throws JSONException {
         request.putOpt(KEY_REQUEST, REQUEST_GET_NAME | REQUEST_LIST_FILES
                                 | REQUEST_IS_DIRECTORY | REQUEST_IS_FILE
@@ -137,4 +138,68 @@ public class NetworkFile implements File {
     public long lastModified() {
         return lastModified;
     }
+    
+    @Override
+    public boolean createNewFile() {
+        JSONObject request = new JSONObject();
+        JSONObject result = sendRequestSync(request);
+        
+        updateDataSync();
+        
+        return false;
+    }
+    
+    private void updateDataSync() {
+        Object lock = new Object();
+        AtomicBoolean atomic = new AtomicBoolean();
+        updateData(() -> {
+            synchronized(lock) {
+                atomic.set(true);
+                lock.notifyAll();    
+            }
+        });
+        
+        if(atomic.get() == false) { 
+            synchronized(lock) {
+                while(atomic.get() == false) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+    
+    private JSONObject sendRequestSync(JSONObject object) {
+        Object lock = new Object();
+        ResultReference reference = new ResultReference();
+        
+        client.sendRequest(object, (jsonResult) -> {
+            synchronized(lock) {
+                reference.result = jsonResult;
+                lock.notifyAll();    
+            }
+        });
+        
+        if(reference.result == null) { 
+            synchronized(lock) {
+                while(reference.result == null) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        
+        return reference.result;
+    }
+    
+    private class ResultReference {
+        private volatile JSONObject result;
+    }
+    
 }

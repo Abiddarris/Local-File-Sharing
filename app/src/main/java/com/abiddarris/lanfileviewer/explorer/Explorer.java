@@ -41,7 +41,7 @@ public class Explorer {
             update();
             return;
         }
-
+        
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(file.toUri(), file.getMimeType());
         getContext().startActivity(intent);

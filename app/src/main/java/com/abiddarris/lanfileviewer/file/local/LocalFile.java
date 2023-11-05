@@ -110,4 +110,13 @@ public class LocalFile implements File {
         return file.lastModified();
     }
     
+    @Override
+    public boolean createNewFile() {
+        source.getSecurityManager()
+            .checkWrite(this);
+        
+        return file.createNewFile();
+    }
+    
+    
 }

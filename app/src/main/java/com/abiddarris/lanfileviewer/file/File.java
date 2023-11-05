@@ -27,6 +27,8 @@ public interface File {
     
     public abstract long lastModified();
     
+    public abstract boolean createNewFile();
+    
     public static interface Callback {
         void onDataUpdated();
     }
