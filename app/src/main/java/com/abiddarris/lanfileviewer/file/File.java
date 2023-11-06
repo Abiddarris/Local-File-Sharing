@@ -1,6 +1,7 @@
 package com.abiddarris.lanfileviewer.file;
 
 import android.net.Uri;
+import java.io.IOException;
 import org.json.JSONObject;
 
 public interface File {
@@ -27,7 +28,7 @@ public interface File {
     
     public abstract long lastModified();
     
-    public abstract boolean createNewFile();
+    public abstract boolean createNewFile() throws IOException;
     
     public static interface Callback {
         void onDataUpdated();

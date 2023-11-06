@@ -55,13 +55,22 @@ public class JSONRequestHandler extends RequestHandler {
         
         response.put(KEY_ID, request.getInt(KEY_ID));
         
-        int requestCode = request.getInt(KEY_REQUEST);
+        JSONArray requestKeys = request.getJSONArray(KEY_REQUEST);
         String path = request.optString(KEY_PATH);
-        if(path != null) {
-            handleFileRelated(request,response,requestCode,path);
+        for(int i = 0; i < requestKeys.length(); ++i) {
+        	String key = requestKeys.getString(i);
+            if(path != null) {
+                handleFileRelated(request,response,key,path);
+            }
+            
+            handleOthersRequest(request,response,key,path);
         }
         
-        if((requestCode & REQUEST_GET_TOP_DIRECTORY_FILES) != 0) {
+        return response;
+    }
+
+    private void handleOthersRequest(JSONObject request, JSONObject response, String key, String path) throws JSONException {
+        if(key.equals(REQUEST_GET_TOP_DIRECTORY_FILES)) {
         	JSONArray topDirectoryFiles = new JSONArray();
             File root = LocalFileSource.getDefaultLocalSource(
                 ApplicationCore.getApplication()).getRoot();
@@ -71,19 +80,17 @@ public class JSONRequestHandler extends RequestHandler {
  
             response.put(KEY_TOP_DIRECTORY_FILES,topDirectoryFiles);
         }
-        
-        return response;
     }
 
-    private void handleFileRelated(final JSONObject request, final JSONObject response, final int requestCode, final String path) throws JSONException {
+    private void handleFileRelated(JSONObject request, JSONObject response, String key, String path) throws JSONException {
         File file = FileSource.getDefaultLocalSource(ApplicationCore.getApplication())
             .getFile(path);
         
-        if ((requestCode & REQUEST_GET_NAME) != 0) {
+        if(key.equalsIgnoreCase(REQUEST_GET_NAME)) {
             response.put(KEY_NAME, file.getName());
         }
           
-        if ((requestCode & REQUEST_LIST_FILES) != 0) {
+        if(key.equalsIgnoreCase(REQUEST_LIST_FILES)) {
             File[] subFiles = file.listFiles();
             if (subFiles == null) {
                 response.put(KEY_LIST_FILES, JSONObject.NULL);
@@ -97,29 +104,29 @@ public class JSONRequestHandler extends RequestHandler {
             }
         }
         
-        if ((requestCode & REQUEST_IS_DIRECTORY) != 0) {
+        if(key.equalsIgnoreCase(REQUEST_IS_DIRECTORY)) {
             response.put(KEY_IS_DIRECTORY, file.isDirectory());
         }
            
-        if ((requestCode & REQUEST_IS_FILE) != 0) {
+        if(key.equalsIgnoreCase(REQUEST_IS_FILE)) {
             response.put(KEY_IS_FILE, file.isFile());
         }
           
-        if ((requestCode & REQUEST_GET_PARENT_FILE) != 0) {
+        if(key.equalsIgnoreCase(REQUEST_GET_PARENT_FILE)) {
             response.put(KEY_GET_PARENT_FILE, file.getParentFile().getPath());
         }
         
-        if((requestCode & REQUEST_GET_MIME_TYPE) != 0) {
+        if(key.equalsIgnoreCase(REQUEST_GET_MIME_TYPE)) {
             response.put(KEY_MIME_TYPE, file.getMimeType());
         }
         
-        if((requestCode & REQUEST_GET_LENGTH) != 0) {
+        if(key.equalsIgnoreCase(REQUEST_GET_LENGTH)) {
         	response.put(KEY_LENGTH, file.length());
         }
         
-        if((requestCode & REQUEST_GET_LAST_MODIFIED) != 0) {
+        if(key.equalsIgnoreCase(REQUEST_GET_LAST_MODIFIED)) {
             response.put(KEY_LAST_MODIFIED, file.lastModified());
         }
     }
-
+    
 }

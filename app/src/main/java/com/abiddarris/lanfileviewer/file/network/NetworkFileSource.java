@@ -18,7 +18,7 @@ public class NetworkFileSource extends FileSource {
         this.client = client;
         
         JSONObject request = new JSONObject()
-            .put(KEY_REQUEST, REQUEST_GET_TOP_DIRECTORY_FILES);
+            .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_GET_TOP_DIRECTORY_FILES));
        
         client.sendRequest(request, (response) -> {
             JSONArray jsonTopDirectoryFiles = response.optJSONArray(KEY_TOP_DIRECTORY_FILES);

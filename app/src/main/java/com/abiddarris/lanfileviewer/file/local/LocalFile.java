@@ -3,6 +3,7 @@ package com.abiddarris.lanfileviewer.file.local;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 import com.abiddarris.lanfileviewer.file.File;
+import java.io.IOException;
 
 public class LocalFile implements File {
 
@@ -111,7 +112,7 @@ public class LocalFile implements File {
     }
     
     @Override
-    public boolean createNewFile() {
+    public boolean createNewFile() throws IOException {
         source.getSecurityManager()
             .checkWrite(this);
         

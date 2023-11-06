@@ -1,16 +1,18 @@
 package com.abiddarris.lanfileviewer.file.network;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public final class JSONRequest {
     
-    public static final int REQUEST_GET_NAME = 1;
-    public static final int REQUEST_LIST_FILES = 2;
-    public static final int REQUEST_IS_DIRECTORY = 4;
-    public static final int REQUEST_IS_FILE = 8;
-    public static final int REQUEST_GET_PARENT_FILE = 16;
-    public static final int REQUEST_GET_TOP_DIRECTORY_FILES = 32;
-    public static final int REQUEST_GET_MIME_TYPE = 64;
-    public static final int REQUEST_GET_LENGTH = 128;
-    public static final int REQUEST_GET_LAST_MODIFIED = 256;
+    public static final String REQUEST_GET_NAME = "requestGetName";
+    public static final String REQUEST_LIST_FILES = "requestListFiles";
+    public static final String REQUEST_IS_DIRECTORY = "requestIsDirectory";
+    public static final String REQUEST_IS_FILE = "requestIsFile";
+    public static final String REQUEST_GET_PARENT_FILE = "requestGetParentFile";
+    public static final String REQUEST_GET_TOP_DIRECTORY_FILES = "requestGetTopDirectoryFiles";
+    public static final String REQUEST_GET_MIME_TYPE = "requestGetMimeType";
+    public static final String REQUEST_GET_LENGTH = "requestGetLength";
+    public static final String REQUEST_GET_LAST_MODIFIED = "requestGetLastModified";
     public static final String KEY_ID = "id";
     public static final String KEY_IS_DIRECTORY = "isDirectory";
     public static final String KEY_IS_FILE = "isFile";
@@ -23,4 +25,13 @@ public final class JSONRequest {
     public static final String KEY_TOP_DIRECTORY_FILES = "topDirectoryFiles";
     public static final String KEY_LENGTH = "length";
     public static final String KEY_LAST_MODIFIED = "lastModified";
+    
+    public static JSONArray createRequest(String... requestKeys) {
+        JSONArray requests = new JSONArray();
+        for(String requestKey : requestKeys) {
+        	requests.put(requestKey);
+        }
+        return requests;
+    }
+    
 }

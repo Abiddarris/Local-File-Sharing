@@ -63,6 +63,11 @@ public class RootFileContainer implements File {
     public long lastModified() {
         return -1;
     }
+    
+    @Override
+    public boolean createNewFile() {
+        return false;
+    }
 
     public void addRoots(RootFile rootFile) {
         roots.add(rootFile);

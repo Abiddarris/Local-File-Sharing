@@ -42,8 +42,10 @@ public class Explorer {
             return;
         }
         
+        String mimeType = file.getMimeType();
+        
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(file.toUri(), file.getMimeType());
+        intent.setDataAndType(file.toUri(), mimeType == null ? "*" : mimeType);
         getContext().startActivity(intent);
     }
 

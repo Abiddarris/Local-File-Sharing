@@ -57,11 +57,11 @@ public class NetworkFile implements File {
     }
     
     protected void onCreateUpdateRequest(JSONObject request) throws JSONException {
-        request.putOpt(KEY_REQUEST, REQUEST_GET_NAME | REQUEST_LIST_FILES
-                                | REQUEST_IS_DIRECTORY | REQUEST_IS_FILE
-                                | REQUEST_GET_PARENT_FILE | REQUEST_GET_MIME_TYPE |
-                                 REQUEST_GET_LENGTH
-                                | REQUEST_GET_LAST_MODIFIED)
+        JSONArray requestKeys = createRequest(REQUEST_GET_NAME, REQUEST_LIST_FILES,
+             REQUEST_IS_DIRECTORY, REQUEST_IS_FILE, REQUEST_GET_PARENT_FILE,
+             REQUEST_GET_MIME_TYPE, REQUEST_GET_LENGTH, REQUEST_GET_LAST_MODIFIED);
+        
+        request.putOpt(KEY_REQUEST, requestKeys)
                 .putOpt(KEY_PATH, path);
     }
 
