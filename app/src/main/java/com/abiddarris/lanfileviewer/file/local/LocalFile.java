@@ -119,5 +119,13 @@ public class LocalFile implements File {
         return file.createNewFile();
     }
     
+    @Override
+    public boolean makeDirs() {
+        source.getSecurityManager()
+            .checkWrite(this);
+        
+        return file.mkdirs();
+    }
+    
     
 }

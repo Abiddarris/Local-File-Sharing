@@ -12,6 +12,7 @@ import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.ref.Reference;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONArray;
@@ -97,31 +99,37 @@ public class NetworkFileClient extends BaseRunnable implements Closeable {
         }
     }
 
-    /* public File getFileInfo(String path) {
-        File file = fileInfos.get(path);
-        if (file != null) return file;
-
-        file = new NetworkFile(this, path);
-        fileInfos.put(path, file);
-
-        return file;
-    }*/
-
     public void sendRequest(JSONObject json, ResponseCallback callback) {
-        executor.submit(
-                () -> {
-                    try {
-                        Log.debug.log(TAG, "Sending a request to server");
-                        int id = getId();
-                        json.put(KEY_ID, id);
+        executor.submit(() -> {
+            try {
+                Log.debug.log(TAG, "Sending a request to server");
+                int id = getId();
+                json.put(KEY_ID, id);
 
-                        callbacks.put(id, callback);
-                        output.writeUTF(json.toString());
-                        output.flush();
-                    } catch (Exception e) {
-                        Log.debug.log(TAG, e);
-                    }
-                });
+                callbacks.put(id, callback);
+                output.writeUTF(json.toString());
+                output.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    
+    public JSONObject sendRequestSync(JSONObject json) {
+        CountDownLatch lock = new CountDownLatch(1);
+        ResponseHolder holder = new ResponseHolder();
+        sendRequest(json, (response) -> {
+            holder.response = response;    
+            lock.countDown();
+        });
+        
+        try {
+            lock.await();
+            return holder.response;
+        } catch (Exception e) {
+            Log.debug.log(TAG, e);
+        }
+        return null;
     }
 
     private ResponseCallback releaseId(int id) {
@@ -150,6 +158,14 @@ public class NetworkFileClient extends BaseRunnable implements Closeable {
         }
     }
 
+    public ConnectedCallback getConnectedCallback() {
+        return this.callback;
+    }
+
+    public NetworkFileSource getSource() {
+        return this.source;
+    }
+    
     public static interface ResponseCallback {
         void onResponseAvailable(JSONObject json);
     }
@@ -158,13 +174,8 @@ public class NetworkFileClient extends BaseRunnable implements Closeable {
         void onConnected(NetworkFileSource source);
     }
 
-    public ConnectedCallback getConnectedCallback() {
-        return this.callback;
+    private static class ResponseHolder {
+        private JSONObject response;
     }
-
-    public NetworkFileSource getSource() {
-        return this.source;
-    }
-
     
 }

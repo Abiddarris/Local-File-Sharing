@@ -56,6 +56,19 @@ public class NetworkFile implements File {
         });
     }
     
+    public void updateDataSync() {
+        JSONObject request = new JSONObject();
+        try {
+            onCreateUpdateRequest(request);
+        } catch (JSONException e) {
+            Log.err.log(TAG, e);
+        }
+
+        JSONObject response = client.sendRequestSync(request);
+        
+        onResponseAvailable(response);
+    }
+    
     protected void onCreateUpdateRequest(JSONObject request) throws JSONException {
         JSONArray requestKeys = createRequest(REQUEST_GET_NAME, REQUEST_LIST_FILES,
              REQUEST_IS_DIRECTORY, REQUEST_IS_FILE, REQUEST_GET_PARENT_FILE,
@@ -141,65 +154,12 @@ public class NetworkFile implements File {
     
     @Override
     public boolean createNewFile() {
-        JSONObject request = new JSONObject();
-        JSONObject result = sendRequestSync(request);
-        
-        updateDataSync();
         
         return false;
     }
     
-    private void updateDataSync() {
-        Object lock = new Object();
-        AtomicBoolean atomic = new AtomicBoolean();
-        updateData(() -> {
-            synchronized(lock) {
-                atomic.set(true);
-                lock.notifyAll();    
-            }
-        });
-        
-        if(atomic.get() == false) { 
-            synchronized(lock) {
-                while(atomic.get() == false) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+    @Override
+    public boolean makeDirs() {
+        return false;
     }
-    
-    private JSONObject sendRequestSync(JSONObject object) {
-        Object lock = new Object();
-        ResultReference reference = new ResultReference();
-        
-        client.sendRequest(object, (jsonResult) -> {
-            synchronized(lock) {
-                reference.result = jsonResult;
-                lock.notifyAll();    
-            }
-        });
-        
-        if(reference.result == null) { 
-            synchronized(lock) {
-                while(reference.result == null) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        
-        return reference.result;
-    }
-    
-    private class ResultReference {
-        private volatile JSONObject result;
-    }
-    
 }

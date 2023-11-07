@@ -30,6 +30,8 @@ public interface File {
     
     public abstract boolean createNewFile() throws IOException;
     
+    public abstract boolean makeDirs();
+    
     public static interface Callback {
         void onDataUpdated();
     }
