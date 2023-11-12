@@ -13,6 +13,7 @@ public final class JSONRequest {
     public static final String REQUEST_GET_MIME_TYPE = "requestGetMimeType";
     public static final String REQUEST_GET_LENGTH = "requestGetLength";
     public static final String REQUEST_GET_LAST_MODIFIED = "requestGetLastModified";
+    public static final String REQUEST_MAKE_DIRECTORIES = "requestMakeDirectories";
     public static final String KEY_ID = "id";
     public static final String KEY_IS_DIRECTORY = "isDirectory";
     public static final String KEY_IS_FILE = "isFile";
@@ -25,6 +26,7 @@ public final class JSONRequest {
     public static final String KEY_TOP_DIRECTORY_FILES = "topDirectoryFiles";
     public static final String KEY_LENGTH = "length";
     public static final String KEY_LAST_MODIFIED = "lastModified";
+    public static final String KEY_MAKE_DIRECTORIES_SUCCESS = "makeDirectoriesSuccess";
     
     public static JSONArray createRequest(String... requestKeys) {
         JSONArray requests = new JSONArray();

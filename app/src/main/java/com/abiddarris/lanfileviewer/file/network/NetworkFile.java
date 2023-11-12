@@ -56,7 +56,7 @@ public class NetworkFile implements File {
         });
     }
     
-    public void updateDataSync() {
+    private void updateDataSync() {
         JSONObject request = new JSONObject();
         try {
             onCreateUpdateRequest(request);
@@ -129,12 +129,9 @@ public class NetworkFile implements File {
 
     @Override
     public Uri toUri() {
-        return Uri.parse("http://"
-                        + client.getAddress().getHostAddress()
-                        + ":"
-                        + client.getPort()
-                        + "/"
-                        + getPath());
+        return Uri.parse("http://" + client.getAddress()
+            .getHostAddress() + ":" + client.getPort() +
+             "/" + getPath());
     }
 
     @Override
@@ -154,12 +151,24 @@ public class NetworkFile implements File {
     
     @Override
     public boolean createNewFile() {
-        
         return false;
     }
     
     @Override
     public boolean makeDirs() {
-        return false;
+        try {
+            JSONObject request = new JSONObject()
+                .putOpt(KEY_PATH, path)
+                .putOpt(KEY_REQUEST, createRequest(REQUEST_MAKE_DIRECTORIES));
+        
+            JSONObject response = client.sendRequestSync(request);
+        
+            updateDataSync();
+            
+            return response.optBoolean(KEY_MAKE_DIRECTORIES_SUCCESS);
+        } catch (Exception e) {
+            Log.err.log(TAG, e);
+            return false;
+        }
     }
 }

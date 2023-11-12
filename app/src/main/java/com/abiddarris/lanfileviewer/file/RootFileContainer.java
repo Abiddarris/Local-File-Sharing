@@ -68,8 +68,14 @@ public class RootFileContainer implements File {
     public boolean createNewFile() {
         return false;
     }
+    
+    @Override
+    public boolean makeDirs() {
+        return false;
+    }
 
     public void addRoots(RootFile rootFile) {
         roots.add(rootFile);
     }
+    
 }

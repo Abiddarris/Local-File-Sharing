@@ -19,6 +19,7 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.file.network.NetworkFileClient;
+import com.abiddarris.lanfileviewer.ui.actions.UploadDialog;
 
 public class NetworkExplorerFragment extends ExplorerFragment {
     
@@ -27,7 +28,8 @@ public class NetworkExplorerFragment extends ExplorerFragment {
         new SelectorExplorerFragment.FileContract(LocalFileSource.getDefaultLocalSource(getContext()), LocalExplorerDialog.class), new ActivityResultCallback<File[]>(){
             @Override
             public void onActivityResult(File[] file) {
-                
+                new UploadDialog(file)
+                    .show(getChildFragmentManager(), null);
             }
         });
     

@@ -4,7 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdManager.DiscoveryListener;
-import android.net.nsd.NsdManager.RegistrationListener;
+
 import android.net.nsd.NsdManager.ResolveListener;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Binder;
@@ -13,11 +13,13 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import com.abiddarris.lanfileviewer.file.network.NetworkFileServer;
+import com.abiddarris.lanfileviewer.file.sharing.FileSharing;
+import com.abiddarris.lanfileviewer.file.sharing.SharingSession;
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ConnectionService extends Service implements RegistrationListener {
+public class ConnectionService extends Service  {
 
     private boolean isRegistered;
     private boolean isScanning;
@@ -28,6 +30,7 @@ public class ConnectionService extends Service implements RegistrationListener {
     private NsdManager nsdManager;
     private NsdServiceInfo info;
     private ServerListAdapter adapter;
+    private SharingSession sharingSession;
     private NetworkFileServer serverThread;
 
     private static final String SERVICE_TYPE = "_http._tcp.";
@@ -63,42 +66,27 @@ public class ConnectionService extends Service implements RegistrationListener {
         return adapter;
     }
 
-    public void onPortAvailable(int port) {
-        Log.debug.log(TAG, "Port Available : " + port);
-
-        info = new NsdServiceInfo();
-        info.setServiceName(Build.BRAND + " " + Build.DEVICE + "_FILEV");
-        info.setServiceType(SERVICE_TYPE);
-        info.setPort(port);
-        
-        nsdManager.registerService(info, NsdManager.PROTOCOL_DNS_SD, this);
-
-        isRegistered = true;
-    }
 
     public boolean isRegistered() {
-        return isRegistered;
+        return sharingSession != null && sharingSession.isRegistered();
     }
 
     public void registerServer() {
-        if (isRegistered) return;
-
+        if (sharingSession != null) return;
+        
         Log.debug.log(TAG, "Registering Server");
         
-        serverThread = new NetworkFileServer(this);
-        executor.submit(serverThread);
+        sharingSession = FileSharing.share(this);
+        sharingSession.start();
     }
 
     public void unregisterServer() {
-        if (!isRegistered) return;
+        if (sharingSession == null) return;
 
         Log.debug.log(TAG, "Unregistering Server");
         
-        serverThread.close();
-        serverThread = null;
-
-        nsdManager.unregisterService(this);
-        isRegistered = false;
+        sharingSession.close();
+        sharingSession = null;
     }
 
     public boolean isScanning() {
@@ -125,26 +113,7 @@ public class ConnectionService extends Service implements RegistrationListener {
         isScanning = false;
     }
 
-    @Override
-    public void onRegistrationFailed(NsdServiceInfo info, int code) {
-        Log.err.log(TAG, "Failed to register server with error code : " + code);
-    }
-
-    @Override
-    public void onUnregistrationFailed(NsdServiceInfo info, int code) {
-        Log.err.log(TAG, "Failed to unregister server with error code : " + code);
-    }
-
-    @Override
-    public void onServiceRegistered(NsdServiceInfo info) {
-        Log.debug.log(TAG, "Sucess registering service with name " + info.getServiceName());
-    }
-
-    @Override
-    public void onServiceUnregistered(NsdServiceInfo info) {
-        Log.debug.log(TAG, "Sucess unregistering service");
-    }
-
+    
     public class DiscoveryListenerImpl implements DiscoveryListener {
         @Override
         public void onDiscoveryStarted(String serverType) {

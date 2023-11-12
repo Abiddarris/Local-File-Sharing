@@ -3,6 +3,7 @@ package com.abiddarris.lanfileviewer.file.network;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import com.abiddarris.lanfileviewer.file.sharing.SharingSession;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.ConnectionService;
 import com.gretta.util.log.Log;
@@ -24,13 +25,13 @@ import org.json.JSONObject;
 public class NetworkFileServer extends BaseRunnable {
 
     private boolean running = true;
-    private ConnectionService service;
+    private SharingSession service;
     private ExecutorService localExecutor = Executors.newFixedThreadPool(10);
     private ServerSocket serverSocket;
     
     private static final String TAG = Log.getTag(NetworkFileServer.class);
     
-    public NetworkFileServer(ConnectionService service) {
+    public NetworkFileServer(SharingSession service) {
         this.service = service;
     }
     

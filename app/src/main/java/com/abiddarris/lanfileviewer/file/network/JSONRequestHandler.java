@@ -127,6 +127,10 @@ public class JSONRequestHandler extends RequestHandler {
         if(key.equalsIgnoreCase(REQUEST_GET_LAST_MODIFIED)) {
             response.put(KEY_LAST_MODIFIED, file.lastModified());
         }
+        
+        if(key.equalsIgnoreCase(REQUEST_MAKE_DIRECTORIES)) {
+            response.put(KEY_MAKE_DIRECTORIES_SUCCESS, file.makeDirs());
+        }
     }
     
 }
