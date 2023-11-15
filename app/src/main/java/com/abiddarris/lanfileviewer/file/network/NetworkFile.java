@@ -56,7 +56,7 @@ public class NetworkFile implements File {
         });
     }
     
-    private void updateDataSync() {
+    private void updateDataSync() throws Exception {
         JSONObject request = new JSONObject();
         try {
             onCreateUpdateRequest(request);

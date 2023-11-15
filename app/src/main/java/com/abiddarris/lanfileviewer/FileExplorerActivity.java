@@ -52,8 +52,6 @@ public class FileExplorerActivity extends ExplorerActivity
         super.onDestroy();
 
         Log.debug.log(TAG, "Destroying Explorer Activity");
-
-        clientThread.close();
     }
 
     @Override

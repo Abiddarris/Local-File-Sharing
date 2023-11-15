@@ -50,7 +50,7 @@ public class JSONRequestHandler extends RequestHandler {
     }
 
     private JSONObject handleRequest(final String requestString) throws Exception {
-      
+      return null;
     }
     
 }

@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.file.network;
 
+import android.net.Uri;
 import static com.abiddarris.lanfileviewer.file.network.JSONRequest.*;
 
 import android.os.Handler;
@@ -8,13 +9,19 @@ import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.FileExplorerActivity;
 import com.abiddarris.lanfileviewer.file.File;
 import com.gretta.util.log.Log;
+import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.ref.Reference;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,19 +34,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NetworkFileClient extends BaseRunnable implements Closeable {
+public class NetworkFileClient extends BaseRunnable {
 
-    private DataOutputStream output;
     private ConnectedCallback callback;
     private ExecutorService executor = Executors.newFixedThreadPool(1);
     private InetAddress address;
     private int port;
     private NetworkFileSource source;
-    private Random random = new Random();
-    private Socket socket;
-    private volatile Map<Integer, ResponseCallback> callbacks = new HashMap<>();
-    private volatile Map<String, File> fileInfos = new HashMap<>();
-
+    private URL server;
+    
     private static final String TAG = Log.getTag(NetworkFileClient.class);
 
     public NetworkFileClient(InetAddress address, int port) {
@@ -53,90 +56,45 @@ public class NetworkFileClient extends BaseRunnable implements Closeable {
 
     @Override
     public void onExecute() throws Exception {
-        socket = new Socket(address, port);
-        DataInputStream input = new DataInputStream(socket.getInputStream());
-        output = new DataOutputStream(socket.getOutputStream());
-        output.write("JSON request\n\n".getBytes());
-        output.flush();
-
+        server = new URL("http://" + address.getHostName() +
+            ":" + port + "/fetch");
+        
         source = new NetworkFileSource(this);
-
-        while (true) {
-            JSONObject jsonObject = new JSONObject(read(input));
-            int id = jsonObject.getInt(KEY_ID);
-            ResponseCallback callback = releaseId(id);
-            callback.onResponseAvailable(jsonObject);
-        }
-    }
-
-    private String read(final DataInputStream input) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        String data = "";
-        while (!data.endsWith("[END]")) {
-            data = input.readUTF();
-            builder.append(data);
-        }
-        builder.delete(builder.length() - 5, builder.length());
-        return builder.toString();
-    }
-
-    @Override
-    public void onFinalization() {
-        super.onFinalization();
-
-        close();
-    }
-
-    @Override
-    public void close() {
-        Log.debug.log(TAG, "Closing Connection");
-        if (socket != null) {
-            try {
-                socket.close();
-            } catch (Exception e) {
-                Log.err.log(TAG, e);
-            }
-        }
     }
 
     public void sendRequest(JSONObject json, ResponseCallback callback) {
         executor.submit(() -> {
             try {
-                Log.debug.log(TAG, "Sending a request to server");
-                int id = getId();
-                json.put(KEY_ID, id);
-
-                callbacks.put(id, callback);
-                output.writeUTF(json.toString());
-                output.flush();
+                JSONObject response = sendRequestSync(json);
+                callback.onResponseAvailable(response);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
     
-    public JSONObject sendRequestSync(JSONObject json) {
-        CountDownLatch lock = new CountDownLatch(1);
-        ResponseHolder holder = new ResponseHolder();
-        sendRequest(json, (response) -> {
-            holder.response = response;    
-            lock.countDown();
-        });
+    public JSONObject sendRequestSync(JSONObject json) throws IOException, JSONException {
+        HttpURLConnection connection = (HttpURLConnection) server.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Content-Length", "" + json.toString().length());
         
-        try {
-            lock.await();
-            return holder.response;
-        } catch (Exception e) {
-            Log.debug.log(TAG, e);
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(json.toString().getBytes());
+        outputStream.flush();
+        
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String data;
+        StringBuilder result = new StringBuilder();
+        while((data = reader.readLine()) != null) {
+            result.append(data)
+                .append("\n");
         }
-        return null;
-    }
-
-    private ResponseCallback releaseId(int id) {
-        ResponseCallback callback = callbacks.get(id);
-        callbacks.remove(id);
-
-        return callback;
+        reader.close();
+        outputStream.close();
+        
+        return new JSONObject(result.toString());
     }
 
     public InetAddress getAddress() {
@@ -145,17 +103,6 @@ public class NetworkFileClient extends BaseRunnable implements Closeable {
 
     public int getPort() {
         return port;
-    }
-
-    private int getId() {
-        while (true) {
-            int rand = random.nextInt();
-            Log.debug.log(TAG, "Generating random number : " + rand);
-            if (callbacks.get(random) == null) {
-                Log.debug.log(TAG, "The Number is unique, returning the number!");
-                return rand;
-            }
-        }
     }
 
     public ConnectedCallback getConnectedCallback() {

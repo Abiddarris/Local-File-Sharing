@@ -104,8 +104,6 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         JSONObject request = new JSONObject(requestString);
         JSONObject response = new JSONObject();
         
-        response.put(KEY_ID, request.getInt(KEY_ID));
-        
         JSONArray requestKeys = request.getJSONArray(KEY_REQUEST);
         String path = request.optString(KEY_PATH);
         for(int i = 0; i < requestKeys.length(); ++i) {
@@ -117,7 +115,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             fetchOthersRequest(request,response,key,path);
         }
         
-        return newFixedLengthResponse(Response.Status.OK, "application/json", response.length());
+        return newFixedLengthResponse(Response.Status.OK, "application/json", response.toString());
     }
     
     private void fetchOthersRequest(JSONObject request, JSONObject response, String key, String path) throws JSONException {
