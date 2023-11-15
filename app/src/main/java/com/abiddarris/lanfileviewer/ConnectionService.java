@@ -66,7 +66,6 @@ public class ConnectionService extends Service  {
         return adapter;
     }
 
-
     public boolean isRegistered() {
         return sharingSession != null && sharingSession.isRegistered();
     }
@@ -77,7 +76,11 @@ public class ConnectionService extends Service  {
         Log.debug.log(TAG, "Registering Server");
         
         sharingSession = FileSharing.share(this);
-        sharingSession.start();
+        try {
+            sharingSession.start();
+        } catch (Exception e) {
+            Log.err.log(TAG,e);
+        }
     }
 
     public void unregisterServer() {

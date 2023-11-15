@@ -17,30 +17,7 @@ public class HTTPRequestHandler extends RequestHandler {
     
     @Override
     public void onExecute() throws Exception {
-        String encodedPath = findUri(getRequest());
-        String decodedPath = encodedPath.replace("%20", " ");
-        
-        File file = LocalFileSource.getDefaultLocalSource(ApplicationCore.getApplication())
-            .getFile(new String(decodedPath));
-        
-        long rangeOffset = findRangeOffset(getRequest());
-        String response = createResponse(file, rangeOffset);
-        rangeOffset = Math.max(0, rangeOffset);
-        
-        getOutputStream().write(response.getBytes(StandardCharsets.UTF_8));
-        getOutputStream().flush();
-        
-        Log.debug.log(getTag(),"Response : ");
-        Log.debug.log(getTag(),response);
-        
-        RandomAccessFile input = new RandomAccessFile(new java.io.File(file.getPath()),"r");
-        byte[] buf = new byte[1024];
-        int len = 0;              
-        input.seek(rangeOffset);
-        while((len = input.read(buf)) != -1) {                 
-            getOutputStream().write(buf,0,len);                   
-        }
-        getOutputStream().flush();           
+             
     }
 
     private String createResponse(File file, long rangeOffset) {

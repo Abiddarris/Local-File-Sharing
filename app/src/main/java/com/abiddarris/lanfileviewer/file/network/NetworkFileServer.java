@@ -40,8 +40,8 @@ public class NetworkFileServer extends BaseRunnable {
         Log.debug.log(TAG,"Server Thread Running");
         
         serverSocket = new ServerSocket(0);
-        new Handler(Looper.getMainLooper())
-            .post(() -> service.onPortAvailable(serverSocket.getLocalPort()));
+    //    new Handler(Looper.getMainLooper())
+      //      .post(() -> service.onPortAvailable(serverSocket.getLocalPort()));
         
         while(running) {
             Socket socket = serverSocket.accept();
