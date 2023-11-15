@@ -34,14 +34,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/network/NetworkFileClient.java",
       "selection": {
         "end": {
-          "column": 53,
-          "index": 2173,
-          "line": 68
+          "column": 20,
+          "index": 1190,
+          "line": 38
         },
         "start": {
-          "column": 53,
-          "index": 2173,
-          "line": 68
+          "column": 20,
+          "index": 1190,
+          "line": 38
         }
       }
     },

@@ -78,7 +78,6 @@ public class NetworkFileClient extends BaseRunnable {
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
         connection.setRequestProperty("Content-Type", "application/json");
-        connection.setRequestProperty("Content-Length", "" + json.toString().length());
         
         OutputStream outputStream = connection.getOutputStream();
         outputStream.write(json.toString().getBytes());
