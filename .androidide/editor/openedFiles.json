@@ -64,14 +64,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/network/NetworkFile.java",
       "selection": {
         "end": {
-          "column": 51,
-          "index": 1747,
-          "line": 58
+          "column": 8,
+          "index": 2005,
+          "line": 67
         },
         "start": {
-          "column": 51,
-          "index": 1747,
-          "line": 58
+          "column": 8,
+          "index": 2005,
+          "line": 67
         }
       }
     },
@@ -94,14 +94,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/network/JSONRequest.java",
       "selection": {
         "end": {
-          "column": 83,
-          "index": 921,
-          "line": 15
+          "column": 0,
+          "index": 51,
+          "line": 1
         },
         "start": {
-          "column": 83,
-          "index": 921,
-          "line": 15
+          "column": 0,
+          "index": 51,
+          "line": 1
         }
       }
     },
@@ -121,20 +121,20 @@
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/network/JSONRequestHandler.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/network/NetworkRootFile.java",
       "selection": {
         "end": {
-          "column": 18,
-          "index": 1829,
-          "line": 52
+          "column": 0,
+          "index": 0,
+          "line": 0
         },
         "start": {
-          "column": 18,
-          "index": 1829,
-          "line": 52
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/network/NetworkFileClient.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/network/NetworkFileSource.java"
 }
