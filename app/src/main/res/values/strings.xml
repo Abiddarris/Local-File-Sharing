@@ -34,5 +34,7 @@
     <string name="write_access">Write Access</string>
     <string name="delete_access">Delete Access</string>
     <string name="permission">Permission</string>
+    <string name="preparing">Preparing</string>
+    <string name="cancel">Cancel</string>
     
 </resources>
