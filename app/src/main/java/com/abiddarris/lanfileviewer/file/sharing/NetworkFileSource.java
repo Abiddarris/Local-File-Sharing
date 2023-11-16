@@ -20,7 +20,7 @@ import org.json.JSONObject;
 
 public class NetworkFileSource extends FileSource {
     
-    private ExecutorService executor = Executors.newFixedThreadPool(1);
+    private ExecutorService executor = Executors.newFixedThreadPool(16);
     private RootFileContainer root;
     private SharingDevice device;
     private URL server;
