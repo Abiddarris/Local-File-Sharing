@@ -3,7 +3,7 @@ package com.abiddarris.lanfileviewer;
 import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
-import com.abiddarris.lanfileviewer.file.network.NetworkFileClient;
+import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
 import com.abiddarris.lanfileviewer.utils.Theme;
 import com.gretta.util.log.FilesLog;
 import com.gretta.util.log.Log;
@@ -16,9 +16,6 @@ public class ApplicationCore extends Application {
 
     private static final String TAG = Log.getTag(ApplicationCore.class);
     
-    private NetworkFileClient client;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
-
     private static ApplicationCore core;
     private static Handler mainHandler;
     
@@ -30,15 +27,6 @@ public class ApplicationCore extends Application {
 
         Theme.apply(this);
         setupLogger();
-    }
-    
-    public void setNetworkFileClient(NetworkFileClient client) {
-    	this.client = client;
-        executor.submit(client);
-    }
-    
-    public NetworkFileClient getNetworkFileClient() {
-        return client;
     }
     
     public static ApplicationCore getApplication() {

@@ -1,4 +1,4 @@
-package com.abiddarris.lanfileviewer.file.network;
+package com.abiddarris.lanfileviewer.file.sharing;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

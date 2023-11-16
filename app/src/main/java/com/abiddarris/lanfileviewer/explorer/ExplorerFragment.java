@@ -23,8 +23,8 @@ import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.FragmentFileExplorerBinding;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
-import com.abiddarris.lanfileviewer.file.network.NetworkFile;
-import com.abiddarris.lanfileviewer.file.network.NetworkFileClient;
+import com.abiddarris.lanfileviewer.file.sharing.NetworkFile;
+import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gretta.util.log.Log;
 

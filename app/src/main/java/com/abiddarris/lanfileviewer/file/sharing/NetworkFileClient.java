@@ -1,7 +1,7 @@
-package com.abiddarris.lanfileviewer.file.network;
+package com.abiddarris.lanfileviewer.file.sharing;
 
 import android.net.Uri;
-import static com.abiddarris.lanfileviewer.file.network.JSONRequest.*;
+import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -37,11 +37,10 @@ import org.json.JSONObject;
 public class NetworkFileClient extends BaseRunnable {
 
     private ConnectedCallback callback;
-    private ExecutorService executor = Executors.newFixedThreadPool(1);
+    
     private InetAddress address;
     private int port;
     private NetworkFileSource source;
-    private URL server;
     
     private static final String TAG = Log.getTag(NetworkFileClient.class);
 
@@ -56,46 +55,10 @@ public class NetworkFileClient extends BaseRunnable {
 
     @Override
     public void onExecute() throws Exception {
-        server = new URL("http://" + address.getHostName() +
-            ":" + port + "/fetch");
         
-        source = new NetworkFileSource(this);
     }
 
-    public void sendRequest(JSONObject json, ResponseCallback callback) {
-        executor.submit(() -> {
-            try {
-                JSONObject response = sendRequestSync(json);
-                callback.onResponseAvailable(response);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
     
-    public JSONObject sendRequestSync(JSONObject json) throws IOException, JSONException {
-        HttpURLConnection connection = (HttpURLConnection) server.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setDoOutput(true);
-        connection.setRequestProperty("Content-Type", "application/json");
-        
-        OutputStream outputStream = connection.getOutputStream();
-        outputStream.write(json.toString().getBytes());
-        outputStream.flush();
-        
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String data;
-        StringBuilder result = new StringBuilder();
-        while((data = reader.readLine()) != null) {
-            result.append(data)
-                .append("\n");
-        }
-        reader.close();
-        outputStream.close();
-        
-        return new JSONObject(result.toString());
-    }
-
     public InetAddress getAddress() {
         return this.address;
     }
@@ -112,9 +75,7 @@ public class NetworkFileClient extends BaseRunnable {
         return this.source;
     }
     
-    public static interface ResponseCallback {
-        void onResponseAvailable(JSONObject json);
-    }
+    
 
     public static interface ConnectedCallback {
         void onConnected(NetworkFileSource source);

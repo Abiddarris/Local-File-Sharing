@@ -1,6 +1,6 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
-import static com.abiddarris.lanfileviewer.file.network.JSONRequest.*;
+import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
 import android.content.Context;
 import android.net.nsd.NsdManager;
@@ -11,7 +11,6 @@ import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
-import com.abiddarris.lanfileviewer.file.network.NetworkFileServer;
 import com.gretta.util.log.Log;
 import fi.iki.elonen.NanoHTTPD;
 import java.io.FileInputStream;
@@ -34,7 +33,6 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     private Context context;
     private ExecutorService executor = Executors.newCachedThreadPool();
     private NsdManager nsdManager;
-    private NetworkFileServer serverThread;
     
     private static final String TAG = Log.getTag(SharingSession
         .class);

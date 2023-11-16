@@ -10,4 +10,8 @@ public class FileSharing {
         return new SharingSession(context);
     }
     
+    public static ScanningSession scan(Context context, ScanningSession.Callback callback) {
+    	return new ScanningSession(context, callback);
+    }
+    
 }

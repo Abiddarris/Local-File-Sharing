@@ -18,7 +18,7 @@ import com.abiddarris.lanfileviewer.explorer.SelectorExplorerFragment;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
-import com.abiddarris.lanfileviewer.file.network.NetworkFileClient;
+import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
 import com.abiddarris.lanfileviewer.ui.actions.UploadDialog;
 
 public class NetworkExplorerFragment extends ExplorerFragment {

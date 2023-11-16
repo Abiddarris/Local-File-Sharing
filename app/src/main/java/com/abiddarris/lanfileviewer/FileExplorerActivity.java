@@ -20,16 +20,20 @@ import com.abiddarris.lanfileviewer.ConnectionService.ConnectionServiceBridge;
 import com.abiddarris.lanfileviewer.databinding.LayoutFileExplorerBinding;
 import com.abiddarris.lanfileviewer.explorer.ExplorerActivity;
 import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
+import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
+import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 import com.abiddarris.lanfileviewer.ui.NetworkExplorerFragment;
-import com.abiddarris.lanfileviewer.file.network.NetworkFile;
-import com.abiddarris.lanfileviewer.file.network.NetworkFileClient;
+import com.abiddarris.lanfileviewer.file.sharing.NetworkFile;
+import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
 import com.gretta.util.log.Log;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FileExplorerActivity extends ExplorerActivity
         implements ServiceConnection {
 
+    private ExecutorService executor = Executors.newFixedThreadPool(1);
     private LayoutFileExplorerBinding binding;
-    private NetworkFileClient clientThread;
     private ConnectionService bridge;
     
     private static final String TAG = Log.getTag(FileExplorerActivity.class);
@@ -62,36 +66,35 @@ public class FileExplorerActivity extends ExplorerActivity
 
         bridge = ((ConnectionServiceBridge) binder).getService();
         Log.debug.log(TAG, "Finding server with name : " + name);
-        NsdServiceInfo info = bridge.getAdapter().getServer(name);
-
-        clientThread = new NetworkFileClient(info.getHost(), info.getPort());
-        clientThread.setConnectedCallback(source -> {
-            NetworkExplorerFragment fragment = new NetworkExplorerFragment(source);
+        
+        SharingDevice info = bridge.getAdapter().getServer(name);
+        
+        executor.submit(() -> {
+            try {
+                NetworkFileSource source = info.openConnection();
+                NetworkExplorerFragment fragment = new NetworkExplorerFragment(source);
+                getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragmentContainer, fragment)
+                    .commit();
                 
-            getSupportFragmentManager().beginTransaction()
-            .setReorderingAllowed(true)
-            .add(R.id.fragmentContainer, fragment)
-            .commit();
-                
-            getSupportFragmentManager().setFragmentFactory(new FragmentFactory(){
+                getSupportFragmentManager().setFragmentFactory(new FragmentFactory(){
                
-                @Override
-                @NonNull
-                public Fragment instantiate(ClassLoader loader, String name) {
-                    Class<? extends Fragment> fragmentClass = loadFragmentClass(loader,name);
-                    if(fragmentClass == NetworkExplorerFragment.class) {
-                        return new NetworkExplorerFragment(source);
-                    }   
+                    @Override
+                    @NonNull
+                    public Fragment instantiate(ClassLoader loader, String name) {
+                        Class<? extends Fragment> fragmentClass = loadFragmentClass(loader,name);
+                        if(fragmentClass == NetworkExplorerFragment.class) {
+                            return new NetworkExplorerFragment(source);
+                        }   
                             
-                    return super.instantiate(loader, name);
-                }
-                
-            });
+                        return super.instantiate(loader, name);
+                    }
+                });
+            } catch(Exception e) {
+                Log.debug.log(TAG, e);
+            }
         });
-        
-        
-        ApplicationCore app = (ApplicationCore)getApplicationContext();
-        app.setNetworkFileClient(clientThread);
     }
 
     @Override

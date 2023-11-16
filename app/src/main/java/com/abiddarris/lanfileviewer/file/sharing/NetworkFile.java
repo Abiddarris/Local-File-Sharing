@@ -1,6 +1,6 @@
-package com.abiddarris.lanfileviewer.file.network;
+package com.abiddarris.lanfileviewer.file.sharing;
 
-import static com.abiddarris.lanfileviewer.file.network.JSONRequest.*;
+import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
 import android.net.Uri;
 import android.os.Handler;
@@ -25,7 +25,6 @@ public class NetworkFile implements File {
     private long length;
     private File parentFile;
     private File[] listFiles;
-    private NetworkFileClient client;
     private NetworkFileSource source;
     private String mimeType;
     private String name;
@@ -36,7 +35,6 @@ public class NetworkFile implements File {
     protected NetworkFile(NetworkFileSource source, String path) {
         this.path = path;
         this.source = source;
-        this.client = source.getClient();
     }
 
     @Override
@@ -48,7 +46,7 @@ public class NetworkFile implements File {
             Log.err.log(TAG, e);
         }
 
-        client.sendRequest(request, (response) -> {
+        source.sendRequest(request, (response) -> {
             onResponseAvailable(response);
 
             if (callback != null)
@@ -64,7 +62,7 @@ public class NetworkFile implements File {
             Log.err.log(TAG, e);
         }
 
-        JSONObject response = client.sendRequestSync(request);
+        JSONObject response = source.sendRequestSync(request);
         
         onResponseAvailable(response);
     }
@@ -129,8 +127,9 @@ public class NetworkFile implements File {
 
     @Override
     public Uri toUri() {
-        return Uri.parse("http://" + client.getAddress()
-            .getHostAddress() + ":" + client.getPort() +
+        SharingDevice device = source.getDevice();
+        return Uri.parse("http://" + device.getHost()
+            .getHostAddress() + ":" + device.getPort() +
              "/" + getPath());
     }
 
@@ -161,7 +160,7 @@ public class NetworkFile implements File {
                 .putOpt(KEY_PATH, path)
                 .putOpt(KEY_REQUEST, createRequest(REQUEST_MAKE_DIRECTORIES));
         
-            JSONObject response = client.sendRequestSync(request);
+            JSONObject response = source.sendRequestSync(request);
         
             updateDataSync();
             

@@ -1,4 +1,4 @@
-package com.abiddarris.lanfileviewer.file.network;
+package com.abiddarris.lanfileviewer.file.sharing;
 
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.RootFile;
