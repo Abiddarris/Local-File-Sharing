@@ -47,16 +47,11 @@ public class UploadDialog extends DialogFragment {
             .setView(view.getRoot())
             .create();
         
+        executor.submit(new UploadRunnable());
+        
         return dialog;
     }
-    
-    @Override
-    public void onStart() {
-        super.onStart();
-        
-        executor.submit(new UploadRunnable());
-    }
-    
+ 
     public class UploadRunnable extends BaseRunnable {
         
         @Override
