@@ -12,7 +12,7 @@ public class Files {
         File[] children = parent.listFiles();
         if(children == null) return;
         
-        for(File file : files) {
+        for(File file : children) {
             getFilesTree(files,file);
         }
     }

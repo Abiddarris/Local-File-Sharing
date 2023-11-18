@@ -23,12 +23,11 @@ import com.abiddarris.lanfileviewer.ui.actions.UploadDialog;
 
 public class NetworkExplorerFragment extends ExplorerFragment {
     
-    
     private ActivityResultLauncher<Bundle> uploadLauncher = registerForActivityResult(
         new SelectorExplorerFragment.FileContract(LocalFileSource.getDefaultLocalSource(getContext()), LocalExplorerDialog.class), new ActivityResultCallback<File[]>(){
             @Override
-            public void onActivityResult(File[] file) {
-                new UploadDialog(file)
+            public void onActivityResult(File[] files) {
+                new UploadDialog(getSource(),getExplorer().getParent(),files)
                     .show(getChildFragmentManager(), null);
             }
         });
