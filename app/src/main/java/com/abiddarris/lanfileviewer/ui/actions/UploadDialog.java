@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import androidx.annotation.CallSuper;
+import androidx.annotation.MainThread;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import com.abiddarris.lanfileviewer.R;
@@ -40,10 +42,12 @@ public class UploadDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle bundle) {
         setCancelable(false);
         
+        String title = String.format(getString(R.string.upload_dialog_title), items.length);
+        
         view = UploadDialogBinding.inflate(getLayoutInflater());
         
         AlertDialog dialog = new MaterialAlertDialogBuilder(getContext())
-            .setTitle("p")
+            .setTitle(title)
             .setView(view.getRoot())
             .create();
         

@@ -1,32 +1,17 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ui/NetworkExplorerFragment.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/strings.xml",
       "selection": {
         "end": {
-          "column": 67,
-          "index": 1470,
-          "line": 29
+          "column": 56,
+          "index": 1718,
+          "line": 38
         },
         "start": {
-          "column": 67,
-          "index": 1470,
-          "line": 29
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/ExplorerFragment.java",
-      "selection": {
-        "end": {
-          "column": 41,
-          "index": 4040,
-          "line": 116
-        },
-        "start": {
-          "column": 41,
-          "index": 4040,
-          "line": 116
+          "column": 56,
+          "index": 1718,
+          "line": 38
         }
       }
     },
@@ -34,44 +19,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ui/actions/UploadDialog.java",
       "selection": {
         "end": {
-          "column": 1,
-          "index": 1843,
-          "line": 53
+          "column": 27,
+          "index": 1867,
+          "line": 49
         },
         "start": {
-          "column": 1,
-          "index": 1843,
-          "line": 53
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ui/LocalExplorerDialog.java",
-      "selection": {
-        "end": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        },
-        "start": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/Explorer.java",
-      "selection": {
-        "end": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        },
-        "start": {
-          "column": 0,
-          "index": 0,
-          "line": 0
+          "column": 27,
+          "index": 1867,
+          "line": 49
         }
       }
     }
