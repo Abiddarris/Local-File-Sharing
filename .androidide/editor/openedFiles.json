@@ -19,14 +19,29 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ui/actions/UploadDialog.java",
       "selection": {
         "end": {
-          "column": 27,
-          "index": 1867,
-          "line": 49
+          "column": 17,
+          "index": 1822,
+          "line": 48
         },
         "start": {
-          "column": 27,
-          "index": 1867,
-          "line": 49
+          "column": 17,
+          "index": 1822,
+          "line": 48
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/upload_dialog.xml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     }

@@ -45,6 +45,9 @@ public class UploadDialog extends DialogFragment {
         String title = String.format(getString(R.string.upload_dialog_title), items.length);
         
         view = UploadDialogBinding.inflate(getLayoutInflater());
+        view.cancel.setOnClickListener((v) -> {
+            dismiss();
+        });
         
         AlertDialog dialog = new MaterialAlertDialogBuilder(getContext())
             .setTitle(title)
