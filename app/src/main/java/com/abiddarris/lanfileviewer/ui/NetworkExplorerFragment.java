@@ -13,13 +13,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.R;
+import com.abiddarris.lanfileviewer.actions.ActionDialog;
+import com.abiddarris.lanfileviewer.actions.ActionRunnable;
+import com.abiddarris.lanfileviewer.actions.uploads.UploadRunnable;
 import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
 import com.abiddarris.lanfileviewer.explorer.SelectorExplorerFragment;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
-import com.abiddarris.lanfileviewer.ui.actions.UploadDialog;
 
 public class NetworkExplorerFragment extends ExplorerFragment {
     
@@ -27,7 +29,8 @@ public class NetworkExplorerFragment extends ExplorerFragment {
         new SelectorExplorerFragment.FileContract(LocalFileSource.getDefaultLocalSource(getContext()), LocalExplorerDialog.class), new ActivityResultCallback<File[]>(){
             @Override
             public void onActivityResult(File[] files) {
-                new UploadDialog(getSource(),getExplorer().getParent(),files)
+                ActionRunnable runnable = new UploadRunnable(getSource(), getExplorer().getParent(), files);
+                new ActionDialog(runnable)
                     .show(getChildFragmentManager(), null);
             }
         });
