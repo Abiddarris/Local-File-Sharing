@@ -10,4 +10,5 @@ public class LocalRootFile extends LocalFile implements RootFile {
     LocalRootFile(LocalFileSource source, File parent, java.io.File file) {
         super(source, parent, file);
     }
+    
 }

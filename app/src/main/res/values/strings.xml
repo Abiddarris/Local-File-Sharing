@@ -37,4 +37,9 @@
     <string name="preparing">Preparing</string>
     <string name="cancel">Cancel</string>
     <string name="upload_dialog_title">Uploading %s items</string>
+    <string name="operation_options_title">Rename file or replace existing one?</string>
+    <string name="operation_options_description">You already have file named %s in the destination folder</string>
+    <string name="operation_options_apply_to_similar_items">Do this for all similar items</string>
+    <string name="skip">Skip</string>
+    <string name="replace">Replace</string>
 </resources>

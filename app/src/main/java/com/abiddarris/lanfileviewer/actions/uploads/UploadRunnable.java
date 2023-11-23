@@ -50,10 +50,14 @@ public class UploadRunnable extends ActionRunnable {
         File parent = items[0].getParentFile();
         for (int i = 0; i < files.size(); ++i) {
             File originalFile = files.get(i);
-            String filePath = originalFile.getPath().replace(parent.getPath(), "");
-            File networkFile = destSource.getFile(dest.getPath() + filePath);
+            String localPath = originalFile.getPath()
+                .replace(parent.getPath(), "");
+            
+            File destFile = getDialog()
+                .getFile(destSource, dest.getPath() + localPath);
+         
             if (originalFile.isDirectory()) {
-                uploadDirectory(networkFile, i, files.size());
+                uploadDirectory(destFile, i, files.size());
             }
         }
     }

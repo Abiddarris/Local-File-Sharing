@@ -178,6 +178,10 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         if(key.equalsIgnoreCase(REQUEST_MAKE_DIRECTORIES)) {
             response.put(KEY_MAKE_DIRECTORIES_SUCCESS, file.makeDirs());
         }
+        
+        if(key.equalsIgnoreCase(REQUEST_EXISTS)) {
+            response.put(KEY_EXISTS, file.exists());
+        }
     }
 
     private Response getFile(IHTTPSession session) throws IOException {

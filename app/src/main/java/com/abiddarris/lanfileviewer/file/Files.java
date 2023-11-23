@@ -17,4 +17,22 @@ public class Files {
         }
     }
     
+    public static String getNameWithoutExtension(File file) {
+    	String fileName = file.getName();
+        int extensionSeparator = fileName.lastIndexOf(".");
+        
+        if(extensionSeparator == - 1) return fileName;
+        
+        return fileName.substring(0, extensionSeparator);
+    }
+    
+    public static String getExtension(File file) {
+    	String fileName = file.getName();
+        int extensionSeparator = fileName.lastIndexOf(".");
+        
+        if(extensionSeparator == - 1) return "";
+        
+        return fileName.substring(extensionSeparator + 1);
+    }
+    
 }

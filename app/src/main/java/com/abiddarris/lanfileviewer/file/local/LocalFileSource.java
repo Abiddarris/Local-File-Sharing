@@ -16,7 +16,7 @@ public class LocalFileSource extends FileSource {
     public static final String TAG = Log.getTag(LocalFileSource.class);
     
     public LocalFileSource(Context context) {
-        root = new RootFileContainer();
+        root = new RootFileContainer(this);
         
         RootFile internalStorage = new LocalRootFile(this, root,
             Environment.getExternalStorageDirectory());

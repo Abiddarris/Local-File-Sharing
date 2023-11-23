@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
+import com.abiddarris.lanfileviewer.file.FileSource;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
 import android.net.Uri;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 
 public class NetworkFile implements File {
 
+    private boolean exists;
     private boolean isDirectory;
     private boolean isFile;
     private long lastModified;
@@ -54,7 +56,7 @@ public class NetworkFile implements File {
         });
     }
     
-    private void updateDataSync() throws Exception {
+    public void updateDataSync() throws Exception {
         JSONObject request = new JSONObject();
         try {
             onCreateUpdateRequest(request);
@@ -70,7 +72,7 @@ public class NetworkFile implements File {
     protected void onCreateUpdateRequest(JSONObject request) throws JSONException {
         JSONArray requestKeys = createRequest(REQUEST_GET_NAME, REQUEST_LIST_FILES,
              REQUEST_IS_DIRECTORY, REQUEST_IS_FILE, REQUEST_GET_PARENT_FILE,
-             REQUEST_GET_MIME_TYPE, REQUEST_GET_LENGTH, REQUEST_GET_LAST_MODIFIED);
+             REQUEST_GET_MIME_TYPE, REQUEST_GET_LENGTH, REQUEST_GET_LAST_MODIFIED, REQUEST_EXISTS);
         
         request.putOpt(KEY_REQUEST, requestKeys)
                 .putOpt(KEY_PATH, path);
@@ -84,7 +86,8 @@ public class NetworkFile implements File {
         mimeType = response.optString(KEY_MIME_TYPE);
         length = response.optLong(KEY_LENGTH);
         lastModified = response.optLong(KEY_LAST_MODIFIED);
-
+        exists = response.optBoolean(KEY_EXISTS);
+        
         JSONArray paths = response.optJSONArray(KEY_LIST_FILES);
         if (paths != null) {
             listFiles = new NetworkFile[paths.length()];
@@ -94,7 +97,12 @@ public class NetworkFile implements File {
             }
         }
     }
-
+    
+    @Override
+    public FileSource getSource() {
+        return source;
+    }
+    
     @Override
     public boolean isDirectory() {
         return isDirectory;
@@ -170,4 +178,10 @@ public class NetworkFile implements File {
             return false;
         }
     }
+    
+    @Override
+    public boolean exists() {
+        return exists;
+    }
+    
 }

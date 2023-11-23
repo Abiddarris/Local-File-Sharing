@@ -3,6 +3,7 @@ package com.abiddarris.lanfileviewer.file.local;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FileSource;
 import java.io.IOException;
 
 public class LocalFile implements File {
@@ -21,6 +22,11 @@ public class LocalFile implements File {
     public void updateData(Callback callback) {
         callback.onDataUpdated();
     }
+    
+    @Override
+    public void updateDataSync() throws Exception {
+    }
+    
 
     @Override
     public boolean isDirectory() {
@@ -125,6 +131,19 @@ public class LocalFile implements File {
             .checkWrite(this);
         
         return file.mkdirs();
+    }
+    
+    @Override
+    public boolean exists() {
+        source.getSecurityManager()
+            .checkRead(this);
+        
+        return file.exists();
+    }
+    
+    @Override
+    public FileSource getSource() {
+        return source;
     }
     
     

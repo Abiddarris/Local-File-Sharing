@@ -23,6 +23,7 @@ import com.gretta.util.log.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,10 +32,12 @@ public class ActionDialog extends DialogFragment {
     private ActionRunnable runnable;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private DialogActionProgressBinding view;
-
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private OperationOptionsDialog optionsDialog;
+    
     public ActionDialog(ActionRunnable runnable) {
         this.runnable = runnable;
-
+        
         runnable.attachDialog(this);
     }
 
@@ -46,6 +49,8 @@ public class ActionDialog extends DialogFragment {
         view.cancel.setOnClickListener((v) -> {
             dismiss();
         });
+        
+        optionsDialog = new OperationOptionsDialog(this);
 
         AlertDialog dialog =
                 new MaterialAlertDialogBuilder(getContext())
@@ -54,8 +59,36 @@ public class ActionDialog extends DialogFragment {
                         .create();
 
         executor.submit(runnable);
-
+        
         return dialog;
+    }
+    
+    public File getFile(FileSource source, String path) throws Exception {
+        File file = source.getFile(path);
+        file.updateDataSync();
+        
+        if(!file.exists()) return file;
+        
+        OperationOptions options = optionsDialog.getDefaultResult();
+        if(options != null) return options.transform(file);
+        
+        CountDownLatch lock = new CountDownLatch(1);
+        
+        handler.post(() -> {
+            getDialog().hide();
+                
+            optionsDialog.show(getParentFragmentManager(), lock, file.getName());
+        });
+        
+        try {
+        	lock.await();
+            options = optionsDialog.getResult();
+            
+            return options.transform(file);
+        } catch(InterruptedException err) {
+        	err.printStackTrace();
+        }
+        return null;
     }
 
     public DialogActionProgressBinding getViewBinding() {

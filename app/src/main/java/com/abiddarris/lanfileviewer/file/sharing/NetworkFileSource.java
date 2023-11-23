@@ -35,7 +35,7 @@ public class NetworkFileSource extends FileSource {
             .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_GET_TOP_DIRECTORY_FILES));
         JSONObject response = sendRequestSync(request);
         JSONArray jsonTopDirectoryFiles = response.optJSONArray(KEY_TOP_DIRECTORY_FILES);
-        root = new RootFileContainer(); 
+        root = new RootFileContainer(this); 
             
         for(int i = 0; i < jsonTopDirectoryFiles.length(); ++i) {
             String path = jsonTopDirectoryFiles.optString(i);

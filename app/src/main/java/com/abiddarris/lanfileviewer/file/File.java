@@ -8,6 +8,10 @@ public interface File {
     
     public abstract void updateData(Callback callback);
     
+    public abstract void updateDataSync() throws Exception;
+    
+    public abstract FileSource getSource();
+    
     public abstract boolean isDirectory();
     
     public abstract boolean isFile();
@@ -31,6 +35,8 @@ public interface File {
     public abstract boolean createNewFile() throws IOException;
     
     public abstract boolean makeDirs();
+    
+    public abstract boolean exists();
     
     public static interface Callback {
         void onDataUpdated();

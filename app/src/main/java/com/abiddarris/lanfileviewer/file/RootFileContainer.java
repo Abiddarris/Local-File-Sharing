@@ -7,12 +7,22 @@ import java.util.List;
 
 public class RootFileContainer implements File {
 
+    private FileSource source;
     private List<RootFile> roots = new ArrayList<>();
 
+    public RootFileContainer(FileSource source) {
+        this.source = source;
+    }
+    
     @Override
     public void updateData(Callback callback) {
         callback.onDataUpdated();
     }
+    
+    @Override
+    public void updateDataSync() throws Exception {
+    }
+    
 
     @Override
     public boolean isDirectory() {
@@ -72,6 +82,16 @@ public class RootFileContainer implements File {
     @Override
     public boolean makeDirs() {
         return false;
+    }
+    
+    @Override
+    public boolean exists() {
+        return true;
+    }
+    
+    @Override
+    public FileSource getSource() {
+        return null;
     }
 
     public void addRoots(RootFile rootFile) {
