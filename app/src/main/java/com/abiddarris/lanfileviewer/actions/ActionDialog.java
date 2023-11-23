@@ -63,6 +63,15 @@ public class ActionDialog extends DialogFragment {
         return dialog;
     }
     
+    @Override
+    @MainThread
+    @CallSuper
+    public void onDestroy() {
+        super.onDestroy();
+        
+        optionsDialog.dismiss();
+    }
+    
     public File getFile(FileSource source, String path) throws Exception {
         File file = source.getFile(path);
         file.updateDataSync();
