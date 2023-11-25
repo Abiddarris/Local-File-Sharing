@@ -42,6 +42,10 @@ public enum OperationOptions {
     
     public static final String TAG = Log.getTag(OperationOptions.class);
     
-    public abstract File transform(File file);
+    public File transform(OperationContext context, File file) {
+        return null;
+    }
+    
+    protected abstract File transform(File file);
 
 }

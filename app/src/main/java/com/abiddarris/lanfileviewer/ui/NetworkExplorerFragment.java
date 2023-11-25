@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -25,20 +26,28 @@ import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
 
 public class NetworkExplorerFragment extends ExplorerFragment {
     
-    private ActivityResultLauncher<Bundle> uploadLauncher = registerForActivityResult(
-        new SelectorExplorerFragment.FileContract(LocalFileSource.getDefaultLocalSource(getContext()), LocalExplorerDialog.class), new ActivityResultCallback<File[]>(){
-            @Override
-            public void onActivityResult(File[] files) {
-                ActionRunnable runnable = new UploadRunnable(getSource(), getExplorer().getParent(), files);
-                new ActionDialog(runnable)
-                    .show(getChildFragmentManager(), null);
-            }
-        });
-    
+    private ActivityResultLauncher<Bundle> uploadLauncher;
     private MenuItem upload;
     
     public NetworkExplorerFragment(FileSource source) {
         super(source);
+    }
+    
+    @Override
+    @MainThread
+    @CallSuper
+    public void onCreate(Bundle bundle) {
+        uploadLauncher = registerForActivityResult(
+            new SelectorExplorerFragment.FileContract(LocalFileSource.getDefaultLocalSource(getContext()), LocalExplorerDialog.class), new ActivityResultCallback<File[]>(){
+                @Override
+                public void onActivityResult(File[] files) {
+                    ActionRunnable runnable = new UploadRunnable(getSource(), getExplorer().getParent(), files);
+                    new ActionDialog(runnable)
+                        .show(getChildFragmentManager(), null);
+                }
+        });
+    
+        super.onCreate(bundle);
     }
    
     @Override
