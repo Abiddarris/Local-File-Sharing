@@ -78,7 +78,7 @@ public class ActionDialog extends DialogFragment {
         
         if(!file.exists()) return file;
         
-        OperationOptions options = optionsDialog.getDefaultResult();
+        OperationOption options = optionsDialog.getDefaultResult();
         if(options != null) return options.transform(file);
         
         CountDownLatch lock = new CountDownLatch(1);

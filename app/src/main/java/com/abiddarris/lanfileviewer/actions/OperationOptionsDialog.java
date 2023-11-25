@@ -20,8 +20,11 @@ public class OperationOptionsDialog extends DialogFragment {
     private boolean firstShow = true;
     private CountDownLatch lock;
     private DialogOperationOptionsBinding binding;
-    private OperationOptions defaultOptions;
-    private OperationOptions options;
+    private OperationOption defaultOptions;
+    private OperationOption options;
+    private RenameOption renameOption;
+    private ReplaceOption replaceOption;
+    private SkipOption skipOption;
     
     protected OperationOptionsDialog(ActionDialog actionDialog) {
         this.actionDialog = actionDialog;
@@ -39,9 +42,9 @@ public class OperationOptionsDialog extends DialogFragment {
         binding.fileName.setText(String.format(
             actionDialog.getString(R.string.operation_options_description), name
         ));
-        binding.rename.setOnClickListener((v) -> setResult(OperationOptions.RENAME));
-        binding.replace.setOnClickListener((v) -> setResult(OperationOptions.REPLACE));
-        binding.skip.setOnClickListener((v) -> setResult(OperationOptions.SKIP));
+        binding.rename.setOnClickListener((v) -> setResult(renameOption));
+        binding.replace.setOnClickListener((v) -> setResult(replaceOption));
+        binding.skip.setOnClickListener((v) -> setResult(skipOption));
         
         if(firstShow) {
             show(manager, null);
@@ -52,7 +55,7 @@ public class OperationOptionsDialog extends DialogFragment {
         getDialog().show();
     }
     
-    protected void setResult(OperationOptions options) {
+    protected void setResult(OperationOption options) {
         this.options = options;
         
         defaultOptions = binding.applyToSimilarItems.isChecked() ? options : null;
@@ -65,11 +68,11 @@ public class OperationOptionsDialog extends DialogFragment {
         lock = null;
     }
     
-    public OperationOptions getResult() {
+    public OperationOption getResult() {
     	return options;
     }
     
-    public OperationOptions getDefaultResult() {
+    public OperationOption getDefaultResult() {
         return defaultOptions;
     }
     
