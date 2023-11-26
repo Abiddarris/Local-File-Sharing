@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer;
 
+import android.app.Application;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -44,6 +45,20 @@ public class FileExplorerActivity extends ExplorerActivity
         binding = LayoutFileExplorerBinding.inflate(getLayoutInflater());
         setSupportActionBar(binding.toolbar);
         setContentView(binding.getRoot());
+        
+        getSupportFragmentManager().setFragmentFactory(new FragmentFactory(){
+                    @Override
+                    @NonNull
+                    public Fragment instantiate(ClassLoader loader, String name) {
+                        Class<? extends Fragment> fragmentClass = loadFragmentClass(loader,name);
+                        if(fragmentClass == NetworkExplorerFragment.class) {
+                            ApplicationCore core = (ApplicationCore)getApplication();
+                            return new NetworkExplorerFragment(core.getCurrentFileSource());
+                        }   
+                            
+                        return super.instantiate(loader, name);
+                    }
+                });
      
         super.onCreate(bundle);
         
@@ -69,28 +84,23 @@ public class FileExplorerActivity extends ExplorerActivity
         
         SharingDevice info = bridge.getAdapter().getServer(name);
         
+        for(Fragment fragment : getSupportFragmentManager().getFragments()) {
+        	if(fragment.getClass() == NetworkExplorerFragment.class)
+                return;
+        }
+        
         executor.submit(() -> {
             try {
                 NetworkFileSource source = info.openConnection();
-                NetworkExplorerFragment fragment = new NetworkExplorerFragment(source);
+                NetworkExplorerFragment fragment = new NetworkExplorerFragment(source);    
+                    
                 getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
                 
-                getSupportFragmentManager().setFragmentFactory(new FragmentFactory(){
-               
-                    @Override
-                    @NonNull
-                    public Fragment instantiate(ClassLoader loader, String name) {
-                        Class<? extends Fragment> fragmentClass = loadFragmentClass(loader,name);
-                        if(fragmentClass == NetworkExplorerFragment.class) {
-                            return new NetworkExplorerFragment(source);
-                        }   
-                            
-                        return super.instantiate(loader, name);
-                    }
-                });
+                ((ApplicationCore) getApplication())
+                    .setCurrentFileSource(source);
             } catch(Exception e) {
                 Log.debug.log(TAG, e);
             }

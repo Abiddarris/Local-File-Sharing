@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
+import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.utils.Theme;
 import com.gretta.util.log.FilesLog;
 import com.gretta.util.log.Log;
@@ -15,26 +16,28 @@ import java.util.concurrent.Executors;
 public class ApplicationCore extends Application {
 
     private static final String TAG = Log.getTag(ApplicationCore.class);
-    
+
     private static ApplicationCore core;
     private static Handler mainHandler;
-    
+
+    private NetworkFileSource currentFileSource;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        
+
         core = this;
 
         Theme.apply(this);
         setupLogger();
     }
-    
+
     public static ApplicationCore getApplication() {
-    	return core;
+        return core;
     }
-    
+
     public static Handler getMainHandler() {
-    	if(mainHandler == null) {
+        if (mainHandler == null) {
             mainHandler = new Handler(Looper.getMainLooper());
         }
         return mainHandler;
@@ -55,15 +58,22 @@ public class ApplicationCore extends Application {
         }
 
         Thread.setDefaultUncaughtExceptionHandler(
-            (t, e) -> {
-            if (e instanceof Exception) {
-                Log.err.log("Main Thread", (Exception)e);
-            } else {
-                Log.err.log("Main Thread", e);
-            }
-            System.exit(1);
-        });
+                (t, e) -> {
+                    if (e instanceof Exception) {
+                        Log.err.log("Main Thread", (Exception) e);
+                    } else {
+                        Log.err.log("Main Thread", e);
+                    }
+                    System.exit(1);
+                });
         Log.debug.log(TAG, "Log setuped");
     }
 
+    public NetworkFileSource getCurrentFileSource() {
+        return this.currentFileSource;
+    }
+
+    public void setCurrentFileSource(NetworkFileSource currentFileSource) {
+        this.currentFileSource = currentFileSource;
+    }
 }
