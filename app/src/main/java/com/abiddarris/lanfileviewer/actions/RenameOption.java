@@ -4,9 +4,13 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.Files;
 import com.gretta.util.log.Log;
 
-public class RenameOption implements OperationOption {
+public class RenameOption extends OperationOption {
     
     public static final String TAG = Log.getTag(RenameOption.class);
+    
+    public RenameOption(OperationContext context) {
+        super(context);
+    }
     
     @Override
     public File transform(File file) {
@@ -27,4 +31,10 @@ public class RenameOption implements OperationOption {
         } while (renamedFile.exists());
         return renamedFile;
     }
+    
+    @Override
+    protected File onGlobalTransform(File file) throws OperationException {
+        throw new OperationException();
+    }
+    
 }

@@ -20,14 +20,14 @@ public class OperationOptionsDialog extends DialogFragment {
     private boolean firstShow = true;
     private CountDownLatch lock;
     private DialogOperationOptionsBinding binding;
+    private OperationContext context;
     private OperationOption defaultOptions;
     private OperationOption options;
-    private RenameOption renameOption;
-    private ReplaceOption replaceOption;
-    private SkipOption skipOption;
     
-    protected OperationOptionsDialog(ActionDialog actionDialog) {
+    protected OperationOptionsDialog(ActionDialog actionDialog, OperationContext context) {
         this.actionDialog = actionDialog;
+        this.context = context;
+        
         binding = DialogOperationOptionsBinding.inflate(actionDialog.getLayoutInflater());
         
         dialog = new MaterialAlertDialogBuilder(actionDialog.getContext())
@@ -42,9 +42,9 @@ public class OperationOptionsDialog extends DialogFragment {
         binding.fileName.setText(String.format(
             actionDialog.getString(R.string.operation_options_description), name
         ));
-        binding.rename.setOnClickListener((v) -> setResult(renameOption));
-        binding.replace.setOnClickListener((v) -> setResult(replaceOption));
-        binding.skip.setOnClickListener((v) -> setResult(skipOption));
+        binding.rename.setOnClickListener((v) -> setResult(context.renameOption));
+        binding.replace.setOnClickListener((v) -> setResult(context.replaceOption));
+        binding.skip.setOnClickListener((v) -> setResult(context.skipOption));
         
         if(firstShow) {
             show(manager, null);

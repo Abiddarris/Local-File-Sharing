@@ -55,7 +55,9 @@ public class UploadRunnable extends ActionRunnable {
             
             File destFile = getDialog()
                 .getFile(destSource, dest.getPath() + localPath);
-         
+           
+            if(destFile == null) continue;
+            
             if (originalFile.isDirectory()) {
                 uploadDirectory(destFile, i, files.size());
             }

@@ -33,7 +33,10 @@ public class ActionDialog extends DialogFragment {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private DialogActionProgressBinding view;
     private Handler handler = new Handler(Looper.getMainLooper());
+    private OperationContext context = new OperationContext();
     private OperationOptionsDialog optionsDialog;
+    
+    public static final String TAG = Log.getTag(ActionDialog.class);
     
     public ActionDialog(ActionRunnable runnable) {
         this.runnable = runnable;
@@ -50,7 +53,7 @@ public class ActionDialog extends DialogFragment {
             dismiss();
         });
         
-        optionsDialog = new OperationOptionsDialog(this);
+        optionsDialog = new OperationOptionsDialog(this, context);
 
         AlertDialog dialog =
                 new MaterialAlertDialogBuilder(getContext())
@@ -77,6 +80,12 @@ public class ActionDialog extends DialogFragment {
         file.updateDataSync();
         
         if(!file.exists()) return file;
+        
+        try {
+        	return context.runGlobalTransform(file);
+        } catch(OperationException err) {
+            Log.debug.log(TAG, "showing dialog");
+        }
         
         OperationOption options = optionsDialog.getDefaultResult();
         if(options != null) return options.transform(file);
