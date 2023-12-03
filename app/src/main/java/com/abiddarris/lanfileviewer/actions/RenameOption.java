@@ -20,10 +20,11 @@ public class RenameOption extends OperationOption {
     
     @Override
     public File transform(File file) {
-        int index = 1;
+        int index = 0;
         File renamedFile;
         
     	do {
+            index++;
             String name = Files.getNameWithoutExtension(file) + " (" + index + ")" +
                 Files.getExtension(file);
                
