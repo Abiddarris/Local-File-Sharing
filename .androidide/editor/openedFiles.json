@@ -74,7 +74,37 @@
           "line": 0
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ui/NetworkExplorerFragment.java",
+      "selection": {
+        "end": {
+          "column": 45,
+          "index": 1858,
+          "line": 43
+        },
+        "start": {
+          "column": 45,
+          "index": 1858,
+          "line": 43
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/SelectorExplorerFragment.java",
+      "selection": {
+        "end": {
+          "column": 9,
+          "index": 1729,
+          "line": 50
+        },
+        "start": {
+          "column": 9,
+          "index": 1729,
+          "line": 50
+        }
+      }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/RenameOption.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/SelectorExplorerFragment.java"
 }

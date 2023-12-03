@@ -41,6 +41,8 @@ public class NetworkExplorerFragment extends ExplorerFragment {
             new SelectorExplorerFragment.FileContract(LocalFileSource.getDefaultLocalSource(getContext()), LocalExplorerDialog.class), new ActivityResultCallback<File[]>(){
                 @Override
                 public void onActivityResult(File[] files) {
+                    if(files == null) return;
+                    
                     ActionRunnable runnable = new UploadRunnable(getSource(), getExplorer().getParent(), files);
                     new ActionDialog(runnable)
                         .show(getChildFragmentManager(), null);

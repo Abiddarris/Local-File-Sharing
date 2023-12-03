@@ -54,6 +54,8 @@ public class SelectorExplorerFragment extends ExplorerFragment {
         public File[] parseResult(int resultCode, Intent intent) {
             Log.debug.log(TAG, "result code : " + resultCode);
             
+            if(intent == null) return null;
+            
             String[] paths = intent.getStringArrayExtra(RESULT);
             if(paths == null) return null;
             
