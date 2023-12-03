@@ -3,10 +3,16 @@ package com.abiddarris.lanfileviewer.actions;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.Files;
 import com.gretta.util.log.Log;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RenameOption extends OperationOption {
     
     public static final String TAG = Log.getTag(RenameOption.class);
+    
+    private Map<File, File> renamedFolders = new HashMap<>();
     
     public RenameOption(OperationContext context) {
         super(context);
@@ -29,11 +35,25 @@ public class RenameOption extends OperationOption {
                 Log.err.log(TAG, err);
             }
         } while (renamedFile.exists());
+        
+        if(file.isDirectory()) {
+            renamedFolders.put(file,renamedFile);
+        }
+        
         return renamedFile;
     }
     
     @Override
     protected File onGlobalTransform(File file) throws OperationException {
+        for(File originalFolder : renamedFolders.keySet()) {
+        	String originalFolderPath = originalFolder.getPath();
+            if(file.getPath().startsWith(originalFolderPath)) {
+                File renamedFolder = renamedFolders.get(originalFolder);
+                String newPath = file.getPath().replace(originalFolderPath, renamedFolder.getPath());
+                
+                return file.getSource().getFile(newPath);
+            }
+        }
         throw new OperationException();
     }
     

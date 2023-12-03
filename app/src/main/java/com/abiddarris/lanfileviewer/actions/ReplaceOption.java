@@ -15,7 +15,7 @@ public class ReplaceOption extends OperationOption{
     
     @Override
     protected File onGlobalTransform(File file) throws OperationException {
-        throw new OperationException();
+        return super.onGlobalTransform(file);
     }
     
 }
