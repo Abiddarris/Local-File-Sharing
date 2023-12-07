@@ -55,11 +55,14 @@ public class Explorer {
 
     private void load(File[] files) {
         cache.clear();
-        targetCount = files.length;
+        targetCount = files.length + 1;
         if (targetCount == 0) {
             onLoaded();
             return;
         }
+        
+        parent.updateData(() -> onFileLoaded(parent));
+        
         for (File file : files) {
             file.updateData(() -> onFileLoaded(file));
         }
@@ -79,6 +82,7 @@ public class Explorer {
     private synchronized void onFileLoaded(File file) {
         cache.add(file);
         if (cache.size() == targetCount) {
+            cache.remove(parent);
             onLoaded();
         }
     }
