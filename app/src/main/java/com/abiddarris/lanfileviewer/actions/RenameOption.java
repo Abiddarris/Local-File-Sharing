@@ -25,9 +25,10 @@ public class RenameOption extends OperationOption {
         
     	do {
             index++;
-            String name = Files.getNameWithoutExtension(file) + " (" + index + ")." +
-                Files.getExtension(file);
-               
+            String nameWithoutExtension = Files.getNameWithoutExtension(file) + " (" + index + ")";
+            String extension = Files.getExtension(file);
+            String name = extension.isEmpty() ? nameWithoutExtension : nameWithoutExtension + "." + extension;
+            
             renamedFile = file.getSource()
                     .getFile(file.getParentFile().getPath() + "/" + name);
             try {

@@ -154,14 +154,44 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/RenameOption.java",
       "selection": {
         "end": {
-          "column": 82,
-          "index": 783,
-          "line": 27
+          "column": 110,
+          "index": 968,
+          "line": 29
         },
         "start": {
-          "column": 82,
-          "index": 783,
-          "line": 27
+          "column": 110,
+          "index": 968,
+          "line": 29
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFileSource.java",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/Files.java",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     }
