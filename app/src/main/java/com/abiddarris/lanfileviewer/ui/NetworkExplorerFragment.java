@@ -44,7 +44,7 @@ public class NetworkExplorerFragment extends ExplorerFragment {
                     if(files == null) return;
                     
                     ActionRunnable runnable = new UploadRunnable(getSource(), getExplorer().getParent(), files);
-                    new ActionDialog(runnable)
+                    new ActionDialog(getExplorer(), runnable)
                         .show(getChildFragmentManager(), null);
                 }
         });

@@ -13,6 +13,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.DialogActionProgressBinding;
+import com.abiddarris.lanfileviewer.explorer.Explorer;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.Files;
@@ -31,6 +32,7 @@ public class ActionDialog extends DialogFragment {
 
     private ActionRunnable runnable;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private Explorer explorer;
     private DialogActionProgressBinding view;
     private Handler handler = new Handler(Looper.getMainLooper());
     private OperationContext context = new OperationContext();
@@ -38,8 +40,9 @@ public class ActionDialog extends DialogFragment {
     
     public static final String TAG = Log.getTag(ActionDialog.class);
     
-    public ActionDialog(ActionRunnable runnable) {
+    public ActionDialog(Explorer explorer, ActionRunnable runnable) {
         this.runnable = runnable;
+        this.explorer = explorer;
         
         runnable.attachDialog(this);
     }
@@ -71,6 +74,8 @@ public class ActionDialog extends DialogFragment {
     @CallSuper
     public void onDestroy() {
         super.onDestroy();
+        
+        explorer.update();
         
         if(optionsDialog.isAdded()) {
             optionsDialog.dismiss();
