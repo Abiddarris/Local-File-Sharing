@@ -19,14 +19,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/ActionDialog.java",
       "selection": {
         "end": {
-          "column": 34,
-          "index": 2208,
-          "line": 63
+          "column": 36,
+          "index": 2437,
+          "line": 75
         },
         "start": {
-          "column": 34,
-          "index": 2208,
-          "line": 63
+          "column": 36,
+          "index": 2437,
+          "line": 75
         }
       }
     },
@@ -196,5 +196,5 @@
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/RenameOption.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/ActionDialog.java"
 }

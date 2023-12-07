@@ -72,7 +72,9 @@ public class ActionDialog extends DialogFragment {
     public void onDestroy() {
         super.onDestroy();
         
-        optionsDialog.dismiss();
+        if(optionsDialog.isAdded()) {
+            optionsDialog.dismiss();
+        }
     }
     
     public File getFile(FileSource source, String path) throws Exception {
