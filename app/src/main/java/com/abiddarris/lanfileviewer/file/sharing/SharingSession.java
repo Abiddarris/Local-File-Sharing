@@ -13,6 +13,8 @@ import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.gretta.util.log.Log;
 import fi.iki.elonen.NanoHTTPD;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +33,7 @@ import org.json.JSONObject;
 public final class SharingSession extends NanoHTTPD implements RegistrationListener {
     
     private Context context;
+    private FileSource source;
     private ExecutorService executor = Executors.newCachedThreadPool();
     private NsdManager nsdManager;
     
@@ -40,6 +43,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     public SharingSession(Context context) {
         super(0);
         
+        source = LocalFileSource.getDefaultLocalSource(context);
         nsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
     }
     
@@ -90,8 +94,33 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         String uri = session.getUri();
         if(uri.startsWith("/fetch")) {
             return handleFetch(session);
+        } else if(uri.equalsIgnoreCase("/upload")) {
+            return handleUpload(session);
         }
         return null;
+    }
+    
+    private Response handleUpload(IHTTPSession session) throws IOException , ResponseException {
+    	Map<String,String> body = new HashMap<>();
+        session.parseBody(body);
+        
+        Map<String,String> params = session.getParms();
+        File dest = source.getFile(params.get("path"));
+        
+        File tempFile = source.getFile(body.get("stream"));
+       
+        BufferedInputStream is = new BufferedInputStream(tempFile.newInputStream());
+        BufferedOutputStream os = new BufferedOutputStream(dest.newOutputStream());
+        byte[] buf = new byte[8 * 1024];
+        int len;
+        while((len = is.read(buf)) != -1) {
+            os.write(buf,0,len);
+        }
+        os.flush();
+        os.close();
+        is.close();
+        
+        return newFixedLengthResponse("success");
     }
 
     private Response handleFetch(IHTTPSession session) throws Exception {

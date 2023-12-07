@@ -7,6 +7,11 @@ import com.abiddarris.lanfileviewer.actions.ActionDialog;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.file.sharing.NetworkOutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import com.abiddarris.lanfileviewer.file.Files;
@@ -59,19 +64,51 @@ public class UploadRunnable extends ActionRunnable {
             if(destFile == null) continue;
             
             if (originalFile.isDirectory()) {
-                uploadDirectory(destFile, i, files.size());
+                uploadDirectory(originalFile, destFile, i, files.size());
+            } else {
+                uploadFile(originalFile, destFile, i, files.size());
             }
         }
     }
 
-    private void uploadDirectory(File file, int index, int size) {
+    private void uploadFile(File src, File dest, int index, int size) throws IOException {
+        index++;
+        
+        updateUI(src.getName(), index, size, 0, src.length());
+        
+        NetworkOutputStream networkStream = (NetworkOutputStream) dest.newOutputStream();
+        networkStream.setMimeType(src.getMimeType());
+        networkStream.open(src.length());
+        
+        BufferedOutputStream os = new BufferedOutputStream(networkStream);
+        
+        BufferedInputStream is = new BufferedInputStream(src.newInputStream());
+        byte[] buffer = new byte[4 * 1024];
+        int len;
+        long writtenBytes = 0;
+        while((len = is.read(buffer)) != -1) {
+            os.write(buffer,0,len);
+            
+            writtenBytes += len;
+            updateUI(src.getName(), index, size, writtenBytes, src.length());
+        }
+        
+        os.flush();
+        
+        networkStream.getResponseCode();
+        
+        os.close();
+        is.close();
+    }
+
+    private void uploadDirectory(File src, File file, int index, int size) {
         index++;
 
-        updateUI(file.getName(), index, size, 0, 1);
+        updateUI(src.getName(), index, size, 0, 1);
 
         boolean success = file.makeDirs();
         
-        updateUI(file.getName(), index, size, 1, 1);
+        updateUI(src.getName(), index, size, 1, 1);
     }
 
     private void updateUI(String name, int index, int totalFiles, double progress, double totalSize) {

@@ -13,6 +13,11 @@ import com.gretta.util.log.Log;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +36,7 @@ public class NetworkFile implements File {
     private String mimeType;
     private String name;
     private String path;
-
+    
     private static final String TAG = Log.getTag(NetworkFile.class);
 
     protected NetworkFile(NetworkFileSource source, String path) {
@@ -177,6 +182,35 @@ public class NetworkFile implements File {
             Log.err.log(TAG, e);
             return false;
         }
+    }
+    
+    @Override
+    public InputStream newInputStream() throws IOException {
+        if(isDirectory()) {
+            throw new IOException("cannot open a directory");
+        }
+        
+        HttpURLConnection connection = (HttpURLConnection) new URL(toUri().toString())
+            .openConnection();
+        
+        return connection.getInputStream();
+    }
+    
+    @Override
+    public NetworkOutputStream newOutputStream() throws IOException {
+        if(isDirectory()) {
+            throw new IOException("cannot open a directory");
+        }
+        SharingDevice device = source.getDevice();
+        URL outputStreamURL = new URL(String.format(
+                "http://%s:%s/upload?path=%s", device.getHost().getHostAddress(), 
+                device.getPort(), URLEncoder.encode(path, "UTF-8")));
+        
+        NetworkOutputStream stream = new NetworkOutputStream(outputStreamURL);
+        stream.setName("stream");
+        stream.setFileName(getName());
+        
+        return stream;
     }
     
     @Override

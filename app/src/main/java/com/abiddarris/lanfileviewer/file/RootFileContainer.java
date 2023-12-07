@@ -2,6 +2,9 @@ package com.abiddarris.lanfileviewer.file;
 
 import android.net.Uri;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +95,16 @@ public class RootFileContainer implements File {
     @Override
     public FileSource getSource() {
         return null;
+    }
+    
+    @Override
+    public InputStream newInputStream() throws IOException {
+        throw new IOException("unable to open root file container");
+    }
+    
+    @Override
+    public OutputStream newOutputStream() throws IOException {
+        throw new IOException("unable to open root file container");
     }
 
     public void addRoots(RootFile rootFile) {

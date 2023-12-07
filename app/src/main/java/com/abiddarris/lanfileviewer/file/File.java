@@ -2,6 +2,8 @@ package com.abiddarris.lanfileviewer.file;
 
 import android.net.Uri;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import org.json.JSONObject;
 
 public interface File {
@@ -37,6 +39,10 @@ public interface File {
     public abstract boolean makeDirs();
     
     public abstract boolean exists();
+    
+    public abstract OutputStream newOutputStream() throws IOException;
+    
+    public abstract InputStream newInputStream() throws IOException;
     
     public static interface Callback {
         void onDataUpdated();

@@ -4,7 +4,11 @@ import android.net.Uri;
 import android.webkit.MimeTypeMap;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class LocalFile implements File {
 
@@ -98,7 +102,7 @@ public class LocalFile implements File {
                 .getMimeTypeFromExtension(extension.toLowerCase());
         }
         
-        return type;
+        return type == null ? "*/*" : type;
     }
     
     @Override
@@ -145,6 +149,17 @@ public class LocalFile implements File {
     public FileSource getSource() {
         return source;
     }
+    
+    @Override
+    public InputStream newInputStream() throws IOException {
+        return new FileInputStream(getPath());
+    }
+    
+    @Override
+    public OutputStream newOutputStream() throws IOException {
+        return new FileOutputStream(getPath());
+    }
+    
     
     
 }
