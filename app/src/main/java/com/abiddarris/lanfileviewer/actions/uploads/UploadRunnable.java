@@ -8,6 +8,7 @@ import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkOutputStream;
+import com.gretta.util.log.Log;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -25,6 +26,8 @@ public class UploadRunnable extends ActionRunnable {
     private File dest;
     private File[] items;
     private FileSource destSource;
+    
+    public static final String TAG = Log.getTag(UploadRunnable.class);
     
     public UploadRunnable(FileSource destSource, File dest, File[] items) {
         this.destSource = destSource;
@@ -54,6 +57,11 @@ public class UploadRunnable extends ActionRunnable {
 
         File parent = items[0].getParentFile();
         for (int i = 0; i < files.size(); ++i) {
+            if(Thread.currentThread().isInterrupted()) {
+                Log.debug.log(TAG, "Canceling upload...");
+                return;
+            }
+            
             File originalFile = files.get(i);
             String localPath = originalFile.getPath()
                 .replace(parent.getPath(), "");
@@ -88,6 +96,11 @@ public class UploadRunnable extends ActionRunnable {
         long writtenBytes = 0;
         while((len = is.read(buffer)) != -1) {
             os.write(buffer,0,len);
+            
+            if(Thread.currentThread().isInterrupted()) {
+                Log.debug.log(TAG, "Canceling upload...");
+                return;
+            }
             
             writtenBytes += len;
             updateUI(src.getName(), index, size, writtenBytes, src.length());
