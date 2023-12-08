@@ -63,6 +63,7 @@ public class UploadRunnable extends ActionRunnable {
             }
             
             File originalFile = files.get(i);
+            
             String localPath = originalFile.getPath()
                 .replace(parent.getPath(), "");
             
@@ -71,18 +72,19 @@ public class UploadRunnable extends ActionRunnable {
            
             if(destFile == null) continue;
             
+            updateFileInfo(originalFile.getName(), i + 1, files.size());
+            
             if (originalFile.isDirectory()) {
-                uploadDirectory(originalFile, destFile, i, files.size());
+                uploadDirectory(destFile);
             } else {
-                uploadFile(originalFile, destFile, i, files.size());
+                uploadFile(originalFile, destFile);
             }
         }
     }
 
-    private void uploadFile(File src, File dest, int index, int size) throws IOException {
-        index++;
-        
-        updateUI(src.getName(), index, size, 0, src.length());
+    private void uploadFile(File src, File dest) throws IOException {
+        setMaxProgress(src.length());
+        updateProgress(0);
         
         NetworkOutputStream networkStream = (NetworkOutputStream) dest.newOutputStream();
         networkStream.setMimeType(src.getMimeType());
@@ -103,7 +105,7 @@ public class UploadRunnable extends ActionRunnable {
             }
             
             writtenBytes += len;
-            updateUI(src.getName(), index, size, writtenBytes, src.length());
+            updateProgress(writtenBytes);
         }
         
         os.flush();
@@ -114,24 +116,38 @@ public class UploadRunnable extends ActionRunnable {
         is.close();
     }
 
-    private void uploadDirectory(File src, File file, int index, int size) {
-        index++;
-
-        updateUI(src.getName(), index, size, 0, 1);
+    private void uploadDirectory(File file) {
+        setMaxProgress(1);
+        updateProgress(0);
 
         boolean success = file.makeDirs();
         
-        updateUI(src.getName(), index, size, 1, 1);
+        updateProgress(1);
     }
-
-    private void updateUI(String name, int index, int totalFiles, double progress, double totalSize) {
+    
+    private void updateFileInfo(String name, int index, int totalFiles) {
         handler.post(() -> {
             view.name.setText(name);
             view.progress.setText((index) + "/" + totalFiles);
-            view.progressIndicator.setMax((int) totalSize);
-            view.progressIndicator.setProgress((int) progress);
-            view.progressPercent.setText(Math.round(progress / totalSize * 100) + "%");
         });
+    }
+    
+    private void setMaxProgress(double maxProgress) {
+        handler.post(() -> view.progressIndicator.setMax((int) maxProgress));
+    }
+
+    private void updateProgress(double progress) {
+        int max = view.progressIndicator.getMax();
+        double oldProgress = view.progressIndicator.getProgress();
+        double oldPercentage = Math.floor(oldProgress / max * 100);
+        
+        int percentage = (int)Math.floor(progress / max * 100);
+        if(percentage > oldPercentage) {
+            handler.post(() -> {
+                view.progressIndicator.setProgress((int) progress);
+                view.progressPercent.setText(percentage + "%");
+            });
+        }
     }
 
     private void startUpload() {
