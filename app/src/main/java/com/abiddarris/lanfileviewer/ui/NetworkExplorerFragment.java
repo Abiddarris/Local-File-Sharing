@@ -95,6 +95,7 @@ public class NetworkExplorerFragment extends ExplorerFragment implements SharedP
             int sortType = PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getInt(SortByDialog.SORT_TYPE, FileSorter.NAME | FileSorter.ASCENDING);
             setSorter(FileSorter.createSorter(sortType));
+            getExplorer().update();
         }
     }
     

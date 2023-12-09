@@ -64,6 +64,8 @@ public class LocalExplorerDialog extends ExplorerActivity implements SharedPrefe
             int sortType = PreferenceManager.getDefaultSharedPreferences(this)
                 .getInt(SortByDialog.SORT_TYPE, FileSorter.NAME | FileSorter.ASCENDING);
             fragment.setSorter(FileSorter.createSorter(sortType));
+            fragment.getExplorer()
+                .update();
         }
     }
     
