@@ -6,7 +6,8 @@ public class NameSorter extends FileSorter {
 
     @Override
     public int compare(File first, File second) {
-        return first.getName().compareTo(second.getName());
+        return first.getName().toLowerCase()
+            .compareTo(second.getName().toLowerCase());
     }
 
 }

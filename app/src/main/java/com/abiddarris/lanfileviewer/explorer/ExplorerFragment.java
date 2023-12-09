@@ -25,12 +25,14 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFile;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
+import com.abiddarris.lanfileviewer.sorter.FileSorter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gretta.util.log.Log;
 
 public abstract class ExplorerFragment extends Fragment {
 
     private Explorer explorer;
+    private FileSorter sorter;
     private FileSource source;
     private FragmentFileExplorerBinding binding;
     private OnBackPressed pressed;
@@ -64,6 +66,7 @@ public abstract class ExplorerFragment extends Fragment {
         // binding.toolbar.setTitle(requireArguments().getString(TITLE,));
 
         explorer = new Explorer(this, binding, binding.refreshlayout);
+        if(sorter != null) explorer.setSorter(sorter);
         explorer.open(root);
 
         binding.filesList.setAdapter(explorer.getAdapter());
@@ -132,5 +135,17 @@ public abstract class ExplorerFragment extends Fragment {
 
     public Explorer getExplorer() {
         return this.explorer;
+    }
+
+    public FileSorter getSorter() {
+        return this.sorter;
+    }
+
+    public void setSorter(FileSorter sorter) {
+        this.sorter = sorter;
+        
+        if(explorer != null) {
+            explorer.setSorter(sorter);
+        }
     }
 }

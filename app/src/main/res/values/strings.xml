@@ -3,7 +3,7 @@
     <string name="app_name">Local File Sharing</string>
     <string name="edit">Edit</string>
     <string name="create_folder">Create Folder</string>
-    <string name="sort">Sort</string>
+    <string name="sort_by">Sort By</string>
     <string name="settings">Settings</string>
     <string name="general">General</string>
     <string name="theme">Theme</string>
@@ -42,4 +42,12 @@
     <string name="operation_options_apply_to_similar_items">Do this for all similar items</string>
     <string name="skip">Skip</string>
     <string name="replace">Replace</string>
+    <string name="name">Name</string>
+    <string name="date">Date</string>
+    <string name="type">Type</string>
+    <string name="size">Size</string>
+    <string name="ascending">Ascensing</string>
+    <string name="decending">Decending</string>
+    <string name="sort">Sort</string>
+    <string name="ok">Ok</string>
 </resources>

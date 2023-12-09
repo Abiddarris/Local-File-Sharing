@@ -12,8 +12,8 @@
         android:showAsAction="never"/>
     
     <item
-        android:id="@+id/sort"
-        android:title="@string/sort"
+        android:id="@+id/sort_by"
+        android:title="@string/sort_by"
         android:showAsAction="never"/>
 
 </menu>

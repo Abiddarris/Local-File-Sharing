@@ -7,16 +7,19 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.abiddarris.lanfileviewer.databinding.FragmentFileExplorerBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.sorter.FileSorter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Explorer {
 
     final NavigateMode navigateMode = new NavigateMode(this);
     ModifyMode selectMode;
-    
+
     private ExplorerFragment fragment;
+    private FileSorter sorter = FileSorter.createSorter(FileSorter.NAME | FileSorter.ASCENDING);
     private FragmentFileExplorerBinding ui;
     private File parent;
     private FileAdapter adapter;
@@ -25,7 +28,10 @@ public class Explorer {
     private Mode mode = navigateMode;
     private SwipeRefreshLayout refresher;
 
-    public Explorer(ExplorerFragment fragment, FragmentFileExplorerBinding ui, SwipeRefreshLayout refresher) {
+    public Explorer(
+            ExplorerFragment fragment,
+            FragmentFileExplorerBinding ui,
+            SwipeRefreshLayout refresher) {
         this.fragment = fragment;
         this.ui = ui;
         this.refresher = refresher;
@@ -41,9 +47,9 @@ public class Explorer {
             update();
             return;
         }
-        
+
         String mimeType = file.getMimeType();
-        
+
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(file.toUri(), mimeType == null ? "*" : mimeType);
         getContext().startActivity(intent);
@@ -51,7 +57,6 @@ public class Explorer {
 
     public void update() {
         parent.updateData(() -> load(parent.listFiles()));
-        
     }
 
     private void load(File[] files) {
@@ -64,7 +69,6 @@ public class Explorer {
         for (File file : files) {
             file.updateData(() -> onFileLoaded(file));
         }
-        
     }
 
     public boolean navigateUp() {
@@ -87,13 +91,14 @@ public class Explorer {
 
     private void onLoaded() {
         File[] files = cache.toArray(new File[0]);
+        Arrays.sort(files, sorter);
         adapter.setFiles(files);
 
         adapter.getMainThread().post(() -> refresher.setRefreshing(false));
     }
-    
+
     public File getParent() {
-    	return parent;
+        return parent;
     }
 
     public boolean onBackPressed() {
@@ -125,10 +130,16 @@ public class Explorer {
     public Context getContext() {
         return fragment.getContext();
     }
-       
+
     public ExplorerFragment getFragment() {
         return this.fragment;
-      
     }
-       
+
+    public FileSorter getSorter() {
+        return this.sorter;
+    }
+
+    public void setSorter(FileSorter sorter) {
+        this.sorter = sorter;
+    }
 }

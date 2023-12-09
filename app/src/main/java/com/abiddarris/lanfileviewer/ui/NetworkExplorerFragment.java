@@ -1,6 +1,7 @@
 package com.abiddarris.lanfileviewer.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,6 +13,8 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionDialog;
@@ -23,8 +26,9 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
+import com.abiddarris.lanfileviewer.sorter.FileSorter;
 
-public class NetworkExplorerFragment extends ExplorerFragment {
+public class NetworkExplorerFragment extends ExplorerFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     
     private ActivityResultLauncher<Bundle> uploadLauncher;
     private MenuItem upload;
@@ -48,6 +52,10 @@ public class NetworkExplorerFragment extends ExplorerFragment {
                         .show(getChildFragmentManager(), null);
                 }
         });
+        
+        int sortType = PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getInt(SortByDialog.SORT_TYPE, FileSorter.NAME | FileSorter.ASCENDING);
+            setSorter(FileSorter.createSorter(sortType));
     
         super.onCreate(bundle);
     }
@@ -71,6 +79,43 @@ public class NetworkExplorerFragment extends ExplorerFragment {
            
             return true;
         }
+        
+        switch(item.getItemId()) {
+            case R.id.sort_by :
+                new SortByDialog()
+                    .show(getParentFragmentManager(), null);
+        }
+        
         return super.onOptionsItemSelected(item);
     }
+    
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
+        if(key.equals(SortByDialog.SORT_TYPE)) {
+            int sortType = PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getInt(SortByDialog.SORT_TYPE, FileSorter.NAME | FileSorter.ASCENDING);
+            setSorter(FileSorter.createSorter(sortType));
+        }
+    }
+    
+    @Override
+    @MainThread
+    @CallSuper
+    public void onResume() {
+        super.onResume();
+        
+        PreferenceManager.getDefaultSharedPreferences(getContext())
+            .registerOnSharedPreferenceChangeListener(this);
+    }
+    
+    @Override
+    @MainThread
+    @CallSuper
+    public void onDestroy() {
+        super.onDestroy();
+        
+        PreferenceManager.getDefaultSharedPreferences(getContext())
+            .unregisterOnSharedPreferenceChangeListener(this);
+    }
+    
 }

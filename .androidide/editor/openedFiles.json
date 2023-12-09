@@ -1,95 +1,170 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/ExplorerFragment.java",
-      "selection": {
-        "end": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        },
-        "start": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/Explorer.java",
-      "selection": {
-        "end": {
-          "column": 30,
-          "index": 1716,
-          "line": 52
-        },
-        "start": {
-          "column": 30,
-          "index": 1716,
-          "line": 52
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/uploads/UploadRunnable.java",
-      "selection": {
-        "end": {
-          "column": 11,
-          "index": 4572,
-          "line": 143
-        },
-        "start": {
-          "column": 11,
-          "index": 4572,
-          "line": 143
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/ActionDialog.java",
-      "selection": {
-        "end": {
-          "column": 13,
-          "index": 2515,
-          "line": 77
-        },
-        "start": {
-          "column": 13,
-          "index": 2515,
-          "line": 77
-        }
-      }
-    },
-    {
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ui/NetworkExplorerFragment.java",
       "selection": {
         "end": {
-          "column": 22,
-          "index": 1402,
-          "line": 32
+          "column": 4,
+          "index": 4482,
+          "line": 119
         },
         "start": {
-          "column": 22,
-          "index": 1402,
-          "line": 32
+          "column": 1,
+          "index": 3584,
+          "line": 91
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/RenameOption.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/RootEditorPreference.java",
       "selection": {
         "end": {
-          "column": 3,
-          "index": 551,
-          "line": 18
+          "column": 0,
+          "index": 0,
+          "line": 0
         },
         "start": {
-          "column": 3,
-          "index": 551,
-          "line": 18
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/SettingsFragment.java",
+      "selection": {
+        "end": {
+          "column": 124,
+          "index": 728,
+          "line": 16
+        },
+        "start": {
+          "column": 63,
+          "index": 667,
+          "line": 16
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ui/LocalExplorerDialog.java",
+      "selection": {
+        "end": {
+          "column": 77,
+          "index": 2546,
+          "line": 63
+        },
+        "start": {
+          "column": 77,
+          "index": 2546,
+          "line": 63
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/sorter/NameSorter.java",
+      "selection": {
+        "end": {
+          "column": 34,
+          "index": 80,
+          "line": 2
+        },
+        "start": {
+          "column": 34,
+          "index": 80,
+          "line": 2
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/sorter/FileSorter.java",
+      "selection": {
+        "end": {
+          "column": 27,
+          "index": 1283,
+          "line": 31
+        },
+        "start": {
+          "column": 27,
+          "index": 1283,
+          "line": 31
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/sorter/AscendingSorter.java",
+      "selection": {
+        "end": {
+          "column": 5,
+          "index": 273,
+          "line": 9
+        },
+        "start": {
+          "column": 4,
+          "index": 157,
+          "line": 6
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/sorter/FolderSorter.java",
+      "selection": {
+        "end": {
+          "column": 50,
+          "index": 357,
+          "line": 9
+        },
+        "start": {
+          "column": 50,
+          "index": 357,
+          "line": 9
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/sorter/DecendingSorter.java",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/sorter/LastModifiedSorter.java",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/sorter/TypeSorter.java",
+      "selection": {
+        "end": {
+          "column": 1,
+          "index": 389,
+          "line": 13
+        },
+        "start": {
+          "column": 1,
+          "index": 389,
+          "line": 13
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/uploads/UploadRunnable.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ui/LocalExplorerDialog.java"
 }
