@@ -154,17 +154,17 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/sorter/TypeSorter.java",
       "selection": {
         "end": {
-          "column": 1,
-          "index": 389,
-          "line": 13
+          "column": 48,
+          "index": 559,
+          "line": 16
         },
         "start": {
-          "column": 1,
-          "index": 389,
-          "line": 13
+          "column": 48,
+          "index": 559,
+          "line": 16
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ui/LocalExplorerDialog.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/sorter/TypeSorter.java"
 }
