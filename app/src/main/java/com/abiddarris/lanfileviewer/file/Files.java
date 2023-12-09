@@ -21,7 +21,7 @@ public class Files {
     	String fileName = file.getName();
         int extensionSeparator = fileName.lastIndexOf(".");
         
-        if(extensionSeparator == - 1) return fileName;
+        if(extensionSeparator <= 0) return fileName;
         
         return fileName.substring(0, extensionSeparator);
     }
@@ -30,7 +30,7 @@ public class Files {
     	String fileName = file.getName();
         int extensionSeparator = fileName.lastIndexOf(".");
         
-        if(extensionSeparator == - 1) return "";
+        if(extensionSeparator <= 0) return "";
         
         return fileName.substring(extensionSeparator + 1);
     }

@@ -164,7 +164,22 @@
           "line": 16
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/Files.java",
+      "selection": {
+        "end": {
+          "column": 34,
+          "index": 939,
+          "line": 32
+        },
+        "start": {
+          "column": 34,
+          "index": 939,
+          "line": 32
+        }
+      }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/sorter/TypeSorter.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/Files.java"
 }
