@@ -21,6 +21,7 @@ import com.abiddarris.lanfileviewer.ConnectionService.ConnectionServiceBridge;
 import com.abiddarris.lanfileviewer.databinding.LayoutFileExplorerBinding;
 import com.abiddarris.lanfileviewer.explorer.ExplorerActivity;
 import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
+import com.abiddarris.lanfileviewer.explorer.ExplorerPathFragment;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 import com.abiddarris.lanfileviewer.ui.NetworkExplorerFragment;
@@ -36,6 +37,7 @@ public class FileExplorerActivity extends ExplorerActivity
     private ExecutorService executor = Executors.newFixedThreadPool(1);
     private LayoutFileExplorerBinding binding;
     private ConnectionService bridge;
+    private ExplorerPathFragment pathFragment;
     
     private static final String TAG = Log.getTag(FileExplorerActivity.class);
     public static final String SERVER_NAME = "serverName";
@@ -46,6 +48,8 @@ public class FileExplorerActivity extends ExplorerActivity
         setSupportActionBar(binding.toolbar);
         setContentView(binding.getRoot());
         
+        pathFragment = new ExplorerPathFragment();
+        
         getSupportFragmentManager().setFragmentFactory(new FragmentFactory(){
                     @Override
                     @NonNull
@@ -53,7 +57,10 @@ public class FileExplorerActivity extends ExplorerActivity
                         Class<? extends Fragment> fragmentClass = loadFragmentClass(loader,name);
                         if(fragmentClass == NetworkExplorerFragment.class) {
                             ApplicationCore core = (ApplicationCore)getApplication();
-                            return new NetworkExplorerFragment(core.getCurrentFileSource());
+                            ExplorerFragment fragment = new NetworkExplorerFragment(core.getCurrentFileSource());
+                            fragment.addOnExplorerCreatedListener((f,e) -> pathFragment.setExplorer(e));
+                        
+                            return fragment;
                         }   
                             
                         return super.instantiate(loader, name);
@@ -61,6 +68,11 @@ public class FileExplorerActivity extends ExplorerActivity
                 });
      
         super.onCreate(bundle);
+        
+        getSupportFragmentManager().beginTransaction()
+            .setReorderingAllowed(true)
+            .add(R.id.pathFragment, pathFragment)
+            .commit();
         
         bindService(new Intent(this, ConnectionService.class), this, 0);
     }
@@ -93,6 +105,7 @@ public class FileExplorerActivity extends ExplorerActivity
             try {
                 NetworkFileSource source = info.openConnection();
                 NetworkExplorerFragment fragment = new NetworkExplorerFragment(source);    
+                fragment.addOnExplorerCreatedListener((f,e) -> pathFragment.setExplorer(e));
                     
                 getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)

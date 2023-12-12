@@ -12,6 +12,7 @@ import androidx.preference.PreferenceManager;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.explorer.ExplorerActivity;
 import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
+import com.abiddarris.lanfileviewer.explorer.ExplorerPathFragment;
 import com.abiddarris.lanfileviewer.explorer.SelectorExplorerFragment;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
@@ -19,6 +20,7 @@ import com.abiddarris.lanfileviewer.sorter.FileSorter;
 public class LocalExplorerDialog extends ExplorerActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     
     private ExplorerFragment fragment;
+    private ExplorerPathFragment pathFragment;
     
     @Override
     protected void onCreate(Bundle bundle) {
@@ -39,11 +41,16 @@ public class LocalExplorerDialog extends ExplorerActivity implements SharedPrefe
         
         super.onCreate(bundle);
         
+        pathFragment = new ExplorerPathFragment();
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.pathFragment, pathFragment)
+                .commit();
         
         getSupportFragmentManager().beginTransaction()
-            .setReorderingAllowed(true)
-            .add(R.id.fragmentContainer, initFragment(bundle))
-            .commit();
+                .setReorderingAllowed(true)
+                .add(R.id.fragmentContainer, initFragment(bundle))
+                .commit();
     }
     
     private ExplorerFragment initFragment(Bundle bundle) {
@@ -54,6 +61,10 @@ public class LocalExplorerDialog extends ExplorerActivity implements SharedPrefe
             LocalFileSource.getDefaultLocalSource(this));
         fragment.setArguments(getIntent().getBundleExtra("extra"));
         fragment.setSorter(FileSorter.createSorter(sortType));
+        fragment.addOnExplorerCreatedListener((f,e) -> {
+            
+            pathFragment.setExplorer(e);    
+        });
         
         return fragment;
     }
@@ -66,6 +77,8 @@ public class LocalExplorerDialog extends ExplorerActivity implements SharedPrefe
             fragment.setSorter(FileSorter.createSorter(sortType));
             fragment.getExplorer()
                 .update();
+            
+            
         }
     }
     

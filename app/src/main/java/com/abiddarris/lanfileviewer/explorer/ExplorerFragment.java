@@ -28,6 +28,8 @@ import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gretta.util.log.Log;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ExplorerFragment extends Fragment {
 
@@ -35,6 +37,7 @@ public abstract class ExplorerFragment extends Fragment {
     private FileSorter sorter;
     private FileSource source;
     private FragmentFileExplorerBinding binding;
+    private List<OnExplorerCreatedListener> explorerCreatedListener = new ArrayList<>();
     private OnBackPressed pressed;
 
     public static final String BACK_PRESSED_EVENT = "backPressedEvent";
@@ -66,6 +69,10 @@ public abstract class ExplorerFragment extends Fragment {
         // binding.toolbar.setTitle(requireArguments().getString(TITLE,));
 
         explorer = new Explorer(this, binding, binding.refreshlayout);
+        for(OnExplorerCreatedListener listener : explorerCreatedListener) {
+            listener.onExplorerCreated(this, explorer);
+        }
+        
         if(sorter != null) explorer.setSorter(sorter);
         explorer.open(root);
 
@@ -120,6 +127,12 @@ public abstract class ExplorerFragment extends Fragment {
     public final FileSource getSource() {
         return source;
     }
+    
+    public void addOnExplorerCreatedListener(OnExplorerCreatedListener listener) {
+    	explorerCreatedListener.add(listener);
+        
+        if(explorer != null) listener.onExplorerCreated(this, explorer);
+    }
 
     public class OnBackPressed extends OnBackPressedCallback {
 
@@ -147,5 +160,11 @@ public abstract class ExplorerFragment extends Fragment {
         if(explorer != null) {
             explorer.setSorter(sorter);
         }
+    }
+    
+    public static interface OnExplorerCreatedListener {
+        
+        public void onExplorerCreated(ExplorerFragment fragment, Explorer explorer);
+        
     }
 }

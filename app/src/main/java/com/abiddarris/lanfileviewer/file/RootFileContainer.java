@@ -94,7 +94,7 @@ public class RootFileContainer implements File {
     
     @Override
     public FileSource getSource() {
-        return null;
+        return source;
     }
     
     @Override

@@ -83,7 +83,7 @@ public class NetworkFileSource extends FileSource {
     }
 
     @Override
-    public File getRoot() {
+    public RootFileContainer getRoot() {
         return root;
     }
 

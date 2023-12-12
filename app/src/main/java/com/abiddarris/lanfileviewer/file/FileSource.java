@@ -14,7 +14,7 @@ public abstract class FileSource {
     private Map<String,File> cache = new HashMap<>();
     private SecurityManager securityManager = new SecurityManager();
     
-    public abstract File getRoot();
+    public abstract RootFileContainer getRoot();
     
     protected abstract File newFile(File parent, String path);
     

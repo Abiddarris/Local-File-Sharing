@@ -25,6 +25,7 @@ public class Explorer {
     private FileAdapter adapter;
     private int targetCount;
     private List<File> cache = new ArrayList<>();
+    private List<OnExplorerUpdatedListener> updatedListeners = new ArrayList<>();
     private Mode mode = navigateMode;
     private SwipeRefreshLayout refresher;
 
@@ -95,6 +96,10 @@ public class Explorer {
         adapter.setFiles(files);
 
         adapter.getMainThread().post(() -> refresher.setRefreshing(false));
+        
+        for(OnExplorerUpdatedListener listener : updatedListeners) {
+            listener.onUpdated(this);
+        }
     }
 
     public File getParent() {
@@ -141,5 +146,15 @@ public class Explorer {
 
     public void setSorter(FileSorter sorter) {
         this.sorter = sorter;
+    }
+    
+    public void addOnUpdatedListener(OnExplorerUpdatedListener listener) {
+    	updatedListeners.add(listener);
+    }
+    
+    public static interface OnExplorerUpdatedListener {
+        
+        void onUpdated(Explorer e);
+        
     }
 }
