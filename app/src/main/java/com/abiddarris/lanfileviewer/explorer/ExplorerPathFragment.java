@@ -25,8 +25,7 @@ public class ExplorerPathFragment extends Fragment {
         adapter.setContext(getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.HORIZONTAL);
-        itemDecoration.setDrawable(getActivity().getDrawable(R.drawable.ic_chevron_right));
+        ChevronItemDecoration itemDecoration = new ChevronItemDecoration(getContext());
         
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(layoutManager);
