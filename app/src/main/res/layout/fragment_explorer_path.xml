@@ -13,12 +13,13 @@
          android:layout_marginBottom="15dp"
          android:scaleType="fitCenter"
          android:src="@drawable/ic_home"
-         android:background="@android:color/transparent"
+         android:background="?attr/selectableItemBackgroundBorderless"
          android:layout_centerVertical="true"
          android:layout_marginLeft="15dp"
          android:id="@+id/icon" />
 
     <androidx.recyclerview.widget.RecyclerView
+         android:layout_marginLeft="10dp"
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
          android:layout_toEndOf="@id/icon"
