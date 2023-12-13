@@ -96,6 +96,10 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
                     handler.post(() -> notifyDataSetChanged());
                 });
     }
+    
+    public Explorer getExplorer() {
+    	return explorer;
+    }
 
     public String[] getPaths() {
         return this.paths;
