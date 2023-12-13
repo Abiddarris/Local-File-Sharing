@@ -8,8 +8,7 @@
     <RelativeLayout
          android:layout_height="wrap_content"
          android:layout_width="match_parent"
-         android:layout_marginLeft="24dp"
-         android:layout_marginRight="24dp">
+         style="@style/DialogRootLayoutStyle">
 
         <RadioGroup
              android:layout_height="wrap_content"
