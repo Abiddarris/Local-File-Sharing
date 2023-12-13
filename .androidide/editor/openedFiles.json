@@ -4,14 +4,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/PathAdapter.java",
       "selection": {
         "end": {
-          "column": 9,
-          "index": 3553,
-          "line": 96
+          "column": 8,
+          "index": 1336,
+          "line": 37
         },
         "start": {
-          "column": 9,
-          "index": 3553,
-          "line": 96
+          "column": 8,
+          "index": 1336,
+          "line": 37
         }
       }
     },
@@ -61,5 +61,5 @@
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/fragment_explorer_path.xml"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/PathAdapter.java"
 }

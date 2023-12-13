@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Button;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.LayoutPathButtonBinding;
@@ -32,9 +33,12 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int index) {
         holder.name.setText(paths[index]);
+        holder.name.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
+        
         if (index == paths.length - 1)
-            holder.name.setTextColor(context.getResources().getColor(R.color.colorAccent));
+            holder.name.setTextColor(ContextCompat.getColor(context,R.color.colorAccent));
         else holder.name.setTextColor(Color.WHITE);
+        
         holder.name.setOnClickListener(
                 (v) -> {
                     StringBuilder path = new StringBuilder();
