@@ -112,6 +112,18 @@ public abstract class ExplorerFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.fragment_explorer_menu, menu);
     }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.createFolder :
+                new CreateFolderDialog()
+                    .show(getChildFragmentManager(), null);
+        }
+        
+        return super.onOptionsItemSelected(item);
+    }
+    
 
     public void navigateUp() {
         if (!explorer.onBackPressed()) {
