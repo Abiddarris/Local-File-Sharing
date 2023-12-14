@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import com.abiddarris.lanfileviewer.R;
+import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.DialogCreateFolderBinding;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
@@ -60,18 +61,35 @@ public class CreateFolderDialog extends DialogFragment {
         public void afterTextChanged(Editable editable) {
             String name = editable.toString();
             binding.create.setEnabled(false);
+            if(name.isBlank()) {
+                binding.name.setErrorEnabled(false);
+                return;
+            }
             
             File folder = source.getFile(parentPath + "/" + name);
             executor.execute(() -> {
                 try {
-                    folder.updateDataSync();
-                    if(!folder.exists()) {
-                        getActivity().runOnUiThread(() -> binding.create.setEnabled(true));
-                    }  
+                    validateInput(folder);
                 } catch (Exception e) {
                     Log.err.log(TAG, e);
                 }
             });
+        }
+
+        private void validateInput(final File folder) throws Exception {
+            folder.updateDataSync();
+                    
+            if(!folder.exists()) {
+                getActivity().runOnUiThread(() -> {
+                    binding.create.setEnabled(true);
+                    binding.name.setErrorEnabled(false);
+                });
+            } else {
+                getActivity().runOnUiThread(() -> {
+                    binding.name.setErrorEnabled(true);
+                    binding.name.setError(getString(R.string.file_already_exists));
+                });
+            }
         }
     }
 }
