@@ -117,7 +117,7 @@ public abstract class ExplorerFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.createFolder :
-                new CreateFolderDialog()
+                new CreateFolderDialog(getExplorer())
                     .show(getChildFragmentManager(), null);
         }
         

@@ -62,7 +62,7 @@ public class ApplicationCore extends Application {
                     if (e instanceof Exception) {
                         Log.err.log("Main Thread", (Exception) e);
                     } else {
-                        Log.err.log("Main Thread", e);
+                        Log.err.log("Main Thread", new Exception(e));
                     }
                     System.exit(1);
                 });

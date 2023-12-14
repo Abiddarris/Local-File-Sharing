@@ -26,24 +26,26 @@
          android:id="@+id/divider" />
 
     <Button
-         style="@style/Widget.Material3.Button.TextButton"
-         android:background="@null"
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
          android:layout_below="@id/name"
+         android:background="@null"
          android:layout_toLeftOf="@id/divider"
+         style="@style/Widget.Material3.Button.TextButton"
          android:layout_alignParentStart="true"
          android:id="@+id/cancel"
          android:text="@string/cancel" />
 
     <Button
-         style="@style/Widget.Material3.Button.TextButton"
-         android:background="@null"
+         android:id="@+id/create"
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
          android:layout_below="@id/name"
+         android:background="@null"
          android:layout_toRightOf="@id/divider"
          android:layout_alignParentEnd="true"
+         android:enabled="false"
+         style="@style/Widget.Material3.Button.TextButton"
          android:text="@string/create" />
 
 </RelativeLayout>
