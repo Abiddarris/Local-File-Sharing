@@ -15,7 +15,6 @@ import com.abiddarris.lanfileviewer.file.FileSource;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
-
 import java.util.concurrent.Executors;
 
 public class CreateFolderDialog extends DialogFragment {
@@ -51,6 +50,7 @@ public class CreateFolderDialog extends DialogFragment {
                 }
             });    
         });
+        binding.cancel.setOnClickListener(v -> dismiss());
         
         AlertDialog dialog =
                 new MaterialAlertDialogBuilder(getContext())
@@ -64,7 +64,8 @@ public class CreateFolderDialog extends DialogFragment {
     private void showFailedToast() {
         getActivity().runOnUiThread(() -> {
             Toast.makeText(getContext(), getString(R.string.fail_creating_folders) , Toast.LENGTH_SHORT).show();
-            dismiss();    
+            dismiss(); 
+            explorer.update();       
         });
     }
 

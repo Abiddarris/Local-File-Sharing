@@ -19,14 +19,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/CreateFolderDialog.java",
       "selection": {
         "end": {
-          "column": 0,
-          "index": 681,
-          "line": 17
+          "column": 23,
+          "index": 2472,
+          "line": 66
         },
         "start": {
-          "column": 0,
-          "index": 681,
-          "line": 17
+          "column": 12,
+          "index": 2461,
+          "line": 66
         }
       }
     },
