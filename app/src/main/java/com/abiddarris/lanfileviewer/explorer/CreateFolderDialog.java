@@ -2,6 +2,7 @@ package com.abiddarris.lanfileviewer.explorer;
 
 import android.os.Bundle;
 import android.app.Dialog;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ public class CreateFolderDialog extends DialogFragment {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Explorer explorer;
     private FileSource source;
+    private Handler handler = new Handler();
     private String parentPath;
     
     public static final String TAG = Log.getTag(CreateFolderDialog.class);
@@ -43,11 +45,13 @@ public class CreateFolderDialog extends DialogFragment {
         binding.create.setOnClickListener(v -> {
             String name = binding.name.getEditText().getText().toString();
             File folder = source.getFile(parentPath + "/" + name);
+            dismiss(); 
             executor.execute(() -> {
                 boolean sucess = folder.makeDirs();
+                refreshExplorer();
                 if(!sucess) {
                     showFailedToast();
-                }
+                } 
             });    
         });
         binding.cancel.setOnClickListener(v -> dismiss());
@@ -61,12 +65,13 @@ public class CreateFolderDialog extends DialogFragment {
         return dialog;
     }
 
+    private void refreshExplorer() {
+        handler.post(() -> explorer.update());
+    }
+
     private void showFailedToast() {
-        getActivity().runOnUiThread(() -> {
-            Toast.makeText(getContext(), getString(R.string.fail_creating_folders) , Toast.LENGTH_SHORT).show();
-            dismiss(); 
-            explorer.update();       
-        });
+        handler.post(() -> 
+            Toast.makeText(getContext(), getString(R.string.fail_creating_folders) , Toast.LENGTH_SHORT).show());
     }
 
     private class TextListener implements TextWatcher {
