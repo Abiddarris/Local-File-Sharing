@@ -2,6 +2,7 @@ package com.abiddarris.lanfileviewer;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Binder;
@@ -9,6 +10,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import androidx.preference.PreferenceManager;
+import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.file.SecurityException;
+import com.abiddarris.lanfileviewer.file.SecurityManager;
+import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.FileSharing;
 import com.abiddarris.lanfileviewer.file.sharing.ScanException;
 import com.abiddarris.lanfileviewer.file.sharing.ScanningSession;
@@ -67,7 +74,10 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         
         Log.debug.log(TAG, "Registering Server");
         
-        sharingSession = FileSharing.share(this);
+        FileSource source = LocalFileSource.getDefaultLocalSource(this);
+        source.setSecurityManager(new SecurityManagerImpl());
+        
+        sharingSession = FileSharing.share(this, source);
         try {
             sharingSession.start();
         } catch (Exception e) {
@@ -119,6 +129,34 @@ public class ConnectionService extends Service implements ScanningSession.Callba
     @Override
     public void onServerLost(SharingDevice device) {
         handler.post(() -> adapter.removeServer(device));
+    }
+    
+    private class SecurityManagerImpl extends SecurityManager {
+        
+        private SharedPreferences preferences;
+        
+        public SecurityManagerImpl() {
+        	preferences = PreferenceManager.getDefaultSharedPreferences(ConnectionService.this);
+        }
+        
+        @Override
+        public void checkWrite(File file) {
+            String granted = preferences.getString("writeAccess", "1");
+            
+            if(granted.equals("1")) {
+                throw new SecurityException("Write access dissalowed");
+            }
+        }
+        
+        @Override
+        public void checkDelete(File file) {
+            String granted = preferences.getString("deleteAccess", "1");
+            
+            if(granted.equals("1")) {
+                throw new SecurityException("Delete access dissalowed");
+            }
+        }
+        
     }
 
     public class ConnectionServiceBridge extends Binder {

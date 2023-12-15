@@ -1,8 +1,10 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Dialog;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Toast;
@@ -20,12 +22,14 @@ import java.util.concurrent.Executors;
 
 public class CreateFolderDialog extends DialogFragment {
 
+    private Context context;
     private DialogCreateFolderBinding binding;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Explorer explorer;
     private FileSource source;
-    private Handler handler = new Handler();
+    private Handler handler = new Handler(Looper.getMainLooper());
     private String parentPath;
+    private String failCreateFoldersMessage;
     
     public static final String TAG = Log.getTag(CreateFolderDialog.class);
 
@@ -56,6 +60,9 @@ public class CreateFolderDialog extends DialogFragment {
         });
         binding.cancel.setOnClickListener(v -> dismiss());
         
+        context = getActivity().getApplication();
+        failCreateFoldersMessage = getString(R.string.fail_creating_folders);
+        
         AlertDialog dialog =
                 new MaterialAlertDialogBuilder(getContext())
                         .setView(binding.getRoot())
@@ -71,7 +78,7 @@ public class CreateFolderDialog extends DialogFragment {
 
     private void showFailedToast() {
         handler.post(() -> 
-            Toast.makeText(getContext(), getString(R.string.fail_creating_folders) , Toast.LENGTH_SHORT).show());
+            Toast.makeText(context, failCreateFoldersMessage , Toast.LENGTH_SHORT).show());
     }
 
     private class TextListener implements TextWatcher {

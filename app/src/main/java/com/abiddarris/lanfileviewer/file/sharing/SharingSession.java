@@ -40,10 +40,10 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     private static final String TAG = Log.getTag(SharingSession
         .class);
     
-    public SharingSession(Context context) {
+    public SharingSession(Context context, FileSource source) {
         super(0);
         
-        source = LocalFileSource.getDefaultLocalSource(context);
+        this.source = source;
         nsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
     }
     
@@ -148,8 +148,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     private void fetchOthersRequest(JSONObject request, JSONObject response, String key, String path) throws JSONException {
         if(key.equals(REQUEST_GET_TOP_DIRECTORY_FILES)) {
         	JSONArray topDirectoryFiles = new JSONArray();
-            File root = LocalFileSource.getDefaultLocalSource(
-                ApplicationCore.getApplication()).getRoot();
+            File root = source.getRoot();
             for(File subroot : root.listFiles()) {
                 topDirectoryFiles.put(subroot.getPath());
             }
@@ -159,8 +158,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     }
 
     private void fetchFileRelated(JSONObject request, JSONObject response, String key, String path) throws JSONException {
-        File file = FileSource.getDefaultLocalSource(ApplicationCore.getApplication())
-            .getFile(path);
+        File file = source.getFile(path);
         
         if(key.equalsIgnoreCase(REQUEST_GET_NAME)) {
             response.put(KEY_NAME, file.getName());
@@ -214,8 +212,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     }
 
     private Response getFile(IHTTPSession session) throws IOException {
-        File file = LocalFileSource.getDefaultLocalSource(ApplicationCore.getApplication())
-            .getFile(session.getUri());
+        File file = source.getFile(session.getUri());
         
         if(session.getHeaders().get("range") != null) {
             return getPartialContent(file,session);

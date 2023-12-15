@@ -152,11 +152,17 @@ public class LocalFile implements File {
     
     @Override
     public InputStream newInputStream() throws IOException {
+        source.getSecurityManager()
+            .checkRead(this);
+        
         return new FileInputStream(getPath());
     }
     
     @Override
     public OutputStream newOutputStream() throws IOException {
+        source.getSecurityManager()
+            .checkWrite(this);
+        
         return new FileOutputStream(getPath());
     }
     
