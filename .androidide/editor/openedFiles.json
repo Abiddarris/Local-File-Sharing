@@ -1,47 +1,17 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/FileSource.java",
-      "selection": {
-        "end": {
-          "column": 38,
-          "index": 673,
-          "line": 20
-        },
-        "start": {
-          "column": 38,
-          "index": 673,
-          "line": 20
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFileSource.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ApplicationCore.java",
       "selection": {
         "end": {
           "column": 0,
-          "index": 0,
-          "line": 0
+          "index": 729,
+          "line": 21
         },
         "start": {
           "column": 0,
-          "index": 0,
-          "line": 0
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/SharingSession.java",
-      "selection": {
-        "end": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        },
-        "start": {
-          "column": 0,
-          "index": 0,
-          "line": 0
+          "index": 729,
+          "line": 21
         }
       }
     },
@@ -49,14 +19,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/CreateFolderDialog.java",
       "selection": {
         "end": {
-          "column": 52,
-          "index": 2285,
-          "line": 64
+          "column": 0,
+          "index": 681,
+          "line": 17
         },
         "start": {
-          "column": 52,
-          "index": 2285,
-          "line": 64
+          "column": 0,
+          "index": 681,
+          "line": 17
         }
       }
     },
@@ -64,14 +34,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/strings.xml",
       "selection": {
         "end": {
-          "column": 67,
-          "index": 2549,
-          "line": 53
+          "column": 75,
+          "index": 2625,
+          "line": 54
         },
         "start": {
-          "column": 67,
-          "index": 2549,
-          "line": 53
+          "column": 75,
+          "index": 2625,
+          "line": 54
         }
       }
     }

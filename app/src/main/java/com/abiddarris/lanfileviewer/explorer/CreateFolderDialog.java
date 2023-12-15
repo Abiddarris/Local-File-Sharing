@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.app.Dialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import com.abiddarris.lanfileviewer.R;
@@ -14,6 +15,7 @@ import com.abiddarris.lanfileviewer.file.FileSource;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
+
 import java.util.concurrent.Executors;
 
 public class CreateFolderDialog extends DialogFragment {
@@ -39,7 +41,17 @@ public class CreateFolderDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle bundle) {
         binding = DialogCreateFolderBinding.inflate(getLayoutInflater());
         binding.name.getEditText().addTextChangedListener(new TextListener());
-
+        binding.create.setOnClickListener(v -> {
+            String name = binding.name.getEditText().getText().toString();
+            File folder = source.getFile(parentPath + "/" + name);
+            executor.execute(() -> {
+                boolean sucess = folder.makeDirs();
+                if(!sucess) {
+                    showFailedToast();
+                }
+            });    
+        });
+        
         AlertDialog dialog =
                 new MaterialAlertDialogBuilder(getContext())
                         .setView(binding.getRoot())
@@ -47,6 +59,13 @@ public class CreateFolderDialog extends DialogFragment {
                         .create();
 
         return dialog;
+    }
+
+    private void showFailedToast() {
+        getActivity().runOnUiThread(() -> {
+            Toast.makeText(getContext(), getString(R.string.fail_creating_folders) , Toast.LENGTH_SHORT).show();
+            dismiss();    
+        });
     }
 
     private class TextListener implements TextWatcher {
