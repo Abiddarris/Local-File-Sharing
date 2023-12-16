@@ -19,7 +19,7 @@ public class RootFileContainer implements File {
     
     @Override
     public void updateData(Callback callback) {
-        callback.onDataUpdated();
+        callback.onDataUpdated(null);
     }
     
     @Override

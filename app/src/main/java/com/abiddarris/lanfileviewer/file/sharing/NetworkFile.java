@@ -53,11 +53,11 @@ public class NetworkFile implements File {
             Log.err.log(TAG, e);
         }
 
-        source.sendRequest(request, (response) -> {
+        source.sendRequest(request, (response, e) -> {
             onResponseAvailable(response);
 
             if (callback != null)
-                ApplicationCore.getMainHandler().post(() -> callback.onDataUpdated());
+                ApplicationCore.getMainHandler().post(() -> callback.onDataUpdated(e));
         });
     }
     

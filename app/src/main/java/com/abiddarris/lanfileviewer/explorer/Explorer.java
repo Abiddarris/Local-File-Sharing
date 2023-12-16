@@ -8,6 +8,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.abiddarris.lanfileviewer.databinding.FragmentFileExplorerBinding;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
+import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +58,14 @@ public class Explorer {
     }
 
     public void update() {
-        parent.updateData(() -> load(parent.listFiles()));
+        parent.updateData((e) -> {
+            if(e != null){
+                new ExceptionDialog(e)
+                      .show(fragment.getChildFragmentManager(), null);
+                return;
+            }    
+            load(parent.listFiles());
+        });
     }
 
     private void load(File[] files) {
@@ -68,7 +76,14 @@ public class Explorer {
             return;
         }
         for (File file : files) {
-            file.updateData(() -> onFileLoaded(file));
+            file.updateData((e) -> {
+                if(e != null){
+                    new ExceptionDialog(e)
+                          .show(fragment.getChildFragmentManager(), null);
+                    return;
+                }
+                onFileLoaded(file);
+            });
         }
     }
 

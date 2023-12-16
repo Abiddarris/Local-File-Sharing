@@ -45,7 +45,7 @@ public interface File {
     public abstract InputStream newInputStream() throws IOException;
     
     public static interface Callback {
-        void onDataUpdated();
+        void onDataUpdated(Exception e);
     }
     
 }

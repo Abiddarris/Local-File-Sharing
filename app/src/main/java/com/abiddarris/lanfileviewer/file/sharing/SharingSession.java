@@ -15,9 +15,12 @@ import com.gretta.util.log.Log;
 import fi.iki.elonen.NanoHTTPD;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -86,7 +89,25 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             return null;
         } catch (Exception e) {
             Log.err.log(TAG,e);
-            return newFixedLengthResponse(Response.Status.INTERNAL_ERROR, "text/plain", e.toString());
+            
+            InputStream inputStream = null;
+            long size = -1;
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(baos));
+                oos.writeObject(e);
+                oos.flush();
+                oos.close();
+                
+                size = baos.size();
+                inputStream = new ByteArrayInputStream(baos.toByteArray());
+            } catch (IOException e1) {
+                Log.err.log(TAG, e1);
+            }
+            
+            if(inputStream == null) return newFixedLengthResponse(Response.Status.INTERNAL_ERROR, "text/plain", "Failed to sent error message");
+            
+            return newFixedLengthResponse(Response.Status.INTERNAL_ERROR, "application/octet-stream", inputStream, size);
         }
     }
 

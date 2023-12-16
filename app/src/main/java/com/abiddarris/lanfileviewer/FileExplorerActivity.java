@@ -24,6 +24,7 @@ import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
 import com.abiddarris.lanfileviewer.explorer.ExplorerPathFragment;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
+import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
 import com.abiddarris.lanfileviewer.ui.NetworkExplorerFragment;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFile;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
@@ -115,6 +116,8 @@ public class FileExplorerActivity extends ExplorerActivity
                 ((ApplicationCore) getApplication())
                     .setCurrentFileSource(source);
             } catch(Exception e) {
+                new ExceptionDialog(e)
+                    .show(getSupportFragmentManager(), null);
                 Log.debug.log(TAG, e);
             }
         });

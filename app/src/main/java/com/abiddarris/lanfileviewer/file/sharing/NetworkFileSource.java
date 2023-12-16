@@ -6,6 +6,10 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.RootFile;
 import com.abiddarris.lanfileviewer.file.RootFileContainer;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.net.ProtocolException;
 import java.util.concurrent.ExecutorService;
 import java.net.URL;
 import java.io.IOException;
@@ -52,34 +56,82 @@ public class NetworkFileSource extends FileSource {
         executor.submit(() -> {
             try {
                 JSONObject response = sendRequestSync(json);
-                callback.onResponseAvailable(response);
-            } catch (Exception e) {
-                e.printStackTrace();
+                callback.onResponseAvailable(response, null);
+            } catch (RequestException e) {
+                callback.onResponseAvailable(null, e);
             }
         });
     }
     
-    public JSONObject sendRequestSync(JSONObject json) throws IOException, JSONException {
-        HttpURLConnection connection = (HttpURLConnection) server.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setDoOutput(true);
-        connection.setRequestProperty("Content-Type", "application/json");
+    public JSONObject sendRequestSync(JSONObject json) throws RequestException {
+        HttpURLConnection connection = null;
+        try {
+            connection = (HttpURLConnection) server.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", "application/json");
         
-        OutputStream outputStream = connection.getOutputStream();
-        outputStream.write(json.toString().getBytes());
-        outputStream.flush();
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(json.toString().getBytes());
+            outputStream.flush();
         
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String data;
-        StringBuilder result = new StringBuilder();
-        while((data = reader.readLine()) != null) {
-            result.append(data)
-                .append("\n");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String data;
+            StringBuilder result = new StringBuilder();
+            while((data = reader.readLine()) != null) {
+                result.append(data)
+                    .append("\n");
+            }
+        
+            reader.close();
+            outputStream.close();
+            
+            return new JSONObject(result.toString());
+        } catch (ProtocolException | JSONException e) {
+            throw new RequestException("Failed to sent a request : ", e);
+        } catch (IOException e) {
+            if(connection == null) {
+                throw new RequestException("Failed to sent a request : ", e);
+            }
+            
+            Exception exception = getServerException(connection);
+            Throwable cause = getCause(e);
+            cause.initCause(exception);
+            
+            throw new RequestException("Failed to sent a request", e);
+        } finally {
+            if(connection != null) connection.disconnect();
         }
-        reader.close();
-        outputStream.close();
+    }
+
+    private Throwable getCause(Throwable e) {
+        Throwable cause = e.getCause();
+        if(cause == null) return e;
         
-        return new JSONObject(result.toString());
+        return getCause(cause);
+    }
+    
+    public Exception getServerException(HttpURLConnection connection) {
+    	try {
+            if(connection.getResponseCode() != HttpURLConnection.HTTP_INTERNAL_ERROR) {
+                return null;
+            }
+            
+            String mimeType = connection.getHeaderField("Content-Type");
+            if(mimeType.equalsIgnoreCase("text/plain")) {
+                return new IOException("Cannot get error messages : Server cannot sent error messages");
+            } else if(mimeType.equalsIgnoreCase("application/octet-stream")) {
+                ObjectInputStream inputStream = new ObjectInputStream(new BufferedInputStream(connection.getErrorStream()));
+                Exception exception = (Exception) inputStream.readObject();
+                inputStream.close();
+                
+                return exception;
+            } else {
+                return new IOException("Cannot get error messages : unrecognize content type");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            return e;
+        }
     }
 
     @Override
@@ -93,7 +145,7 @@ public class NetworkFileSource extends FileSource {
     }
 
     public static interface ResponseCallback {
-        void onResponseAvailable(JSONObject json);
+        void onResponseAvailable(JSONObject json, Exception exception);
     }
     
     public SharingDevice getDevice() {
