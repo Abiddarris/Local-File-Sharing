@@ -54,4 +54,9 @@
     <string name="file_already_exists">File already exists</string>
     <string name="fail_creating_folders">Failed to create a folder</string>
     <string name="exception_dialog_title">Exceptions have been thrown!</string>
+    <string name="error">Error</string>
+    <string name="permission_denied_message">Application cannot proceed without proper permissions.</string>
+    <string name="request_permission_message">This application needs storage permissions to work.</string>
+    <string name="grant">Grant</string>
+    <string name="exit">Exit</string>
 </resources>

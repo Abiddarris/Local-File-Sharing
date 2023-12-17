@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import com.abiddarris.lanfileviewer.databinding.ActivityMainBinding;
 import com.abiddarris.lanfileviewer.ConnectionService.ConnectionServiceBridge;
+import com.abiddarris.lanfileviewer.utils.Permission;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.gretta.util.log.FilesLog;
 import com.gretta.util.log.Log;
@@ -38,6 +39,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        Permission.onCreate(this);
+        Permission.checkPermission(this);
         
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         binding.viewPager.setAdapter(new MainFragmentAdapter(this));
@@ -61,6 +65,12 @@ public class MainActivity extends AppCompatActivity
         startService(intent);
         bindService(intent, this, 0);
     }
+    
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Permission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+    
     
     public void addConnectedListener(OnServiceConnected listener) {
         if(bridge != null) {
