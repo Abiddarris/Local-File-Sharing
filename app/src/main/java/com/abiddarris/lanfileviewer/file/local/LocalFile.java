@@ -2,6 +2,7 @@ package com.abiddarris.lanfileviewer.file.local;
 
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
+import androidx.documentfile.provider.DocumentFile;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import java.io.FileInputStream;
@@ -134,7 +135,18 @@ public class LocalFile implements File {
         source.getSecurityManager()
             .checkWrite(this);
         
-        return file.mkdirs();
+        if(file.canWrite()) {
+            return file.mkdirs();
+        }
+        
+        if(!getParentFile().exists()) getParentFile().makeDirs();
+       
+        DocumentFile documentFile = source.findDocumentFile(getParentFile());
+        if(documentFile != null) {
+        	return documentFile.createDirectory(getName()) != null;
+        }
+        
+        return false;
     }
     
     @Override
@@ -163,7 +175,21 @@ public class LocalFile implements File {
         source.getSecurityManager()
             .checkWrite(this);
         
-        return new FileOutputStream(getPath());
+        if(file.canWrite()) {
+            return new FileOutputStream(getPath());
+        }
+        
+        DocumentFile parentDocumentFile = source.findDocumentFile(getParentFile());
+        if(parentDocumentFile != null) {
+            DocumentFile file = parentDocumentFile.findFile(getName());
+            file = file == null ? parentDocumentFile.createFile("application/notexist", getName()) : file;
+            
+            return source.getContext()
+                .getContentResolver()
+                .openOutputStream(file.getUri());
+        }
+        
+        throw new IOException("Cannot open an outputstream");
     }
     
     

@@ -59,4 +59,6 @@
     <string name="request_permission_message">This application needs storage permissions to work.</string>
     <string name="grant">Grant</string>
     <string name="exit">Exit</string>
+    <string name="select">Select</string>
+    <string name="request_sd_card_permission_message">This application cannot write to a sd card. Please select SD Card folder to grant write access!</string>
 </resources>
