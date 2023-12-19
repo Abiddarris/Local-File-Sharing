@@ -44,6 +44,8 @@ public interface File {
     
     public abstract InputStream newInputStream() throws IOException;
     
+    //public abstract void copy(File dest);
+    
     public static interface Callback {
         void onDataUpdated(Exception e);
     }

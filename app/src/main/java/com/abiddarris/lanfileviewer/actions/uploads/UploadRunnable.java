@@ -21,8 +21,6 @@ import com.abiddarris.lanfileviewer.databinding.DialogActionProgressBinding;
 
 public class UploadRunnable extends ActionRunnable {
 
-    private DialogActionProgressBinding view;
-    private Handler handler = new Handler(Looper.getMainLooper());
     private File dest;
     private File[] items;
     private FileSource destSource;
@@ -44,8 +42,6 @@ public class UploadRunnable extends ActionRunnable {
 
     @Override
     public void onExecute() throws Exception {
-        view = getView();
-        
         prepare();
 
         List<File> files = new ArrayList<>();
@@ -53,7 +49,7 @@ public class UploadRunnable extends ActionRunnable {
             Files.getFilesTree(files, file);
         }
 
-        startUpload();
+        start();
 
         File parent = items[0].getParentFile();
         for (int i = 0; i < files.size(); ++i) {
@@ -125,44 +121,5 @@ public class UploadRunnable extends ActionRunnable {
         updateProgress(1);
     }
     
-    private void updateFileInfo(String name, int index, int totalFiles) {
-        handler.post(() -> {
-            view.name.setText(name);
-            view.progress.setText((index) + "/" + totalFiles);
-        });
-    }
     
-    private void setMaxProgress(double maxProgress) {
-        handler.post(() -> view.progressIndicator.setMax((int) maxProgress));
-    }
-
-    private void updateProgress(double progress) {
-        int max = view.progressIndicator.getMax();
-        double oldProgress = view.progressIndicator.getProgress();
-        double oldPercentage = Math.floor(oldProgress / max * 100);
-        
-        int percentage = (int)Math.floor(progress / max * 100);
-        if(percentage > oldPercentage) {
-            handler.post(() -> {
-                view.progressIndicator.setProgress((int) progress);
-                view.progressPercent.setText(percentage + "%");
-            });
-        }
-    }
-
-    private void startUpload() {
-        handler.post(() -> {
-            view.name.setVisibility(View.VISIBLE);
-            view.progressPercent.setVisibility(View.VISIBLE);
-        });
-    }
-
-    public void prepare() {
-        handler.post(() -> {
-            view.name.setVisibility(View.INVISIBLE);
-            view.progressPercent.setVisibility(View.INVISIBLE);
-
-            view.progress.setText(R.string.preparing);
-        });
-    }
 }
