@@ -13,8 +13,10 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
+import androidx.appcompat.widget.Toolbar;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.R;
+import com.abiddarris.lanfileviewer.databinding.LayoutModifyBinding;
 import com.abiddarris.lanfileviewer.databinding.LayoutSelectBinding;
 import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
 import com.abiddarris.lanfileviewer.file.File;
@@ -25,10 +27,12 @@ import java.util.List;
 import java.util.Set;
 import kotlin.jvm.internal.Lambda;
 
-public class ModifyMode extends Mode implements ActionMode.Callback {
+public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback {
     
     private ActionMode view;
+    private boolean hide = true;
     private boolean programaticlyEvent;
+    private CopyMode copyMode;
     private Set<File> checked = new HashSet<>();
     private LayoutSelectBinding actionModeLayout;
     
@@ -36,17 +40,17 @@ public class ModifyMode extends Mode implements ActionMode.Callback {
     
     public ModifyMode(Explorer explorer) {
         super(explorer);
+        
+        this.copyMode = new CopyMode(getExplorer());
     }
    
     @Override
     public void onModeSelected() {
-        super.onModeSelected();
-        
         Context context = getExplorer().getContext();
         AppCompatActivity compat = (AppCompatActivity)context;
         compat.startSupportActionMode(this);
         
-        showModifyOptions();
+        super.onModeSelected();
     }
     
     @Override
@@ -90,11 +94,12 @@ public class ModifyMode extends Mode implements ActionMode.Callback {
     
     @Override
     public void onModeDeselected() {
-        super.onModeDeselected();
-        
         checked.clear();
         
-        hideModifyOptions();
+        if(hide) {
+            super.onModeDeselected();
+        }
+        hide = true;
         
         view.finish();
         view = null;
@@ -174,58 +179,28 @@ public class ModifyMode extends Mode implements ActionMode.Callback {
 
     @Override
     public void onDestroyActionMode(ActionMode mode) {
-        getExplorer().setMode(getExplorer().navigateMode);
+        if(getExplorer().getMode() == this) {
+            getExplorer().setMode(getExplorer().navigateMode);
+        }
     }
     
-    private void showModifyOptions() {
-        RelativeLayout group = getExplorer().getUI()
-            .bottomAction;
-        
-    	onModifyOptionsCreated(group);
-        
-        group.setVisibility(View.VISIBLE);
-        group.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                ValueAnimator animator = ValueAnimator.ofFloat(group.getY() + group.getHeight(), group.getY());
-                animator.setDuration(500);
-                animator.addUpdateListener((vAnimator) -> {
-                    Log.debug.log("anim", vAnimator.getAnimatedValue());    
-                    group.setY((float)vAnimator.getAnimatedValue());
-                });
-                animator.start();
-                group.getViewTreeObserver().removeOnGlobalLayoutListener(this); 
-            }
-        });
-    }
-    
-    private void hideModifyOptions() {
-        RelativeLayout group = getExplorer().getUI()
-            .bottomAction;
-        
-        float initialY = group.getY();
-        
-        ValueAnimator animator = ValueAnimator.ofFloat(initialY, initialY + group.getHeight());
-        animator.setDuration(500);
-        animator.addUpdateListener((vAnimator) -> {
-            group.setY((float)vAnimator.getAnimatedValue());
-        });
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                super.onAnimationEnd(animator);
-                    
-                group.setY(initialY); 
-                group.removeAllViews();
-                group.setVisibility(View.GONE);
-            }
-        });
-        animator.start();
-    }
-    
+    @Override
     public void onModifyOptionsCreated(RelativeLayout group) {
-        LayoutInflater.from(getExplorer().getContext())
-            .inflate(R.layout.layout_modify, group, true);
+        View view = LayoutInflater.from(getExplorer().getContext())
+            .inflate(R.layout.layout_modify, null);
+        group.addView(view);
+        
+        LayoutModifyBinding binding = LayoutModifyBinding.bind(view);
+        binding.actions.setOnMenuItemClickListener(item -> onActionClick(item));
+    }
+
+    private boolean onActionClick(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.copy : 
+                hide = false;
+                getExplorer().setMode(copyMode);
+        }
+        return false;
     }
     
 }

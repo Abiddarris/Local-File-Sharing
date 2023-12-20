@@ -134,10 +134,13 @@ public class Explorer {
     }
 
     public void setMode(Mode mode) {
-        if (this.mode != null) {
-            this.mode.onModeDeselected();
-        }
+        Mode oldMode = this.mode;
         this.mode = mode;
+        
+        if (oldMode != null) {
+            oldMode.onModeDeselected();
+        }
+        
         mode.onModeSelected();
 
         adapter.notifyDataSetChanged();

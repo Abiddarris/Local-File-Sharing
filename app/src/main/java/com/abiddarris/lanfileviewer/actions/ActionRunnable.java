@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.view.View;
 import com.abiddarris.lanfileviewer.databinding.DialogActionProgressBinding;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
+import com.abiddarris.lanfileviewer.R;
 
 public abstract class ActionRunnable extends BaseRunnable {
 
