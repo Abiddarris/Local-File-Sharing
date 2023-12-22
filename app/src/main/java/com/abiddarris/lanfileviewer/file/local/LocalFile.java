@@ -5,18 +5,26 @@ import android.webkit.MimeTypeMap;
 import androidx.documentfile.provider.DocumentFile;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.gretta.util.log.Log;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LocalFile implements File {
 
     private java.io.File file;
     private File parent;
     private LocalFileSource source;
+    private ExecutorService service = Executors.newSingleThreadExecutor();
 
+    public static final String TAG = Log.getTag(LocalFile.class);
+    
     protected LocalFile(LocalFileSource source, File parent, java.io.File file) {
         this.source = source;
         this.parent = parent;
@@ -135,7 +143,7 @@ public class LocalFile implements File {
         source.getSecurityManager()
             .checkWrite(this);
         
-        if(file.canWrite()) {
+        if(file.getParentFile() != null & file.getParentFile().canWrite()) {
             return file.mkdirs();
         }
         
@@ -175,7 +183,7 @@ public class LocalFile implements File {
         source.getSecurityManager()
             .checkWrite(this);
         
-        if(file.canWrite()) {
+        if(file.getParentFile() != null & file.getParentFile().canWrite()) {
             return new FileOutputStream(getPath());
         }
         
@@ -192,6 +200,36 @@ public class LocalFile implements File {
         throw new IOException("Cannot open an outputstream");
     }
     
+    @Override
+    public Progress copy(File dest) {
+        Progress progress = new Progress(length());
+        
+        service.submit(() -> {
+            try {
+                BufferedInputStream inputStream = new BufferedInputStream(newInputStream());
+                BufferedOutputStream outputStream = new BufferedOutputStream(dest.newOutputStream());
+                byte[] buf = new byte[1024 * 4];
+                int len;
+                while((len = inputStream.read(buf)) != -1) {
+                    if(progress.isCancel()) {
+                        break;
+                    }
+                    outputStream.write(buf,0,len);
+                    progress.setCurrentProgress(progress.getCurrentProgress() + len);
+                }
+                outputStream.flush();
+                outputStream.close();
+                inputStream.close();   
+            } catch (IOException e) {
+                Log.err.log(TAG, e); 
+                progress.setException(e);
+            } finally {
+                progress.setCompleted(true);
+            }
+        });
+        
+        return progress;
+    }
     
     
 }

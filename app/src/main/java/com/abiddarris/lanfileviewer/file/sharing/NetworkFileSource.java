@@ -122,7 +122,7 @@ public class NetworkFileSource extends FileSource {
                 return new IOException("Cannot get error messages : Server cannot sent error messages");
             } else if(mimeType.equalsIgnoreCase("application/octet-stream")) {
                 ObjectInputStream inputStream = new ObjectInputStream(new BufferedInputStream(connection.getErrorStream()));
-                Exception exception = (Exception) inputStream.readObject();
+                    Exception exception = (Exception) inputStream.readObject();
                 inputStream.close();
                 
                 return exception;

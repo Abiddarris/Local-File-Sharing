@@ -22,6 +22,7 @@ import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
 import com.abiddarris.lanfileviewer.file.File;
 import com.gretta.util.log.Log;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -198,6 +199,9 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
         switch(item.getItemId()) {
             case R.id.copy : 
                 hide = false;
+            
+                Set<File> items = new HashSet<>(checked);
+                copyMode.setItems(items);
                 getExplorer().setMode(copyMode);
         }
         return false;

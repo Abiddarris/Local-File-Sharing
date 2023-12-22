@@ -10,14 +10,21 @@ import android.util.Base64;
 import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.file.File;
 import com.gretta.util.log.Log;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.CharArrayReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +37,7 @@ public class NetworkFile implements File {
     private boolean isFile;
     private long lastModified;
     private long length;
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
     private File parentFile;
     private File[] listFiles;
     private NetworkFileSource source;
@@ -218,4 +226,56 @@ public class NetworkFile implements File {
         return exists;
     }
     
+    @Override
+    public Progress copy(File dest) {
+        Progress progress = new Progress();
+        executor.submit(() -> {
+            try {
+                JSONObject request = new JSONObject()
+                    .putOpt(KEY_REQUEST, createRequest(REQUEST_COPY))
+                    .putOpt(KEY_PATH, path)
+                    .putOpt(KEY_DEST, dest.getPath());
+                  
+                JSONObject response = source.sendRequestSync(request);
+                int progressId = response.optInt(KEY_PROGRESS_ID);
+                  
+                request = new JSONObject()
+                    .putOpt(KEY_REQUEST, createRequest(REQUEST_PROGRESS))
+                    .putOpt(KEY_PROGRESS_ID, progressId);
+                while(!progress.isCompleted()) {
+                    if(progress.isCancel()) {
+                        JSONObject cancelRequest = new JSONObject()
+                            .putOpt(KEY_REQUEST, createRequest(REQUEST_CANCEL_PROGRESS))
+                            .putOpt(KEY_PROGRESS_ID, progressId);
+                        source.sendRequestSync(cancelRequest);  
+                    } 
+                    response = source.sendRequestSync(request);
+                        
+                    progress.setCompleted(response.optBoolean(KEY_COMPLETED));  
+                    progress.setCurrentProgress(response.optLong(KEY_PROGRESS));
+                    progress.setSize(response.optLong(KEY_LENGTH));
+                }  
+                    
+                JSONObject removeRequest = new JSONObject()    
+                    .putOpt(KEY_REQUEST, createRequest(REQUEST_REMOVE_PROGRESS))
+                    .putOpt(KEY_PROGRESS_ID, progressId);
+                
+                source.sendRequestSync(removeRequest);   
+                    
+                String base64Exception = response.optString(KEY_EXCEPTION);
+                if(base64Exception == null) return;
+                    
+                byte[] datas = Base64.decode(base64Exception, Base64.DEFAULT);
+                ObjectInputStream reader = new ObjectInputStream(
+                        new BufferedInputStream(new ByteArrayInputStream(datas)));
+                Exception e = (Exception) reader.readObject();  
+                progress.setException(e);
+            } catch (Exception e) {
+                progress.setException(e);
+                progress.setCompleted(true);        
+            }
+        });
+        return progress;
+    }
+    //
 }

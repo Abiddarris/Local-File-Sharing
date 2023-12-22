@@ -62,4 +62,6 @@
     <string name="select">Select</string>
     <string name="request_sd_card_permission_message">This application cannot write to a sd card. Please select SD Card folder to grant write access!</string>
     <string name="move_to_here">Move to here</string>
+    <string name="item_format">%s item</string>
+    <string name="copy_dialog_title">Copying %s items</string>
 </resources>

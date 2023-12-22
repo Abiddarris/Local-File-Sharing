@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
+import android.util.Base64;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
 import android.content.Context;
@@ -38,6 +39,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     private Context context;
     private FileSource source;
     private ExecutorService executor = Executors.newCachedThreadPool();
+    private Map<Integer, File.Progress> progresses = new HashMap<>();
     private NsdManager nsdManager;
     
     private static final String TAG = Log.getTag(SharingSession
@@ -166,7 +168,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         return newFixedLengthResponse(Response.Status.OK, "application/json", response.toString());
     }
     
-    private void fetchOthersRequest(JSONObject request, JSONObject response, String key, String path) throws JSONException {
+    private void fetchOthersRequest(JSONObject request, JSONObject response, String key, String path) throws JSONException , IOException {
         if(key.equals(REQUEST_GET_TOP_DIRECTORY_FILES)) {
         	JSONArray topDirectoryFiles = new JSONArray();
             File root = source.getRoot();
@@ -175,6 +177,32 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             }
  
             response.put(KEY_TOP_DIRECTORY_FILES,topDirectoryFiles);
+        } else if(key.equals(REQUEST_PROGRESS)) {
+            int id = request.optInt(KEY_PROGRESS_ID);
+            File.Progress progress = progresses.get(id);
+            boolean completed = progress.isCompleted();
+            
+            response.put(KEY_COMPLETED, completed);
+            response.put(KEY_PROGRESS, progress.getCurrentProgress());
+            response.put(KEY_LENGTH, progress.getSize());
+            
+            if(completed && progress.getException() != null) {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ObjectOutputStream stream = new ObjectOutputStream(new BufferedOutputStream(baos));
+                stream.writeObject(progress.getException());
+                stream.flush();
+                stream.close();
+                
+                byte[] data = Base64.encode(baos.toByteArray(),Base64.DEFAULT);
+                response.put(KEY_EXCEPTION, new String(data));
+            }
+        } else if(key.equalsIgnoreCase(REQUEST_CANCEL_PROGRESS)) {
+            int id = request.optInt(KEY_PROGRESS_ID);
+            File.Progress progress = progresses.get(id);
+            progress.setCancel(true);
+        } else if(key.equalsIgnoreCase(REQUEST_REMOVE_PROGRESS)) {
+           int id = request.optInt(KEY_PROGRESS_ID);
+           progresses.remove(id);
         }
     }
 
@@ -229,6 +257,16 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         
         if(key.equalsIgnoreCase(REQUEST_EXISTS)) {
             response.put(KEY_EXISTS, file.exists());
+        }
+        
+        if(key.equalsIgnoreCase(REQUEST_COPY)) {
+            File dest = source.getFile(
+                request.getString(KEY_DEST));
+            
+            File.Progress progress = file.copy(dest);
+            progresses.put(progress.hashCode(), progress);
+            
+            response.put(KEY_PROGRESS_ID, progress.hashCode());
         }
     }
 

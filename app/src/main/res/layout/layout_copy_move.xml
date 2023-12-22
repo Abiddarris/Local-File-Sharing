@@ -8,10 +8,10 @@
      android:id="@+id/coordinator">
 
     <TextView
-         android:textColor="@color/colorAccent"
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
          android:layout_centerVertical="true"
+         android:textColor="@color/colorAccent"
          android:layout_marginLeft="10dp"
          android:id="@+id/totalItems"
          android:text="1 item" />
@@ -19,7 +19,6 @@
     <Button
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
-         android:background="@null"
          android:layout_alignParentEnd="true"
          android:textColor="@color/colorAccent"
          style="@style/Widget.Material3.Button.TextButton"
@@ -29,7 +28,6 @@
     <Button
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
-         android:background="@null"
          android:layout_toLeftOf="@+id/moveToHere"
          android:textColor="@color/colorAccent"
          style="@style/Widget.Material3.Button.TextButton"

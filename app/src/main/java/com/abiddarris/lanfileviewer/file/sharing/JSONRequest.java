@@ -16,6 +16,10 @@ public final class JSONRequest {
     public static final String REQUEST_GET_LAST_MODIFIED = "requestGetLastModified";
     public static final String REQUEST_MAKE_DIRECTORIES = "requestMakeDirectories";
     public static final String REQUEST_EXISTS = "requestExists";
+    public static final String REQUEST_COPY = "requestCopy";
+    public static final String REQUEST_PROGRESS  = "requestProgress";
+    public static final String REQUEST_CANCEL_PROGRESS = "requestCancelProgress";
+    public static final String REQUEST_REMOVE_PROGRESS = "requestRemoveProgress";
     public static final String KEY_IS_DIRECTORY = "isDirectory";
     public static final String KEY_IS_FILE = "isFile";
     public static final String KEY_GET_PARENT_FILE = "getParentFile";
@@ -29,6 +33,11 @@ public final class JSONRequest {
     public static final String KEY_LAST_MODIFIED = "lastModified";
     public static final String KEY_MAKE_DIRECTORIES_SUCCESS = "makeDirectoriesSuccess";
     public static final String KEY_EXISTS = "exists";
+    public static final String KEY_DEST = "dest";
+    public static final String KEY_PROGRESS_ID = "progressId";
+    public static final String KEY_COMPLETED = "completed";
+    public static final String KEY_PROGRESS = "progress";
+    public static final String KEY_EXCEPTION = "exception";
     
     public static JSONArray createRequest(String... requestKeys) {
         JSONArray requests = new JSONArray();

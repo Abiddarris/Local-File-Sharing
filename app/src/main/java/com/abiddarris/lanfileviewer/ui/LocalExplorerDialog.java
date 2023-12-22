@@ -62,7 +62,6 @@ public class LocalExplorerDialog extends ExplorerActivity implements SharedPrefe
         fragment.setArguments(getIntent().getBundleExtra("extra"));
         fragment.setSorter(FileSorter.createSorter(sortType));
         fragment.addOnExplorerCreatedListener((f,e) -> {
-            
             pathFragment.setExplorer(e);    
         });
         
@@ -77,8 +76,6 @@ public class LocalExplorerDialog extends ExplorerActivity implements SharedPrefe
             fragment.setSorter(FileSorter.createSorter(sortType));
             fragment.getExplorer()
                 .update();
-            
-            
         }
     }
     

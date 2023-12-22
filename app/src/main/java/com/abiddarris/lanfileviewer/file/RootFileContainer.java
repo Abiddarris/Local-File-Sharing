@@ -106,6 +106,16 @@ public class RootFileContainer implements File {
     public OutputStream newOutputStream() throws IOException {
         throw new IOException("unable to open root file container");
     }
+    
+    @Override
+    public Progress copy(File dest) {
+        Progress progress = new Progress(0);
+        progress.setCompleted(true);
+        progress.setException(new IOException("Cannot copy this file."));
+        
+        return progress;
+    }
+    
 
     public void addRoots(RootFile rootFile) {
         roots.add(rootFile);
