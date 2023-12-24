@@ -20,6 +20,7 @@ import com.abiddarris.lanfileviewer.databinding.LayoutModifyBinding;
 import com.abiddarris.lanfileviewer.databinding.LayoutSelectBinding;
 import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
 import com.abiddarris.lanfileviewer.file.File;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.gretta.util.log.Log;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +35,7 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
     private boolean hide = true;
     private boolean programaticlyEvent;
     private CopyMode copyMode;
+    private Menu menu;
     private Set<File> checked = new HashSet<>();
     private LayoutSelectBinding actionModeLayout;
     
@@ -116,6 +118,9 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
     }
     
     private void updateActionModeView() {
+        MenuItem menu = this.menu.findItem(R.id.rename);
+        menu.setVisible(!(checked.size() > 1));
+        
         CheckBox selectAll = actionModeLayout.selectAll;
         
         boolean check = checked.size() == getExplorer().getAdapter().getItemCount();
@@ -193,6 +198,8 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
         
         LayoutModifyBinding binding = LayoutModifyBinding.bind(view);
         binding.actions.setOnMenuItemClickListener(item -> onActionClick(item));
+        
+        menu = binding.actions.getMenu();
     }
 
     private boolean onActionClick(MenuItem item) {

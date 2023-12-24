@@ -81,8 +81,10 @@ public class CopyRunnable extends ActionRunnable {
                 progress.setCancel(true);
                 break;
             }
+            Log.debug.log(TAG, progress.getCurrentProgress());
             updateProgress(progress.getCurrentProgress());
         }
+        updateProgress(progress.getCurrentProgress());
         
         if(progress.getException() == null) return;
        
