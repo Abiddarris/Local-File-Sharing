@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:id="@+id/coordinator">
+
+    <RelativeLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         style="@style/DialogRootLayoutStyle">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:textSize="@dimen/detail_title_size"
+             android:id="@+id/detailText"
+             android:text="@string/detail"
+             android:textStyle="bold" />
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_below="@id/detailText"
+             android:layout_marginTop="@dimen/gap_between_detail_sub_info"
+             android:id="@+id/iconAndNameHolder">
+
+            <ImageView
+                 android:layout_height="50dp"
+                 android:layout_width="50dp"
+                 android:scaleType="fitStart"
+                 android:src="@drawable/icons8_folder"
+                 android:id="@+id/icon" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:layout_toEndOf="@id/icon"
+                 android:layout_below="@id/detailText"
+                 android:textSize="@dimen/detail_sub_info_title"
+                 android:layout_marginLeft="@dimen/gap_between_icon_and_name"
+                 android:text="Android"
+                 android:layout_gravity="center"
+                 android:id="@+id/name" />
+
+        </LinearLayout>
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_below="@id/iconAndNameHolder"
+             android:textSize="@dimen/detail_sub_info_title"
+             android:layout_marginTop="@dimen/gap_between_detail_sub_info"
+             android:text="@string/size"
+             android:id="@+id/sizeText" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_below="@id/sizeText"
+             android:textSize="@dimen/detail_sub_info"
+             android:id="@+id/size"
+             android:text="20 MB" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_below="@id/size"
+             android:textSize="@dimen/detail_sub_info_title"
+             android:layout_marginTop="@dimen/gap_between_detail_sub_info"
+             android:text="@string/last_modified"
+             android:id="@+id/lastModifiedText" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_below="@id/lastModifiedText"
+             android:textSize="@dimen/detail_sub_info"
+             android:text="20 September 2009 14.23"
+             android:id="@+id/lastModified" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_below="@id/lastModified"
+             android:textSize="@dimen/detail_sub_info_title"
+             android:layout_marginTop="@dimen/gap_between_detail_sub_info"
+             android:text="@string/containing"
+             android:id="@+id/containingText" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_below="@id/containingText"
+             android:textSize="@dimen/detail_sub_info"
+             android:text="@string/calculating"
+             android:id="@+id/containing" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_below="@id/containing"
+             android:textSize="@dimen/detail_sub_info_title"
+             android:layout_marginTop="@dimen/gap_between_detail_sub_info"
+             android:text="@string/path"
+             android:id="@+id/pathText" />
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_below="@id/pathText"
+             android:textSize="@dimen/detail_sub_info"
+             android:text="/storage/emulated/0"
+             android:id="@+id/path" />
+
+    </RelativeLayout>
+
+</LinearLayout>

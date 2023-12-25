@@ -194,7 +194,9 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
     public void onModifyOptionsCreated(RelativeLayout group) {
         View view = LayoutInflater.from(getExplorer().getContext())
             .inflate(R.layout.layout_modify, null);
-        group.addView(view);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams
+            (RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        group.addView(view, params);
         
         LayoutModifyBinding binding = LayoutModifyBinding.bind(view);
         binding.actions.setOnMenuItemClickListener(item -> onActionClick(item));
@@ -215,7 +217,10 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
                 File target = checked.toArray(new File[0])[0];
                 new RenameDialog(getExplorer(), target)
                     .show(getExplorer().getFragment().getParentFragmentManager(), null);
-            
+                break;
+            case R.id.detail :
+                new DetailDialog()
+                      .show(getExplorer().getFragment().getParentFragmentManager(), null);
         }
         return false;
     }

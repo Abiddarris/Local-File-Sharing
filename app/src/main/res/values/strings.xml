@@ -68,4 +68,8 @@
     <string name="rename_file">Rename file</string>
     <string name="fail_rename_file_message">Fail to rename the file</string>
     <string name="fail_rename_folder_message">Fail to rename the folder</string>
+    <string name="calculating">Calculating</string>
+    <string name="last_modified">Last Modified</string>
+    <string name="containing">Containing</string>
+    <string name="path">Path</string>
 </resources>

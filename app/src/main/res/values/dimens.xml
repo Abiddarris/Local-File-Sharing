@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="detail_title_size">25sp</dimen>
+    <dimen name="gap_between_detail_sub_info">30dp</dimen>
+    <dimen name="detail_sub_info">19sp</dimen>
+    <dimen name="detail_sub_info_title">18sp</dimen>
+    <dimen name="gap_between_icon_and_name">10dp</dimen>
+</resources>
