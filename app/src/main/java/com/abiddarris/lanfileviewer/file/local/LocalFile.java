@@ -233,8 +233,16 @@ public class LocalFile implements File {
     
     @Override
     public boolean rename(String newName) {
-        java.io.File dest = new java.io.File(file.getParentFile(), newName);
-        return file.renameTo(dest);
+        if(file.canWrite()) {
+            java.io.File dest = new java.io.File(file.getParentFile(), newName);
+            return file.renameTo(dest);
+        }
+        
+        DocumentFile file = source.findDocumentFile(this);
+        if(file == null) {
+            return false;
+        } 
+        return file.renameTo(newName);
     }
     
 }
