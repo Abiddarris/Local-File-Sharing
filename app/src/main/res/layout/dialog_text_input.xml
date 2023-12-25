@@ -10,7 +10,7 @@
          android:layout_height="wrap_content"
          android:layout_width="match_parent"
          android:paddingBottom="15dp"
-         android:id="@+id/name">
+         android:id="@+id/textInput">
 
         <com.google.android.material.textfield.TextInputEditText
              android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
     <Button
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
-         android:layout_below="@id/name"
+         android:layout_below="@id/textInput"
          android:background="@null"
          android:layout_toLeftOf="@id/divider"
          style="@style/Widget.Material3.Button.TextButton"
@@ -37,15 +37,14 @@
          android:text="@string/cancel" />
 
     <Button
-         android:id="@+id/create"
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
-         android:layout_below="@id/name"
+         android:layout_below="@id/textInput"
          android:background="@null"
          android:layout_toRightOf="@id/divider"
          android:layout_alignParentEnd="true"
          android:enabled="false"
          style="@style/Widget.Material3.Button.TextButton"
-         android:text="@string/create" />
+         android:id="@+id/positiveAction" />
 
 </RelativeLayout>

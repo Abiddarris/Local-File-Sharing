@@ -277,5 +277,21 @@ public class NetworkFile implements File {
         });
         return progress;
     }
-    //
+    
+    @Override
+    public boolean rename(String newName) {
+        try {
+        	JSONObject request = new JSONObject()
+                .put(KEY_REQUEST, createRequest(REQUEST_RENAME))
+                .put(KEY_PATH, path)
+                .put(KEY_NEW_NAME, newName);
+            JSONObject response = source.sendRequestSync(request);
+            
+            return response.getBoolean(KEY_SUCESS);
+        } catch(Exception err) {
+        	Log.err.log(TAG,err);
+        }
+        return false;
+    }
+    
 }

@@ -12,6 +12,8 @@ public abstract class BottomToolbarMode extends NavigateMode {
 
     public static final String TAG = Log.getTag(BottomToolbarMode.class);
     
+    private float initialY;
+    
     public BottomToolbarMode(Explorer explorer) {
         super(explorer);
     }
@@ -46,6 +48,7 @@ public abstract class BottomToolbarMode extends NavigateMode {
                         new OnGlobalLayoutListener() {
                             @Override
                             public void onGlobalLayout() {
+                                initialY = group.getY();
                                 ValueAnimator animator =
                                         ValueAnimator.ofFloat(
                                                 group.getY() + group.getHeight(), group.getY());
@@ -74,9 +77,8 @@ public abstract class BottomToolbarMode extends NavigateMode {
         Log.debug.log(TAG, "Hiding Bottom actions");
         
         RelativeLayout group = getExplorer().getUI().bottomAction;
-        float initialY = group.getY();
-
-        ValueAnimator animator = ValueAnimator.ofFloat(initialY, initialY + group.getHeight());
+        
+        ValueAnimator animator = ValueAnimator.ofFloat(group.getY(), initialY);
         animator.setDuration(500);
         animator.addUpdateListener(
                 (vAnimator) -> {

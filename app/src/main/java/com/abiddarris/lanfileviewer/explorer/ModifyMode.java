@@ -210,6 +210,12 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
                 Set<File> items = new HashSet<>(checked);
                 copyMode.setItems(items);
                 getExplorer().setMode(copyMode);
+                break;
+            case R.id.rename :
+                File target = checked.toArray(new File[0])[0];
+                new RenameDialog(getExplorer(), target)
+                    .show(getExplorer().getFragment().getParentFragmentManager(), null);
+            
         }
         return false;
     }

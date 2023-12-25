@@ -20,6 +20,7 @@ public final class JSONRequest {
     public static final String REQUEST_PROGRESS  = "requestProgress";
     public static final String REQUEST_CANCEL_PROGRESS = "requestCancelProgress";
     public static final String REQUEST_REMOVE_PROGRESS = "requestRemoveProgress";
+    public static final String REQUEST_RENAME = "requestRename";
     public static final String KEY_IS_DIRECTORY = "isDirectory";
     public static final String KEY_IS_FILE = "isFile";
     public static final String KEY_GET_PARENT_FILE = "getParentFile";
@@ -38,6 +39,8 @@ public final class JSONRequest {
     public static final String KEY_COMPLETED = "completed";
     public static final String KEY_PROGRESS = "progress";
     public static final String KEY_EXCEPTION = "exception";
+    public static final String KEY_NEW_NAME = "newName";
+    public static final String KEY_SUCESS = "sucess";
     
     public static JSONArray createRequest(String... requestKeys) {
         JSONArray requests = new JSONArray();

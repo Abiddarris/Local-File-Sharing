@@ -116,7 +116,11 @@ public class RootFileContainer implements File {
         return progress;
     }
     
-
+    @Override
+    public boolean rename(String newName) {
+        return false;
+    }
+    
     public void addRoots(RootFile rootFile) {
         roots.add(rootFile);
     }

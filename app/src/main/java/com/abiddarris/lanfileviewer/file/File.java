@@ -46,6 +46,8 @@ public interface File {
 
     public abstract Progress copy(File dest);
 
+    public abstract boolean rename(String newName);
+    
     public static interface Callback {
         void onDataUpdated(Exception e);
     }

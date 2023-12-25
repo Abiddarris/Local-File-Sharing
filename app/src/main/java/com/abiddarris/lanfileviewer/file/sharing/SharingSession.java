@@ -267,6 +267,10 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             progresses.put(progress.hashCode(), progress);
             
             response.put(KEY_PROGRESS_ID, progress.hashCode());
+        } else if(key.equalsIgnoreCase(REQUEST_RENAME)) {
+            String newName = request.getString(KEY_NEW_NAME);
+            boolean sucess = file.rename(newName);
+            response.put(KEY_SUCESS, sucess);
         }
     }
 

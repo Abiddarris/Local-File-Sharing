@@ -231,5 +231,10 @@ public class LocalFile implements File {
         return progress;
     }
     
+    @Override
+    public boolean rename(String newName) {
+        java.io.File dest = new java.io.File(file.getParentFile(), newName);
+        return file.renameTo(dest);
+    }
     
 }
