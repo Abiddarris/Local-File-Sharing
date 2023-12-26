@@ -23,7 +23,7 @@ public class RootFileContainer implements File {
     }
     
     @Override
-    public void updateDataSync() throws Exception {
+    public void updateDataSync() {
     }
     
 

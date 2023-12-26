@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.LayoutFileCardBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.DrawableTinter;
 import com.bumptech.glide.Glide;
 import java.text.SimpleDateFormat;
@@ -26,8 +27,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     private Explorer explorer;
     private Handler handler = new Handler(Looper.getMainLooper());
     private LayoutInflater inflater;
-    private static final SimpleDateFormat anotherYear = new SimpleDateFormat("dd LLL YYYY HH.mm");
-    private static final SimpleDateFormat currentYear = new SimpleDateFormat("dd LLL HH.mm");
     
     public FileAdapter(Explorer explorer) {
         this.explorer = explorer;
@@ -87,64 +86,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
             textView.setText(item + " item");
             return;
         }
-        
-        double length = file.length();
-        
-        double kbLength = length / 1024;
-        if(kbLength < 0.9) {
-        	textView.setText(Math.round(length) + " B");
-            return;
-        }
-        
-        if(kbLength < 100) {
-            textView.setText(formatSize(kbLength) + " KB");
-            return;
-        }
-        
-        double mbLength = kbLength / 1024;
-        if(mbLength < 0.9) {
-            textView.setText(Math.round(kbLength) + " KB");
-            return;
-        }
-        
-        if(mbLength < 100) {
-            textView.setText(formatSize(mbLength) + " MB");
-            return;
-        }
-        
-        double gbLength = mbLength / 1024;
-        if(gbLength < 0.9) {
-            textView.setText(Math.round(mbLength) + " MB");
-            return;
-        }
-        
-        if(gbLength < 100) {
-            textView.setText(formatSize(gbLength) + " GB");
-            return;
-        }
-        
-        textView.setText(Math.round(gbLength) + " GB");
+        textView.setText(Files.formatSize(file.length()));
     }
-
-    private String formatSize(final double length) {
-        return String.format("%.2f", length);
-    }
-
     private void setDate(final TextView textView, final File file) {
-        Calendar fileTime = Calendar.getInstance();
-        int currentYear = fileTime.get(Calendar.YEAR);
-        
-        fileTime.setTimeInMillis(file.lastModified());
-        int fileYear = fileTime.get(Calendar.YEAR);
-        
-        if(fileYear == currentYear) {
-            textView.setText(FileAdapter.currentYear
-                .format(fileTime.getTime()));
-            return;
-        }
-        
-        textView.setText(FileAdapter.anotherYear
-                .format(fileTime.getTime()));
+        textView.setText(Files.formatToDate(file.lastModified()));
     }
 
     private void setIcon(final ImageView thumbnail, final File file) {

@@ -219,7 +219,7 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
                     .show(getExplorer().getFragment().getParentFragmentManager(), null);
                 break;
             case R.id.detail :
-                new DetailDialog()
+                new DetailDialog(checked.toArray(new File[0]))
                       .show(getExplorer().getFragment().getParentFragmentManager(), null);
         }
         return false;

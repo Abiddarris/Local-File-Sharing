@@ -61,7 +61,7 @@
              android:layout_below="@id/sizeText"
              android:textSize="@dimen/detail_sub_info"
              android:id="@+id/size"
-             android:text="20 MB" />
+             android:text="@string/calculating" />
 
         <TextView
              android:layout_height="wrap_content"

@@ -37,7 +37,7 @@ public class LocalFile implements File {
     }
     
     @Override
-    public void updateDataSync() throws Exception {
+    public void updateDataSync() {
     }
     
 

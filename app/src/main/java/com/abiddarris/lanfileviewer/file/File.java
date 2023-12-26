@@ -10,7 +10,7 @@ public interface File {
 
     public abstract void updateData(Callback callback);
 
-    public abstract void updateDataSync() throws Exception;
+    public abstract void updateDataSync();
 
     public abstract FileSource getSource();
 

@@ -69,17 +69,16 @@ public class NetworkFile implements File {
         });
     }
     
-    public void updateDataSync() throws Exception {
+    public void updateDataSync() {
         JSONObject request = new JSONObject();
         try {
             onCreateUpdateRequest(request);
-        } catch (JSONException e) {
+            JSONObject response = source.sendRequestSync(request);
+        
+            onResponseAvailable(response);    
+        } catch (Exception e) {
             Log.err.log(TAG, e);
         }
-
-        JSONObject response = source.sendRequestSync(request);
-        
-        onResponseAvailable(response);
     }
     
     protected void onCreateUpdateRequest(JSONObject request) throws JSONException {
