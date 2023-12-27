@@ -26,6 +26,7 @@ import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFile;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
+import com.abiddarris.lanfileviewer.ui.LocalExplorerDialog;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gretta.util.log.Log;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public abstract class ExplorerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceBundle) {
         super.onViewCreated(view, savedInstanceBundle);
-
+        
         File root =
                 (savedInstanceBundle == null
                         ? getSource().getRoot()
@@ -130,6 +131,10 @@ public abstract class ExplorerFragment extends Fragment {
             pressed.setEnabled(false);
             ((AppCompatActivity) getActivity()).getOnBackPressedDispatcher().onBackPressed();
         }
+    }
+    
+    protected Mode getMainMode(Explorer explorer) {
+       return new NavigateMode(explorer);
     }
 
     public ModifyMode getModifyMode(Explorer explorer) {

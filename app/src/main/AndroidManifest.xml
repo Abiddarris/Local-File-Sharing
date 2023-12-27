@@ -33,6 +33,11 @@
             android:theme="@style/DialogActivity"
             android:exported="true"/>
         
+         <activity
+            android:name=".explorer.LocalFolderSelectorActivity"
+            android:theme="@style/DialogActivity"
+            android:exported="true"/>
+        
         <activity
             android:name=".VideoViewerActivity"
             android:exported="true"/>

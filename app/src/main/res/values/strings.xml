@@ -76,4 +76,6 @@
     <string name="plural_files_format">%s files</string>
     <string name="one_folder_format">%s folder</string>
     <string name="plural_folder_format">%s folders</string>
+    <string name="save_to">Save to</string>
+
 </resources>

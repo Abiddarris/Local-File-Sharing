@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Explorer {
 
-    final NavigateMode navigateMode = new NavigateMode(this);
+    Mode navigateMode;
     ModifyMode selectMode;
 
     private ExplorerFragment fragment;
@@ -25,9 +25,9 @@ public class Explorer {
     private File parent;
     private FileAdapter adapter;
     private int targetCount;
+    private Mode mode;
     private List<File> cache = new ArrayList<>();
     private List<OnExplorerUpdatedListener> updatedListeners = new ArrayList<>();
-    private Mode mode = navigateMode;
     private SwipeRefreshLayout refresher;
 
     public Explorer(
@@ -38,8 +38,11 @@ public class Explorer {
         this.ui = ui;
         this.refresher = refresher;
 
+        navigateMode = fragment.getMainMode(this);
         selectMode = fragment.getModifyMode(this);
         adapter = new FileAdapter(this);
+        
+        setMode(navigateMode);
     }
 
     public void open(File file) {

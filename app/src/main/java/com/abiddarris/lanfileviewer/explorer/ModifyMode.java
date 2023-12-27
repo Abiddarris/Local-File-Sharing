@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
@@ -20,6 +23,8 @@ import com.abiddarris.lanfileviewer.databinding.LayoutModifyBinding;
 import com.abiddarris.lanfileviewer.databinding.LayoutSelectBinding;
 import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.ui.LocalExplorerDialog;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.gretta.util.log.Log;
 import java.util.ArrayList;
@@ -32,6 +37,7 @@ import kotlin.jvm.internal.Lambda;
 public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback {
     
     private ActionMode view;
+    private ActivityResultLauncher<Void> launcher;
     private boolean hide = true;
     private boolean programaticlyEvent;
     private CopyMode copyMode;
@@ -43,6 +49,17 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
     
     public ModifyMode(Explorer explorer) {
         super(explorer);
+        
+        FileSource source = FileSource.getDefaultLocalSource(explorer.getContext());
+        
+        launcher = explorer.getFragment()
+            .registerForActivityResult(new LocalFolderSelectorActivity.FileContract(source),
+            new ActivityResultCallback<File>() {
+                @Override
+                public void onActivityResult(File file) {
+                    Log.debug.log(TAG, file.getPath());
+                }
+            });
         
         this.copyMode = new CopyMode(getExplorer());
     }
@@ -221,6 +238,10 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
             case R.id.detail :
                 new DetailDialog(checked.toArray(new File[0]))
                       .show(getExplorer().getFragment().getParentFragmentManager(), null);
+                break;
+            case R.id.download :
+                launcher.launch(null);
+                getExplorer().setMode(getExplorer().navigateMode);
         }
         return false;
     }
