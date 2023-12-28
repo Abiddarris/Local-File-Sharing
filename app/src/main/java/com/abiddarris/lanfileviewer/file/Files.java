@@ -51,6 +51,22 @@ public class Files {
         return foldersCount;
     }
     
+    public static int getFilesCount(File[] files) {
+    	int filesCount = 0;
+        for(File file : files) {
+    		if(file.isFile()) filesCount++;
+    	}
+        return filesCount;
+    }
+    
+    public static int getDirectoriesCount(File[] files) {
+    	int foldersCount = 0;
+        for(File file : files) {
+    		if(file.isDirectory()) foldersCount++;
+    	}
+        return foldersCount;
+    }
+    
     public static String getNameWithoutExtension(File file) {
     	String fileName = file.getName();
         int extensionSeparator = fileName.lastIndexOf(".");

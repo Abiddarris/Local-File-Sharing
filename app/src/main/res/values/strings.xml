@@ -62,7 +62,7 @@
     <string name="select">Select</string>
     <string name="request_sd_card_permission_message">This application cannot write to a sd card. Please select SD Card folder to grant write access!</string>
     <string name="move_to_here">Move to here</string>
-    <string name="item_format">%s item</string>
+    <string name="item_format">%s items</string>
     <string name="copy_dialog_title">Copying %s items</string>
     <string name="rename_folder">Rename folder</string>
     <string name="rename_file">Rename file</string>
@@ -77,6 +77,5 @@
     <string name="one_folder_format">%s folder</string>
     <string name="plural_folder_format">%s folders</string>
     <string name="save_to">Save to</string>
-    <string name="download_dialog_title">Downloading %s items</string>
-
+    <string name="download_dialog_title">Downloading %s items</string>ĺ
 </resources>
