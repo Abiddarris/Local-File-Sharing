@@ -22,13 +22,13 @@
          android:layout_alignParentEnd="true"
          android:textColor="@color/colorAccent"
          style="@style/Widget.Material3.Button.TextButton"
-         android:text="@string/move_to_here"
-         android:id="@+id/moveToHere" />
+         android:text="action"
+         android:id="@+id/action" />
 
     <Button
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
-         android:layout_toLeftOf="@+id/moveToHere"
+         android:layout_toLeftOf="@+id/action"
          android:textColor="@color/colorAccent"
          style="@style/Widget.Material3.Button.TextButton"
          android:text="@string/cancel"

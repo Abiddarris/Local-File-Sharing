@@ -36,7 +36,9 @@ public class CopyMode extends BottomToolbarMode {
       
         binding.totalItems.setText(totalItemsText);
         binding.cancel.setOnClickListener((v) -> dismissMode());
-        binding.moveToHere.setOnClickListener((v) -> {
+        binding.action.setText(
+            getExplorer().getContext().getString(R.string.copy_to_here));
+        binding.action.setOnClickListener((v) -> {
             CopyRunnable runnable = new CopyRunnable(getExplorer().getParent(), items); 
             new ActionDialog(getExplorer(), runnable)
                 .show(getExplorer().getFragment().getParentFragmentManager(), null);
