@@ -19,6 +19,8 @@ import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.R;
+import com.abiddarris.lanfileviewer.actions.ActionDialog;
+import com.abiddarris.lanfileviewer.actions.runnables.DownloadRunnable;
 import com.abiddarris.lanfileviewer.databinding.LayoutModifyBinding;
 import com.abiddarris.lanfileviewer.databinding.LayoutSelectBinding;
 import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
@@ -58,6 +60,14 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
                 @Override
                 public void onActivityResult(File file) {
                     Log.debug.log(TAG, file.getPath());
+                    
+                    File[] items = checked.toArray(new File[0]);
+                    
+                    new ActionDialog(getExplorer(), 
+                        new DownloadRunnable(items, file))
+                    .show(getExplorer().getFragment().getParentFragmentManager(), null);
+                    
+                    getExplorer().setMode(getExplorer().navigateMode);
                 }
             });
         
@@ -241,7 +251,6 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
                 break;
             case R.id.download :
                 launcher.launch(null);
-                getExplorer().setMode(getExplorer().navigateMode);
         }
         return false;
     }
