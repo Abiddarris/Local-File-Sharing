@@ -49,14 +49,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/ModifyMode.java",
       "selection": {
         "end": {
-          "column": 26,
-          "index": 8727,
-          "line": 255
+          "column": 38,
+          "index": 8901,
+          "line": 257
         },
         "start": {
-          "column": 26,
-          "index": 8727,
-          "line": 255
+          "column": 38,
+          "index": 8901,
+          "line": 257
         }
       }
     },
@@ -274,14 +274,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/CopyMode.java",
       "selection": {
         "end": {
-          "column": 38,
-          "index": 160,
-          "line": 4
+          "column": 37,
+          "index": 2050,
+          "line": 57
         },
         "start": {
-          "column": 38,
-          "index": 160,
-          "line": 4
+          "column": 37,
+          "index": 2050,
+          "line": 57
         }
       }
     },
@@ -314,7 +314,22 @@
           "line": 0
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/MoveMode.java",
+      "selection": {
+        "end": {
+          "column": 37,
+          "index": 427,
+          "line": 15
+        },
+        "start": {
+          "column": 37,
+          "index": 427,
+          "line": 15
+        }
+      }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_copy_move.xml"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/MoveMode.java"
 }

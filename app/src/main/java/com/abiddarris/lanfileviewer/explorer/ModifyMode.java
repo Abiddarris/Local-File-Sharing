@@ -44,6 +44,7 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
     private boolean programaticlyEvent;
     private CopyMode copyMode;
     private Menu menu;
+    private MoveMode moveMode;
     private Set<File> checked = new HashSet<>();
     private LayoutSelectBinding actionModeLayout;
     
@@ -72,6 +73,7 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
             });
         
         this.copyMode = new CopyMode(getExplorer());
+        this.moveMode = new MoveMode(getExplorer());
     }
    
     @Override
@@ -234,11 +236,7 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
     private boolean onActionClick(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.copy : 
-                hide = false;
-            
-                Set<File> items = new HashSet<>(checked);
-                copyMode.setItems(items);
-                getExplorer().setMode(copyMode);
+                setCopyMode(copyMode);
                 break;
             case R.id.rename :
                 File target = checked.toArray(new File[0])[0];
@@ -255,9 +253,20 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
             case R.id.delete :
                 new DeleteConfirmationDialog(getExplorer(), checked.toArray(new File[0]))
                     .show(getExplorer().getFragment().getParentFragmentManager(), null);
+                break;
+            case R.id.move :
+                setCopyMode(moveMode);
+                
         }
         return false;
     }
     
+    private void setCopyMode(CopyMode mode) {
+        hide = false;
+            
+        Set<File> items = new HashSet<>(checked);
+        mode.setItems(items);
+        getExplorer().setMode(mode);
+    }
 }
     
