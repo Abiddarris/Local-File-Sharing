@@ -6,10 +6,10 @@
      android:layout_width="match_parent">
 
     <RelativeLayout
-         android:paddingTop="40dp"
          android:layout_height="wrap_content"
          android:layout_width="match_parent"
-         style="@style/DialogRootLayoutStyle">
+         style="@style/DialogRootLayoutStyle"
+         android:paddingTop="40dp">
 
         <TextView
              android:layout_height="wrap_content"

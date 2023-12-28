@@ -253,7 +253,7 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
                 launcher.launch(null);
                 break;
             case R.id.delete :
-                new DeleteConfirmationDialog(checked.toArray(new File[0]))
+                new DeleteConfirmationDialog(getExplorer(), checked.toArray(new File[0]))
                     .show(getExplorer().getFragment().getParentFragmentManager(), null);
         }
         return false;

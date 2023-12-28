@@ -245,4 +245,20 @@ public class LocalFile implements File {
         return file.renameTo(newName);
     }
     
+    @Override
+    public boolean delete() {
+        source.getSecurityManager()
+            .checkDelete(this);
+        
+        if(file.canWrite()) {
+            return file.delete();
+        }
+        
+        DocumentFile file = source.findDocumentFile(this);
+        if(file == null) {
+            return false;
+        }
+        return file.delete();
+    }
+    
 }

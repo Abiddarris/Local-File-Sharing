@@ -125,4 +125,10 @@ public class RootFileContainer implements File {
         roots.add(rootFile);
     }
     
+    @Override
+    public boolean delete() {
+        return false;
+    }
+    
+    
 }

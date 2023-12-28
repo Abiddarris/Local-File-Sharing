@@ -48,6 +48,8 @@ public interface File {
 
     public abstract boolean rename(String newName);
     
+    public abstract boolean delete();
+    
     public static interface Callback {
         void onDataUpdated(Exception e);
     }

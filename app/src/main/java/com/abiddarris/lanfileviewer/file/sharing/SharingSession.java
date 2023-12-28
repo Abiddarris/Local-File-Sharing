@@ -271,6 +271,9 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             String newName = request.getString(KEY_NEW_NAME);
             boolean sucess = file.rename(newName);
             response.put(KEY_SUCESS, sucess);
+        } else if(key.equalsIgnoreCase(REQUEST_DELETE)) {
+            boolean success = file.delete();
+            response.put(KEY_SUCESS, success);
         }
     }
 

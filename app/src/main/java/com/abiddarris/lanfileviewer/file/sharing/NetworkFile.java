@@ -293,4 +293,19 @@ public class NetworkFile implements File {
         return false;
     }
     
+    @Override
+    public boolean delete() {
+        try {
+            JSONObject request = new JSONObject()
+                .put(KEY_REQUEST, createRequest(REQUEST_DELETE))
+                .put(KEY_PATH, path);
+            
+            JSONObject response = source.sendRequestSync(request);
+            return response.getBoolean(KEY_SUCESS);
+        } catch (Exception err) {
+            Log.err.log(TAG, err);
+        }
+        return false;
+    }
+    
 }
