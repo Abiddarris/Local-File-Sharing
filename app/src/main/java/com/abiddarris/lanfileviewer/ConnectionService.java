@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +12,9 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import androidx.core.app.NotificationChannelCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.preference.PreferenceManager;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
@@ -33,6 +38,7 @@ public class ConnectionService extends Service implements ScanningSession.Callba
     private ScanningSession session;
     private SharingSession sharingSession;
     
+    private static final String NOTIFICATION_CHANNEL_ID = "mainNotification";
     private static final String SERVICE_TYPE = "_http._tcp.";
     private static final String TAG = Log.getTag(ConnectionService.class);
 
@@ -48,8 +54,24 @@ public class ConnectionService extends Service implements ScanningSession.Callba
 
         Log.debug.log(TAG, "Service Created");
         
+        createNotificationChannel();
+        
         adapter = new ServerListAdapter(this);
     }
+    
+    @Override
+    public int onStartCommand(Intent arg0, int arg1, int arg2) {
+        Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+            .setSmallIcon(R.drawable.icons8_folder)
+            .setContentTitle(getString(R.string.notification_title))
+            .setContentText(getString(R.string.notification_description))
+            .setPriority(NotificationManagerCompat.IMPORTANCE_MIN)
+            .build();
+        
+        startForeground(1, notification);
+        return START_STICKY;
+    }
+    
 
     @Override
     public void onDestroy() {
@@ -61,6 +83,16 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         unregisterServer();
     }
 
+    private void createNotificationChannel() {
+        NotificationChannelCompat channel = new NotificationChannelCompat.Builder(NOTIFICATION_CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_MIN)
+            .setName(getString(R.string.notification_channel_title))
+            .setDescription(getString(R.string.notification_channel_description))
+            .build();
+        
+        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        manager.createNotificationChannel(channel);
+    }
+    
     public ServerListAdapter getAdapter() {
         return adapter;
     }

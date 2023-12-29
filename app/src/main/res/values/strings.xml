@@ -80,4 +80,8 @@
     <string name="download_dialog_title">Downloading %s items</string>
     <string name="deleting">Deleting</string>
     <string name="copy_to_here">Copy to here</string>
+    <string name="notification_channel_title">Main notification</string>
+    <string name="notification_channel_description">Main notification channel</string>
+    <string name="notification_title">Background service</string>
+    <string name="notification_description">Sharing files locally...</string>
 </resources>

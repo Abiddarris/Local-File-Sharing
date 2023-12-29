@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(binding.toolbar);
 
         Intent intent = new Intent(this, ConnectionService.class);
-        startService(intent);
+        startForegroundService(intent);
         bindService(intent, this, 0);
     }
     
