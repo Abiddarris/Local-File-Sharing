@@ -50,6 +50,8 @@ public interface File {
     
     public abstract boolean delete();
     
+    public abstract Progress move(File dest);
+    
     public static interface Callback {
         void onDataUpdated(Exception e);
     }

@@ -274,6 +274,14 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         } else if(key.equalsIgnoreCase(REQUEST_DELETE)) {
             boolean success = file.delete();
             response.put(KEY_SUCESS, success);
+        } else if(key.equalsIgnoreCase(REQUEST_MOVE)) {
+            File dest = source.getFile(
+                request.getString(KEY_DEST));
+            
+            File.Progress progress = file.move(dest);
+            progresses.put(progress.hashCode(), progress);
+            
+            response.put(KEY_PROGRESS_ID, progress.hashCode());
         }
     }
 

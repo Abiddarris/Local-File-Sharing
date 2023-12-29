@@ -1,6 +1,7 @@
 package com.abiddarris.lanfileviewer.explorer;
 
 import com.abiddarris.lanfileviewer.R;
+import com.abiddarris.lanfileviewer.actions.runnables.MoveRunnable;
 import java.util.Set;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
@@ -18,7 +19,7 @@ public class MoveMode extends CopyMode {
     
     @Override
     protected ActionRunnable getRunnable(Set<File> items, File dest) {
-        return super.getRunnable(items, dest);
+        return new MoveRunnable(items.toArray(new File[0]), dest);
     }
     
 }

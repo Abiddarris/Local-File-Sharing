@@ -21,7 +21,7 @@ public class LocalFile implements File {
     private java.io.File file;
     private File parent;
     private LocalFileSource source;
-    private ExecutorService service = Executors.newSingleThreadExecutor();
+    private static ExecutorService service = Executors.newCachedThreadPool();
 
     public static final String TAG = Log.getTag(LocalFile.class);
     
@@ -202,6 +202,10 @@ public class LocalFile implements File {
     
     @Override
     public Progress copy(File dest) {
+        return copyInternal(dest, null);
+    }
+    
+    private Progress copyInternal(File dest, OnCopyDoneListener listener) {
         Progress progress = new Progress(length());
         
         service.submit(() -> {
@@ -225,12 +229,13 @@ public class LocalFile implements File {
                 progress.setException(e);
             } finally {
                 progress.setCompleted(true);
+                if(listener != null) 
+                    listener.onCopyDone(progress);
             }
         });
-        
         return progress;
     }
-    
+   
     @Override
     public boolean rename(String newName) {
         if(file.canWrite()) {
@@ -261,4 +266,33 @@ public class LocalFile implements File {
         return file.delete();
     }
     
+    @Override
+    public Progress move(File dest) {
+        source.getSecurityManager()
+            .checkRead(this);
+        
+        java.io.File destFile = new java.io.File(dest.getPath());
+        if(file.canWrite() && destFile.getParentFile() != null && destFile.getParentFile().canWrite()) {
+            boolean success = file.renameTo(destFile);
+            if(success) {
+                Progress progress = new Progress(1);
+                progress.setCompleted(true);
+                progress.setCurrentProgress(1);
+                return progress;
+            }
+        }
+        
+        Progress progress = copyInternal(dest, (p) -> {
+            if(p.isCancel() || p.getException() != null) {
+                dest.delete();
+                return;
+            }
+            delete();
+        });
+        
+        return progress;
+    }
+    private static interface OnCopyDoneListener {
+        void onCopyDone(Progress progress);
+    }
 }

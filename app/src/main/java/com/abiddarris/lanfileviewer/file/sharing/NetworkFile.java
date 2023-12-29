@@ -238,37 +238,7 @@ public class NetworkFile implements File {
                 JSONObject response = source.sendRequestSync(request);
                 int progressId = response.optInt(KEY_PROGRESS_ID);
                   
-                request = new JSONObject()
-                    .putOpt(KEY_REQUEST, createRequest(REQUEST_PROGRESS))
-                    .putOpt(KEY_PROGRESS_ID, progressId);
-                while(!progress.isCompleted()) {
-                    if(progress.isCancel()) {
-                        JSONObject cancelRequest = new JSONObject()
-                            .putOpt(KEY_REQUEST, createRequest(REQUEST_CANCEL_PROGRESS))
-                            .putOpt(KEY_PROGRESS_ID, progressId);
-                        source.sendRequestSync(cancelRequest);  
-                    } 
-                    response = source.sendRequestSync(request);
-                        
-                    progress.setCompleted(response.optBoolean(KEY_COMPLETED));  
-                    progress.setCurrentProgress(response.optLong(KEY_PROGRESS));
-                    progress.setSize(response.optLong(KEY_LENGTH));
-                }  
-                    
-                JSONObject removeRequest = new JSONObject()    
-                    .putOpt(KEY_REQUEST, createRequest(REQUEST_REMOVE_PROGRESS))
-                    .putOpt(KEY_PROGRESS_ID, progressId);
-                
-                source.sendRequestSync(removeRequest);   
-                    
-                String base64Exception = response.optString(KEY_EXCEPTION);
-                if(base64Exception == null) return;
-                    
-                byte[] datas = Base64.decode(base64Exception, Base64.DEFAULT);
-                ObjectInputStream reader = new ObjectInputStream(
-                        new BufferedInputStream(new ByteArrayInputStream(datas)));
-                Exception e = (Exception) reader.readObject();  
-                progress.setException(e);
+                updateProgress(progressId, progress);
             } catch (Exception e) {
                 progress.setException(e);
                 progress.setCompleted(true);        
@@ -293,6 +263,41 @@ public class NetworkFile implements File {
         return false;
     }
     
+    private void updateProgress(int progressId, Progress progress) throws Exception{
+        JSONObject request = new JSONObject()
+                    .putOpt(KEY_REQUEST, createRequest(REQUEST_PROGRESS))
+                    .putOpt(KEY_PROGRESS_ID, progressId);
+        JSONObject response = null;
+        while(!progress.isCompleted()) {
+            if(progress.isCancel()) {
+                JSONObject cancelRequest = new JSONObject()
+                    .putOpt(KEY_REQUEST, createRequest(REQUEST_CANCEL_PROGRESS))
+                    .putOpt(KEY_PROGRESS_ID, progressId);
+                source.sendRequestSync(cancelRequest);  
+            } 
+            response = source.sendRequestSync(request);
+                        
+            progress.setCompleted(response.optBoolean(KEY_COMPLETED));  
+            progress.setCurrentProgress(response.optLong(KEY_PROGRESS));
+            progress.setSize(response.optLong(KEY_LENGTH));
+        }  
+                    
+        JSONObject removeRequest = new JSONObject()    
+            .putOpt(KEY_REQUEST, createRequest(REQUEST_REMOVE_PROGRESS))
+            .putOpt(KEY_PROGRESS_ID, progressId);
+                
+        source.sendRequestSync(removeRequest);   
+                    
+        String base64Exception = response.optString(KEY_EXCEPTION);
+        if(base64Exception == null) return;
+                    
+        byte[] datas = Base64.decode(base64Exception, Base64.DEFAULT);
+        ObjectInputStream reader = new ObjectInputStream(
+            new BufferedInputStream(new ByteArrayInputStream(datas)));
+        Exception e = (Exception) reader.readObject();  
+        progress.setException(e);
+    }
+    
     @Override
     public boolean delete() {
         try {
@@ -306,6 +311,28 @@ public class NetworkFile implements File {
             Log.err.log(TAG, err);
         }
         return false;
+    }
+    
+    @Override
+    public Progress move(File dest) {
+        Progress progress = new Progress();
+        executor.submit(() -> {
+            try {
+                JSONObject request = new JSONObject()
+                    .putOpt(KEY_REQUEST, createRequest(REQUEST_MOVE))
+                    .putOpt(KEY_PATH, path)
+                    .putOpt(KEY_DEST, dest.getPath());
+                  
+                JSONObject response = source.sendRequestSync(request);
+                int progressId = response.optInt(KEY_PROGRESS_ID);
+                  
+                updateProgress(progressId, progress);
+            } catch (Exception e) {
+                progress.setException(e);
+                progress.setCompleted(true);        
+            }
+        });
+        return progress;
     }
     
 }

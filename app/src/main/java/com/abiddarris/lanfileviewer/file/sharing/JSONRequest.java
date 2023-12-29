@@ -22,6 +22,7 @@ public final class JSONRequest {
     public static final String REQUEST_REMOVE_PROGRESS = "requestRemoveProgress";
     public static final String REQUEST_RENAME = "requestRename";
     public static final String REQUEST_DELETE = "requestDelete";
+    public static final String REQUEST_MOVE = "requestMove";
     public static final String KEY_IS_DIRECTORY = "isDirectory";
     public static final String KEY_IS_FILE = "isFile";
     public static final String KEY_GET_PARENT_FILE = "getParentFile";

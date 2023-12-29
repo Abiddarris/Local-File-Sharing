@@ -256,7 +256,6 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
                 break;
             case R.id.move :
                 setCopyMode(moveMode);
-                
         }
         return false;
     }

@@ -130,5 +130,13 @@ public class RootFileContainer implements File {
         return false;
     }
     
+    @Override
+    public Progress move(File dest) {
+        Progress progress = new Progress(0);
+        progress.setCompleted(true);
+        progress.setException(new IOException("Cannot move this file."));
+        
+        return progress;
+    }
     
 }
