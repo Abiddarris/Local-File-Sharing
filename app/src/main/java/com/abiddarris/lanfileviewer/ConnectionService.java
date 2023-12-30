@@ -26,6 +26,7 @@ import com.abiddarris.lanfileviewer.file.sharing.ScanException;
 import com.abiddarris.lanfileviewer.file.sharing.ScanningSession;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 import com.abiddarris.lanfileviewer.file.sharing.SharingSession;
+import com.abiddarris.lanfileviewer.settings.Settings;
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -109,9 +110,11 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         FileSource source = LocalFileSource.getDefaultLocalSource(this);
         source.setSecurityManager(new SecurityManagerImpl());
         
+        String name = Settings.getDefaultName(this);
+        
         sharingSession = FileSharing.share(this, source);
         try {
-            sharingSession.start();
+            sharingSession.start(name);
         } catch (Exception e) {
             Log.err.log(TAG,e);
         }

@@ -5,6 +5,10 @@
     <PreferenceCategory
         app:title="@string/general">
         
+        <EditTextPreference
+            app:key="name"
+            app:title="@string/name"/>
+        
         <ListPreference
             app:defaultValue="0"
             app:entries="@array/theme_labels"

@@ -52,11 +52,11 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         nsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
     }
     
-    public void start() throws IOException {
+    public void start(String name) throws IOException {
         start(SOCKET_READ_TIMEOUT);
         
         NsdServiceInfo info = new NsdServiceInfo();
-        info.setServiceName(Build.BRAND + " " + Build.DEVICE + "_FILEV");
+        info.setServiceName(name + "_FILEV");
         info.setServiceType(FileSharing.SERVICE_TYPE);
         info.setPort(getListeningPort());
         

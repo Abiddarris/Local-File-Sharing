@@ -6,6 +6,7 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.DialogFragment;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
@@ -23,6 +24,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         final ListPreference theme = findPreference("theme");
         final ListPreference writeAccess = findPreference("writeAccess");
         final ListPreference deleteAccess = findPreference("deleteAccess");
+        EditTextPreference name = findPreference("name");
+        name.setDefaultValue(Settings.getDefaultName(getContext()));
+        name.setSummaryProvider(p -> Settings.getDefaultName(getContext()));
         
         theme.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
         writeAccess.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
