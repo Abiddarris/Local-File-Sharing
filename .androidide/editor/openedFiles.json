@@ -19,14 +19,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/SettingsFragment.java",
       "selection": {
         "end": {
-          "column": 42,
-          "index": 1489,
-          "line": 30
+          "column": 50,
+          "index": 1511,
+          "line": 31
         },
         "start": {
-          "column": 8,
-          "index": 1455,
-          "line": 30
+          "column": 50,
+          "index": 1511,
+          "line": 31
         }
       }
     },
@@ -44,7 +44,37 @@
           "line": 9
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/AndroidManifest.xml",
+      "selection": {
+        "end": {
+          "column": 39,
+          "index": 1935,
+          "line": 50
+        },
+        "start": {
+          "column": 34,
+          "index": 1930,
+          "line": 50
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ConnectionService.java",
+      "selection": {
+        "end": {
+          "column": 23,
+          "index": 2990,
+          "line": 78
+        },
+        "start": {
+          "column": 23,
+          "index": 2990,
+          "line": 78
+        }
+      }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/SettingsFragment.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ConnectionService.java"
 }

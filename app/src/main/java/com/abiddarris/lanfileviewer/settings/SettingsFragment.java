@@ -27,7 +27,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         EditTextPreference name = findPreference("name");
         name.setDefaultValue(Settings.getDefaultName(getContext()));
         name.setSummaryProvider(p -> Settings.getDefaultName(getContext()));
-        name.setOnBindEditTextListener((e) -> e.setText(Settings.getDefaultName(getContext())));
+        name.setOnBindEditTextListener((e) -> {
+             e.setText(Settings.getDefaultName(getContext()));
+             e.setSelection(e.getText().length());
+        });
         name.setOnPreferenceChangeListener((p,newName) -> !((String)newName).isBlank());
         
         theme.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
