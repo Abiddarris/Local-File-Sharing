@@ -8,6 +8,7 @@ import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkOutputStream;
+import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.gretta.util.log.Log;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -41,7 +42,7 @@ public class UploadRunnable extends ActionRunnable {
     }
 
     @Override
-    public void onExecute() throws Exception {
+    public void onExecute(BaseRunnable context) throws Exception {
         prepare();
 
         List<File> files = new ArrayList<>();

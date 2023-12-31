@@ -10,6 +10,7 @@ import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.DialogTextInputBinding;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,7 +21,7 @@ public class FileNameInputValidator implements TextWatcher {
     private DialogTextInputBinding binding;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private FileSource source;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     private String parentPath;
     
     public static final String TAG = Log.getTag(FileNameInputValidator.class);
@@ -64,12 +65,12 @@ public class FileNameInputValidator implements TextWatcher {
         folder.updateDataSync();
 
         if (!folder.exists()) {
-            handler.post(() -> {
+            handler.post((c) -> {
                 binding.positiveAction.setEnabled(true);
                 binding.textInput.setErrorEnabled(false);
             });
         } else {
-            handler.post(() -> {
+            handler.post((c) -> {
                 binding.textInput.setErrorEnabled(true);
                 binding.textInput.setError(
                         context.getString(R.string.file_already_exists));

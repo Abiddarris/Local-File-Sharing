@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.DialogTextInputBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,7 +22,7 @@ public class RenameDialog extends DialogFragment {
     private Explorer explorer;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private File target;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     
     public RenameDialog(Explorer explorer, File target) {
         this.explorer = explorer;
@@ -62,7 +63,7 @@ public class RenameDialog extends DialogFragment {
     }
     
     private void checkSuccess(boolean success) {
-        handler.post(() -> {
+        handler.post((c) -> {
             explorer.update();
             
             if(!success) {

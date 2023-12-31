@@ -113,7 +113,7 @@ public class Explorer {
         Arrays.sort(files, sorter);
         adapter.setFiles(files);
 
-        adapter.getMainThread().post(() -> refresher.setRefreshing(false));
+        adapter.getMainThread().post((c) -> refresher.setRefreshing(false));
         
         for(OnExplorerUpdatedListener listener : updatedListeners) {
             listener.onUpdated(this);

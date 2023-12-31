@@ -6,11 +6,12 @@ import android.view.View;
 import com.abiddarris.lanfileviewer.databinding.DialogActionProgressBinding;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.R;
+import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 
 public abstract class ActionRunnable extends BaseRunnable {
 
     private ActionDialog dialog;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     
     protected void attachDialog(ActionDialog dialog) {
     	this.dialog = dialog;
@@ -29,14 +30,14 @@ public abstract class ActionRunnable extends BaseRunnable {
     }
 
     protected void updateFileInfo(String name, int index, int totalFiles) {
-        handler.post(() -> {
+        handler.post((c) -> {
             getView().name.setText(name);
             getView().progress.setText((index) + "/" + totalFiles);
         });
     }
     
     protected void setMaxProgress(double maxProgress) {
-        handler.post(() -> getView().progressIndicator.setMax((int) maxProgress));
+        handler.post((c) -> getView().progressIndicator.setMax((int) maxProgress));
     }
 
     protected void updateProgress(double progress) {
@@ -46,7 +47,7 @@ public abstract class ActionRunnable extends BaseRunnable {
         
         int percentage = (int)Math.floor(progress / max * 100);
         if(percentage > oldPercentage) {
-            handler.post(() -> {
+            handler.post((c) -> {
                 getView().progressIndicator.setProgress((int) progress);
                 getView().progressPercent.setText(percentage + "%");
             });
@@ -54,14 +55,14 @@ public abstract class ActionRunnable extends BaseRunnable {
     }
 
     protected void start() {
-        handler.post(() -> {
+        handler.post((c) -> {
             getView().name.setVisibility(View.VISIBLE);
             getView().progressPercent.setVisibility(View.VISIBLE);
         });
     }
 
     protected void prepare() {
-        handler.post(() -> {
+        handler.post((c) -> {
             getView().name.setVisibility(View.INVISIBLE);
             getView().progressPercent.setVisibility(View.INVISIBLE);
 

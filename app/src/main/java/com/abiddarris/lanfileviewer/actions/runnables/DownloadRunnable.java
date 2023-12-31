@@ -4,6 +4,7 @@ import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.gretta.util.log.Log;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -31,7 +32,7 @@ public class DownloadRunnable extends ActionRunnable {
     }
 
     @Override
-    public void onExecute() throws Exception {
+    public void onExecute(BaseRunnable context) throws Exception {
         prepare();
         
         FileSource source = dest.getSource();

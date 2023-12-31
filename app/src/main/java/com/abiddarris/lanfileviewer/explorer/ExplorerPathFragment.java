@@ -17,12 +17,12 @@ import java.util.List;
 public class ExplorerPathFragment extends Fragment {
     
     private FragmentExplorerPathBinding binding;
-    private PathAdapter adapter = new PathAdapter();
-    
+    private PathAdapter adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup group, Bundle bundle) {
         binding = FragmentExplorerPathBinding.inflate(inflater);
-        
+        adapter = new PathAdapter(binding.recyclerView);
+    
         adapter.setContext(getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 

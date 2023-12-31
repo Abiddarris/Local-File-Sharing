@@ -65,7 +65,7 @@ public class NetworkFile implements File {
             onResponseAvailable(response);
 
             if (callback != null)
-                ApplicationCore.getMainHandler().post(() -> callback.onDataUpdated(e));
+                ApplicationCore.getMainHandler().post((c) -> callback.onDataUpdated(e));
         });
     }
     

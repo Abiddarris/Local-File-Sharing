@@ -4,6 +4,7 @@ import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.Files;
+import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.gretta.util.log.Log;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class MoveRunnable extends ActionRunnable {
     }
 
     @Override
-    public void onExecute() throws Exception {
+    public void onExecute(BaseRunnable context) throws Exception {
         prepare();
 
         List<File> files = new ArrayList<>();

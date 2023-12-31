@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.LayoutPathButtonBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -20,11 +21,16 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
 
     private Context context;
     private Explorer explorer;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     private LayoutInflater inflater;
     private String[] paths = new String[0];
     private String parent;
-    
+    private RecyclerView recyclerView;
+
+    public PathAdapter(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup group, int type) {
         return new ViewHolder(LayoutPathButtonBinding.inflate(inflater));
@@ -33,12 +39,13 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int index) {
         holder.name.setText(paths[index]);
-        holder.name.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
-        
+        holder.name.setBackgroundColor(
+                ContextCompat.getColor(context, android.R.color.transparent));
+
         if (index == paths.length - 1)
-            holder.name.setTextColor(ContextCompat.getColor(context,R.color.colorAccent));
+            holder.name.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
         else holder.name.setTextColor(Color.WHITE);
-        
+
         holder.name.setOnClickListener(
                 (v) -> {
                     StringBuilder path = new StringBuilder();
@@ -76,7 +83,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
                     if (parents.size() == 0) {
                         setPaths(new String[0]);
 
-                        handler.post(() -> notifyDataSetChanged());
+                        handler.post((c) -> notifyDataSetChanged());
                         return;
                     }
 
@@ -97,12 +104,14 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
 
                     setPaths(paths);
 
-                    handler.post(() -> notifyDataSetChanged());
+                    handler.post((c) -> {
+                        notifyDataSetChanged();
+                    });
                 });
     }
-    
+
     public Explorer getExplorer() {
-    	return explorer;
+        return explorer;
     }
 
     public String[] getPaths() {
@@ -130,7 +139,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
 
     public void setContext(Context context) {
         this.context = context;
-        
+
         inflater = LayoutInflater.from(context);
     }
 }

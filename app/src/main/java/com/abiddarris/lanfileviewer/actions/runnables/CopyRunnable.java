@@ -3,6 +3,7 @@ package com.abiddarris.lanfileviewer.actions.runnables;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.gretta.util.log.Log;
 import java.util.List;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class CopyRunnable extends ActionRunnable {
     
 
     @Override
-    public void onExecute() throws Exception {
+    public void onExecute(BaseRunnable context) throws Exception {
         prepare();
         
         List<File> files = new ArrayList<>();

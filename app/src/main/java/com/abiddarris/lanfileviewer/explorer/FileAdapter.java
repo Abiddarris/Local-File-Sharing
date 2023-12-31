@@ -14,6 +14,7 @@ import com.abiddarris.lanfileviewer.databinding.LayoutFileCardBinding;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.DrawableTinter;
+import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.bumptech.glide.Glide;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,7 +26,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     private Context context;
     private File[] files = new File[0];
     private Explorer explorer;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     private LayoutInflater inflater;
     
     public FileAdapter(Explorer explorer) {
@@ -34,14 +35,14 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         inflater = LayoutInflater.from(context);
     }
     
-    public Handler getMainThread() {
+    public HandlerLogSupport getMainThread() {
     	return handler;
     }
     
     public void setFiles(File[] files) {
     	this.files = files;
         
-        handler.post(()-> notifyDataSetChanged());
+        handler.post((c)-> notifyDataSetChanged());
     }
     
     public File get(int pos) {

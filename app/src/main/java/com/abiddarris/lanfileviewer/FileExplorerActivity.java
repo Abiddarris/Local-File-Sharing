@@ -27,7 +27,7 @@ import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
 import com.abiddarris.lanfileviewer.ui.NetworkExplorerFragment;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFile;
-import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
+
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

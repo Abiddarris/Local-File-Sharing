@@ -2,29 +2,38 @@ package com.abiddarris.lanfileviewer.utils;
 
 import com.gretta.util.log.Log;
 
-public abstract class BaseRunnable implements Runnable {
-    
+public class BaseRunnable implements Runnable, RunnableInterface {
+
+    private RunnableInterface runnable;
+
+    public BaseRunnable(RunnableInterface runnable) {
+        this.runnable = runnable;
+    }
+
+    public BaseRunnable() {}
+
     @Override
     public void run() {
         try {
-            onExecute();
+            onExecute(this);
         } catch (Exception e) {
             onError(e);
         } finally {
             onFinalization();
         }
     }
-    
-    public abstract void onExecute() throws Exception;
-    
+
+    public void onExecute(BaseRunnable context) throws Exception {
+        if(this.runnable != null) this.runnable.onExecute(context);
+    }
+
     public void onError(Exception e) {
-    	Log.err.log(getTag(), e);
+        Log.err.log(getTag(), e);
     }
-    
-    public void onFinalization() {
-    }
-    
+
+    public void onFinalization() {}
+
     public String getTag() {
-    	return Log.getTag(this.getClass());
+        return Log.getTag(this.getClass());
     }
 }

@@ -14,6 +14,7 @@ import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.DialogTextInputBinding;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
@@ -26,7 +27,7 @@ public class CreateFolderDialog extends DialogFragment {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Explorer explorer;
     private FileNameInputValidator validator;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     private String failCreateFoldersMessage;
     
     public static final String TAG = Log.getTag(CreateFolderDialog.class);
@@ -69,11 +70,11 @@ public class CreateFolderDialog extends DialogFragment {
     }
 
     private void refreshExplorer() {
-        handler.post(() -> explorer.update());
+        handler.post((c) -> explorer.update());
     }
 
     private void showFailedToast() {
-        handler.post(() -> 
+        handler.post((c) -> 
             Toast.makeText(context, failCreateFoldersMessage , Toast.LENGTH_SHORT).show());
     }
 }

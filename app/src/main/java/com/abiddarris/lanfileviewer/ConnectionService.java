@@ -27,6 +27,7 @@ import com.abiddarris.lanfileviewer.file.sharing.ScanningSession;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 import com.abiddarris.lanfileviewer.file.sharing.SharingSession;
 import com.abiddarris.lanfileviewer.settings.Settings;
+import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,7 +35,7 @@ import java.util.concurrent.Executors;
 public class ConnectionService extends Service implements ScanningSession.Callback {
     
     private ConnectionServiceBridge bridge = new ConnectionServiceBridge();
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     private ServerListAdapter adapter;
     private ScanningSession session;
     private SharingSession sharingSession;
@@ -166,12 +167,12 @@ public class ConnectionService extends Service implements ScanningSession.Callba
     
     @Override
     public void onServerFound(SharingDevice device) {
-        handler.post(() -> adapter.addServer(device));
+        handler.post((c) -> adapter.addServer(device));
     }
     
     @Override
     public void onServerLost(SharingDevice device) {
-        handler.post(() -> adapter.removeServer(device));
+        handler.post((c) -> adapter.removeServer(device));
     }
     
     private class SecurityManagerImpl extends SecurityManager {

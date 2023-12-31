@@ -3,11 +3,13 @@ package com.abiddarris.lanfileviewer;
 import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
-import com.abiddarris.lanfileviewer.file.sharing.NetworkFileClient;
+
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
+import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.abiddarris.lanfileviewer.utils.Theme;
 import com.gretta.util.log.FilesLog;
 import com.gretta.util.log.Log;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +20,7 @@ public class ApplicationCore extends Application {
     private static final String TAG = Log.getTag(ApplicationCore.class);
 
     private static ApplicationCore core;
-    private static Handler mainHandler;
+    private static HandlerLogSupport mainHandler;
 
     private NetworkFileSource currentFileSource;
 
@@ -36,9 +38,9 @@ public class ApplicationCore extends Application {
         return core;
     }
 
-    public static Handler getMainHandler() {
+    public static HandlerLogSupport getMainHandler() {
         if (mainHandler == null) {
-            mainHandler = new Handler(Looper.getMainLooper());
+            mainHandler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
         }
         return mainHandler;
     }

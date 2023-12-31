@@ -18,6 +18,7 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
+import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.dialog.MaterialDialogs;
 import com.gretta.util.log.Log;
@@ -34,7 +35,7 @@ public class ActionDialog extends DialogFragment {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Explorer explorer;
     private DialogActionProgressBinding view;
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     private OperationContext context = new OperationContext();
     private OperationOptionsDialog optionsDialog;
     
@@ -100,7 +101,7 @@ public class ActionDialog extends DialogFragment {
         
         CountDownLatch lock = new CountDownLatch(1);
         
-        handler.post(() -> {
+        handler.post((c) -> {
             getDialog().hide();
                 
             optionsDialog.show(getParentFragmentManager(), lock, file.getName());
