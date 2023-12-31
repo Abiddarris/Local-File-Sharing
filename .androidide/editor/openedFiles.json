@@ -64,13 +64,13 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/ConnectionService.java",
       "selection": {
         "end": {
-          "column": 23,
-          "index": 2990,
+          "column": 51,
+          "index": 3018,
           "line": 78
         },
         "start": {
-          "column": 23,
-          "index": 2990,
+          "column": 51,
+          "index": 3018,
           "line": 78
         }
       }

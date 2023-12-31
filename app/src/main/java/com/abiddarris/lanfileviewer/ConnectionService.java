@@ -73,6 +73,14 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         return START_STICKY;
     }
     
+    @Override
+    public void onTaskRemoved(Intent intent) {
+        if(!isRegistered()) {
+            Log.debug.log(TAG, "Stopping service");
+            stopSelf();
+        }
+        super.onTaskRemoved(intent);
+    }
 
     @Override
     public void onDestroy() {
