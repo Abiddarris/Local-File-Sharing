@@ -68,38 +68,9 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
         this.explorer = explorer;
         explorer.addOnUpdatedListener((v) -> {
             File file = explorer.getParent();
-            /*File[] roots = file.getSource().getRoot().listFiles();
-
+         
             String filePath = file.getPath();
-            List<String> parents = new ArrayList<>();
-            for (File root : roots) {
-                String rootPath = root.getPath();
-                if (filePath.toLowerCase().startsWith(rootPath.toLowerCase())) {
-                    parents.add(rootPath);
-                }
-            }
-
-            if (parents.size() == 0) {
-                setPaths(new String[0]);
-
-                handler.post((c) -> notifyDataSetChanged());
-                return;
-            }
-
-            for (String parentPath : parents) {
-                if (parent == null) {
-                    parent = parentPath;
-                    continue;
-                }
-                if (parentPath.length() < parent.length()) {
-                            parent = parentPath;
-                }
-            }
-
-            parent = parent.substring(0, parent.lastIndexOf("/") + 1);
-            filePath = filePath.substring(parent.length());
-            */
-            String filePath = file.getPath().substring(1);
+            if(filePath.startsWith("/")) filePath = filePath.substring(1);
             String[] paths = filePath.split("/");
             setPaths(paths);
 

@@ -1,0 +1,20 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/PathAdapter.java",
+      "selection": {
+        "end": {
+          "column": 34,
+          "index": 2608,
+          "line": 72
+        },
+        "start": {
+          "column": 34,
+          "index": 2608,
+          "line": 72
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/PathAdapter.java"
+}
