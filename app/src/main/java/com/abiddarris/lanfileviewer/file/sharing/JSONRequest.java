@@ -23,6 +23,7 @@ public final class JSONRequest {
     public static final String REQUEST_RENAME = "requestRename";
     public static final String REQUEST_DELETE = "requestDelete";
     public static final String REQUEST_MOVE = "requestMove";
+    public static final String REQUEST_ABSOLUTE_PATH = "requestAbsolutePath";
     public static final String KEY_IS_DIRECTORY = "isDirectory";
     public static final String KEY_IS_FILE = "isFile";
     public static final String KEY_GET_PARENT_FILE = "getParentFile";
@@ -43,6 +44,7 @@ public final class JSONRequest {
     public static final String KEY_EXCEPTION = "exception";
     public static final String KEY_NEW_NAME = "newName";
     public static final String KEY_SUCESS = "sucess";
+    public static final String KEY_ABSOLUTE_PATH = "absolutePath";
     
     public static JSONArray createRequest(String... requestKeys) {
         JSONArray requests = new JSONArray();

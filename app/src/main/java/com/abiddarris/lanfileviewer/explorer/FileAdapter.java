@@ -97,7 +97,8 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         if(hasThumbnail(file)) {
             Object thumbnail = file.getThumbnail();
             if(thumbnail instanceof File) {
-                thumbnail = ((File)thumbnail).getPath();
+                thumbnail = ((File)thumbnail)
+                    .getAbsolutePath();
             }
             Glide.with(context)
                 .load(thumbnail)

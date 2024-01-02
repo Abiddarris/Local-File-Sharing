@@ -24,7 +24,7 @@ public interface File {
 
     public abstract File[] listFiles();
 
-    public abstract String getPath();
+    public abstract String getAbsolutePath();
 
     public abstract Uri toUri();
 
@@ -53,6 +53,8 @@ public interface File {
     public abstract Progress move(File dest);
     
     public abstract Object getThumbnail();
+    
+    public abstract String getPath();
     
     public static interface Callback {
         void onDataUpdated(Exception e);

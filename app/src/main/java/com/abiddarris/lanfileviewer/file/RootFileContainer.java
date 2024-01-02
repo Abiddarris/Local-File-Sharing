@@ -56,6 +56,11 @@ public class RootFileContainer implements File {
     public String getPath() {
         return "";
     }
+    
+    @Override
+    public String getAbsolutePath() {
+        return "";
+    }
 
     @Override
     public Uri toUri() {

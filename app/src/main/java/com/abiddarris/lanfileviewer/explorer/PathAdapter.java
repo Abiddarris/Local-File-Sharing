@@ -68,7 +68,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
         this.explorer = explorer;
         explorer.addOnUpdatedListener((v) -> {
             File file = explorer.getParent();
-            File[] roots = file.getSource().getRoot().listFiles();
+            /*File[] roots = file.getSource().getRoot().listFiles();
 
             String filePath = file.getPath();
             List<String> parents = new ArrayList<>();
@@ -98,7 +98,8 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
 
             parent = parent.substring(0, parent.lastIndexOf("/") + 1);
             filePath = filePath.substring(parent.length());
-
+            */
+            String filePath = file.getPath().substring(1);
             String[] paths = filePath.split("/");
             setPaths(paths);
 

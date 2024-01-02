@@ -44,6 +44,7 @@ public class NetworkFile implements File {
     private String mimeType;
     private String name;
     private String path;
+    private String absolutePath;
     
     private static final String TAG = Log.getTag(NetworkFile.class);
 
@@ -84,7 +85,7 @@ public class NetworkFile implements File {
     protected void onCreateUpdateRequest(JSONObject request) throws JSONException {
         JSONArray requestKeys = createRequest(REQUEST_GET_NAME, REQUEST_LIST_FILES,
              REQUEST_IS_DIRECTORY, REQUEST_IS_FILE, REQUEST_GET_PARENT_FILE,
-             REQUEST_GET_MIME_TYPE, REQUEST_GET_LENGTH, REQUEST_GET_LAST_MODIFIED, REQUEST_EXISTS);
+             REQUEST_GET_MIME_TYPE, REQUEST_GET_LENGTH, REQUEST_GET_LAST_MODIFIED, REQUEST_EXISTS, REQUEST_ABSOLUTE_PATH);
         
         request.putOpt(KEY_REQUEST, requestKeys)
                 .putOpt(KEY_PATH, path);
@@ -99,6 +100,7 @@ public class NetworkFile implements File {
         length = response.optLong(KEY_LENGTH);
         lastModified = response.optLong(KEY_LAST_MODIFIED);
         exists = response.optBoolean(KEY_EXISTS);
+        absolutePath = response.optString(KEY_ABSOLUTE_PATH);
         
         JSONArray paths = response.optJSONArray(KEY_LIST_FILES);
         if (paths != null) {
@@ -140,6 +142,11 @@ public class NetworkFile implements File {
         return listFiles;
     }
 
+    @Override
+    public String getAbsolutePath() {
+        return absolutePath;
+    }
+    
     @Override
     public String getPath() {
         return path;

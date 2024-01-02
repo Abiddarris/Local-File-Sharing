@@ -143,7 +143,8 @@ public class NetworkFileSource extends FileSource {
     }
 
     @Override
-    protected File newFile(File parent, String path) {
+    protected File newFile(File parent, String name) {
+        String path = parent.getPath() + "/" + name;
         return new NetworkFile(this,path);
     }
 

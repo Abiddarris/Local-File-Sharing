@@ -22,7 +22,7 @@ public abstract class FileSource {
     
     public abstract RootFileContainer getRoot();
     
-    protected abstract File newFile(File parent, String path);
+    protected abstract File newFile(File parent, String name);
     
     public File getFile(String path) {
         if(!path.startsWith("/")) path = "/" + path;
@@ -32,9 +32,11 @@ public abstract class FileSource {
         if(file != null) return file;
         
         int pathDivider = path.lastIndexOf("/");
+        String name = path.substring(pathDivider + 1);
         
         File parent = getFile(path.substring(0,pathDivider));
-        file = newFile(parent, path);
+        
+        file = newFile(parent, name);
         
         registerToCache(file);
         

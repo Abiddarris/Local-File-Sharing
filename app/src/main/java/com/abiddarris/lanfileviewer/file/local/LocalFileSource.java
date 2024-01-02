@@ -95,8 +95,8 @@ public class LocalFileSource extends FileSource {
     }
 
     @Override
-    protected File newFile(File parent, String path) {
-        java.io.File file = new java.io.File(path);
+    protected File newFile(File parent, String name) {
+        java.io.File file = new java.io.File(parent.getAbsolutePath(), name);
        
         return new LocalFile(this, parent, file);
     }

@@ -293,6 +293,8 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             progresses.put(progress.hashCode(), progress);
             
             response.put(KEY_PROGRESS_ID, progress.hashCode());
+        } else if(key.equalsIgnoreCase(REQUEST_ABSOLUTE_PATH)) {
+            response.put(KEY_ABSOLUTE_PATH, file.getAbsolutePath());
         }
     }
 
@@ -301,7 +303,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         String type = session.getParms().get("type");
         if(type != null && type.equalsIgnoreCase("thumbnail")) {
             Timer timer = new Timer();
-            java.io.File f = Thumbnails.getThumbnail(getContext(), new java.io.File(file.getPath()));;
+            java.io.File f = Thumbnails.getThumbnail(getContext(), new java.io.File(file.getAbsolutePath()));
             
             Log.debug.log(TAG, "file : " + file.getPath() + ", originalSize : " + file.length() + ", time : " + timer.reset() + " ms, thumb : " + f + ", size :" + (f != null ? f.length() : 0));
             
@@ -323,14 +325,14 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         }
         
         Response response = newFixedLengthResponse(Response.Status.OK,
-             file.getMimeType(), new FileInputStream(file.getPath()), file.length());
+             file.getMimeType(), file.newInputStream(), file.length());
         response.addHeader("Accept-Ranges","bytes");
         
         return response;
     }
 
     private Response getPartialContent(File file, IHTTPSession session) throws IOException {
-        InputStream stream = new FileInputStream(file.getPath());
+        InputStream stream = file.newInputStream();
       
         long rangeOffset = findRangeOffset(session.getHeaders().get("range"));
         long length = file.length();

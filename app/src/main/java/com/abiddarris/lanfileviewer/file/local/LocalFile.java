@@ -80,7 +80,7 @@ public class LocalFile implements File {
 
         File[] files = new File[javaFiles.length];
         for (int i = 0; i < files.length; ++i) {
-            files[i] = source.getFile(javaFiles[i].getPath());
+            files[i] = source.getFile(getPath() + "/" + javaFiles[i].getName());
         }
 
         return files;
@@ -88,6 +88,11 @@ public class LocalFile implements File {
 
     @Override
     public String getPath() {
+        return getParentFile().getPath() + "/" + getName();
+    }
+    
+    @Override
+    public String getAbsolutePath() {
         return file.getPath();
     }
 
@@ -166,7 +171,7 @@ public class LocalFile implements File {
     public InputStream newInputStream() throws IOException {
         source.getSecurityManager().checkRead(this);
 
-        return new FileInputStream(getPath());
+        return new FileInputStream(getAbsolutePath());
     }
 
     @Override
@@ -174,7 +179,7 @@ public class LocalFile implements File {
         source.getSecurityManager().checkWrite(this);
 
         if (file.getParentFile() != null & file.getParentFile().canWrite()) {
-            return new FileOutputStream(getPath());
+            return new FileOutputStream(getAbsolutePath());
         }
 
         DocumentFile parentDocumentFile = source.findDocumentFile(getParentFile());
@@ -261,7 +266,7 @@ public class LocalFile implements File {
     public Progress move(File dest) {
         source.getSecurityManager().checkRead(this);
 
-        java.io.File destFile = new java.io.File(dest.getPath());
+        java.io.File destFile = new java.io.File(dest.getAbsolutePath());
         if (file.canWrite()
                 && destFile.getParentFile() != null
                 && destFile.getParentFile().canWrite()) {
@@ -288,14 +293,7 @@ public class LocalFile implements File {
     @Override
     public File getThumbnail() {
         return this;
-       /* 
-        
-        if(target.thumbnail == null) return null;
-        
-        return source.getFile(target.thumbnail.getPath());*/
     }
-
-    
 
     private static interface OnCopyDoneListener {
         void onCopyDone(Progress progress);
