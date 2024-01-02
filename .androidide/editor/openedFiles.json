@@ -1,50 +1,35 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/SharingSession.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/File.java",
       "selection": {
         "end": {
-          "column": 173,
-          "index": 11796,
-          "line": 305
+          "column": 0,
+          "index": 0,
+          "line": 0
         },
         "start": {
-          "column": 173,
-          "index": 11796,
-          "line": 305
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/utils/Thumbnails.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/FileSource.java",
       "selection": {
         "end": {
-          "column": 12,
-          "index": 2047,
-          "line": 55
+          "column": 73,
+          "index": 918,
+          "line": 28
         },
         "start": {
-          "column": 12,
-          "index": 2047,
-          "line": 55
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/utils/Timer.java",
-      "selection": {
-        "end": {
-          "column": 24,
-          "index": 299,
-          "line": 11
-        },
-        "start": {
-          "column": 24,
-          "index": 299,
-          "line": 11
+          "column": 73,
+          "index": 918,
+          "line": 28
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/SharingSession.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/FileSource.java"
 }

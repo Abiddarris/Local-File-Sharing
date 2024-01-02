@@ -25,6 +25,9 @@ public abstract class FileSource {
     protected abstract File newFile(File parent, String path);
     
     public File getFile(String path) {
+        if(!path.startsWith("/")) path = "/" + path;
+        if(path.endsWith("/")) path = path.substring(0, path.length() - 1);
+        
         File file = cache.get(path);
         if(file != null) return file;
         
