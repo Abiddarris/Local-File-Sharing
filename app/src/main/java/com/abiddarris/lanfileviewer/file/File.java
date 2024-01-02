@@ -52,6 +52,8 @@ public interface File {
     
     public abstract Progress move(File dest);
     
+    public abstract Object getThumbnail();
+    
     public static interface Callback {
         void onDataUpdated(Exception e);
     }

@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
+import android.content.Context;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
 import com.abiddarris.lanfileviewer.file.File;
@@ -29,7 +30,9 @@ public class NetworkFileSource extends FileSource {
     private SharingDevice device;
     private URL server;
     
-    NetworkFileSource(SharingDevice device) throws Exception {
+    NetworkFileSource(SharingDevice device, Context context) throws Exception {
+        super(context);
+        
         this.device = device;
         
         server = new URL("http://" + device.getHost().getHostName() +

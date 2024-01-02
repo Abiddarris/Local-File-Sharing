@@ -93,23 +93,28 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         textView.setText(Files.formatToDate(file.lastModified()));
     }
 
-    private void setIcon(final ImageView thumbnail, final File file) {
+    private void setIcon(final ImageView imageView, final File file) {
         if(hasThumbnail(file)) {
+            Object thumbnail = file.getThumbnail();
+            if(thumbnail instanceof File) {
+                thumbnail = ((File)thumbnail).getPath();
+            }
             Glide.with(context)
-                .load(file.toUri())
+                .load(thumbnail)
+                .timeout(6000)
                 .error(R.drawable.icons8_file)
                 .centerCrop()
-                .into(thumbnail);
+                .into(imageView);
             return;
         }
         Glide.with(context) 
-            .clear(thumbnail);
+            .clear(imageView);
         
         DrawableTinter.withContext(context)
             .withColor(R.color.colorPrimary)
             .withDrawable(file.isFile() ? R.drawable.icons8_file : R.drawable.icons8_folder)
             .tint()
-            .applyTo(thumbnail);
+            .applyTo(imageView);
     }
 
     private boolean hasThumbnail(final File file) {

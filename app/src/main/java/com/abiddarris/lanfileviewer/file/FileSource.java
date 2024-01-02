@@ -11,6 +11,12 @@ public abstract class FileSource {
     private static LocalFileSource localFileSource;
     public static final String TAG = Log.getTag(FileSource.class);
     
+    private Context context;
+    
+    public FileSource(Context context) {
+        this.context = context;
+    }
+    
     private Map<String,File> cache = new HashMap<>();
     private SecurityManager securityManager = new SecurityManager();
     
@@ -49,5 +55,9 @@ public abstract class FileSource {
     
     public void setSecurityManager(SecurityManager securityManager) {
         this.securityManager = securityManager;
+    }
+    
+    public Context getContext() {
+        return context;
     }
 }

@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
+import android.content.Context;
 import android.net.nsd.NsdServiceInfo;
 import java.net.InetAddress;
 
@@ -15,8 +16,8 @@ public class SharingDevice {
         name = info.getServiceName();
     }
     
-    public NetworkFileSource openConnection() throws Exception {
-        return new NetworkFileSource(this);
+    public NetworkFileSource openConnection(Context context) throws Exception {
+        return new NetworkFileSource(this, context);
     }
 
     public InetAddress getHost() {

@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
+import android.graphics.Bitmap;
 import android.util.Base64;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
@@ -12,6 +13,15 @@ import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
+import com.abiddarris.lanfileviewer.utils.Thumbnails;
+import com.abiddarris.lanfileviewer.utils.Timer;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.CustomTarget;
+import java.util.concurrent.CountDownLatch;
+import android.graphics.drawable.Drawable;
+import com.bumptech.glide.request.transition.Transition;
 import com.gretta.util.log.Log;
 import fi.iki.elonen.NanoHTTPD;
 import java.io.BufferedInputStream;
@@ -26,6 +36,7 @@ import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
@@ -47,7 +58,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     
     public SharingSession(Context context, FileSource source) {
         super(0);
-        
+        this.context = context;
         this.source = source;
         nsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
     }
@@ -287,6 +298,25 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
 
     private Response getFile(IHTTPSession session) throws IOException {
         File file = source.getFile(session.getUri());
+        String type = session.getParms().get("type");
+        if(type != null && type.equalsIgnoreCase("thumbnail")) {
+            Timer timer = new Timer();
+            java.io.File f = Thumbnails.getThumbnail(getContext(), new java.io.File(file.getPath()));;
+            
+            Log.debug.log(TAG, "file : " + file.getPath() + ", originalSize : " + file.length() + ", time : " + timer.reset() + " ms, thumb : " + f + ", size :" + (f != null ? f.length() : 0));
+            
+            
+           /* try {
+                target.lock.await();
+            } catch (InterruptedException e) {
+                Log.err.log(TAG, e);
+            }*/
+        
+            if(f == null) {
+                return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "not found");
+            }
+            file = source.getFile(f.getPath());
+        }
         
         if(session.getHeaders().get("range") != null) {
             return getPartialContent(file,session);
@@ -345,5 +375,26 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     public void onServiceUnregistered(NsdServiceInfo info) {
         Log.debug.log(TAG, "Sucess unregistering service");
     }
+    
+    private static class LoadTarget extends CustomTarget<java.io.File> {
 
+        private CountDownLatch lock = new CountDownLatch(1);
+        private volatile java.io.File thumbnail;        
+
+        @Override
+        public void onLoadCleared(Drawable arg0) {}
+
+        @Override
+        public void onResourceReady(java.io.File thumbnail, Transition<? super java.io.File> arg1) {
+            this.thumbnail = thumbnail;
+            Log.debug.log("ThumbnailLoader", "success ");
+            lock.countDown();
+        }
+
+        @Override
+        public void onLoadFailed(Drawable drawable) {
+                        Log.debug.log("ThumbnailLoader", "failed ");
+            lock.countDown();
+        }
+    }
 }

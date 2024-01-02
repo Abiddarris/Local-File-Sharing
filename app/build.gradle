@@ -48,3 +48,4 @@ dependencies {
     implementation("androidx.preference:preference:1.2.0")
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
+ 

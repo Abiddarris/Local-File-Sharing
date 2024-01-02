@@ -335,4 +335,13 @@ public class NetworkFile implements File {
         return progress;
     }
     
+    @Override
+    public Uri getThumbnail() {
+        SharingDevice device = source.getDevice();
+        String host = device.getHost().getHostAddress();
+        int port = device.getPort();
+        
+        return Uri.parse(String.format("http://%s:%s%s?type=thumbnail", host, port, path));
+    }
+    
 }

@@ -34,6 +34,6 @@ public class BaseRunnable implements Runnable, RunnableInterface {
     public void onFinalization() {}
 
     public String getTag() {
-        return Log.getTag(this.getClass());
+        return Log.getTag(runnable == null ? getClass() : runnable.getClass());
     }
 }

@@ -139,4 +139,9 @@ public class RootFileContainer implements File {
         return progress;
     }
     
+    @Override
+    public Object getThumbnail() {
+    	return null;
+    }
+    
 }

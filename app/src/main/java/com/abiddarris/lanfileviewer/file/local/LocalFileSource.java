@@ -16,7 +16,6 @@ import java.util.Arrays;
 
 public class LocalFileSource extends FileSource {
 
-    private Context context;
     private DocumentFile sdCardDocumentFile;
     private RootFileContainer root;
     private RootFile sdCardStorage;
@@ -25,7 +24,7 @@ public class LocalFileSource extends FileSource {
     public static final String TAG = Log.getTag(LocalFileSource.class);
     
     public LocalFileSource(Context context) {
-        this.context = context;
+        super(context);
         
         root = new RootFileContainer(this);
         
@@ -144,7 +143,4 @@ public class LocalFileSource extends FileSource {
             .commit();
     }
   
-    public Context getContext() {
-        return this.context;
-    }
 }
