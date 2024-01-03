@@ -25,6 +25,7 @@ public abstract class FileSource {
     protected abstract File newFile(File parent, String name);
     
     public File getFile(String path) {
+        Log.debug.log(TAG, path);
         if(!path.startsWith("/")) path = "/" + path;
         if(path.endsWith("/")) path = path.substring(0, path.length() - 1);
         

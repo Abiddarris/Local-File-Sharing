@@ -157,7 +157,7 @@ public class NetworkFile implements File {
         SharingDevice device = source.getDevice();
         return Uri.parse("http://" + device.getHost()
             .getHostAddress() + ":" + device.getPort() +
-             "/" + getPath());
+             getPath());
     }
 
     @Override

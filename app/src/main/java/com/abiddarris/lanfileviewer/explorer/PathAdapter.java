@@ -49,7 +49,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
         holder.name.setOnClickListener(
                 (v) -> {
                     StringBuilder path = new StringBuilder();
-                    path.append(parent);
+                    path.append("/");
                     for (int i = 0; i <= index; ++i) {
                         path.append(paths[i]);
                         if (i != index) path.append("/");

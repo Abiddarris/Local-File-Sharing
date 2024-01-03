@@ -171,6 +171,7 @@ public class LocalFile implements File {
     public InputStream newInputStream() throws IOException {
         source.getSecurityManager().checkRead(this);
 
+        Log.debug.log(TAG, "opening input stream, path : " + getPath() + " abs :" + getAbsolutePath());
         return new FileInputStream(getAbsolutePath());
     }
 

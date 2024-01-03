@@ -97,8 +97,10 @@ public class LocalFileSource extends FileSource {
     @Override
     protected File newFile(File parent, String name) {
         java.io.File file = new java.io.File(parent.getAbsolutePath(), name);
-       
-        return new LocalFile(this, parent, file);
+        LocalFile f = new LocalFile(this, parent, file);
+        Log.debug.log(TAG, String.format("parent abs : %s, name: %s, res: %s, locpath : %s, locabspath : %s", parent.getAbsolutePath(),name,file.getPath(),f.getPath(),f.getAbsolutePath()));
+        
+        return f;
     }
     
     private static String getSDCardPath(Context context) {

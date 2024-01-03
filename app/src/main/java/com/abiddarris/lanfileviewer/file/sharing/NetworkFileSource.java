@@ -7,6 +7,7 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.RootFile;
 import com.abiddarris.lanfileviewer.file.RootFileContainer;
+import com.gretta.util.log.Log;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -29,6 +30,8 @@ public class NetworkFileSource extends FileSource {
     private RootFileContainer root;
     private SharingDevice device;
     private URL server;
+    
+    public static final String TAG = Log.getTag(NetworkFileSource.class);
     
     NetworkFileSource(SharingDevice device, Context context) throws Exception {
         super(context);
@@ -145,7 +148,9 @@ public class NetworkFileSource extends FileSource {
     @Override
     protected File newFile(File parent, String name) {
         String path = parent.getPath() + "/" + name;
-        return new NetworkFile(this,path);
+        File f = new NetworkFile(this,path);
+        Log.debug.log(TAG, path);
+        return f;
     }
 
     public static interface ResponseCallback {
