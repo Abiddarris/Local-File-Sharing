@@ -147,8 +147,10 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
     }
     
     private void updateActionModeView() {
-        MenuItem menu = this.menu.findItem(R.id.rename);
-        menu.setVisible(!(checked.size() > 1));
+        if(this.menu != null) {
+            MenuItem menu = this.menu.findItem(R.id.rename);
+            menu.setVisible(!(checked.size() > 1));
+        }
         
         CheckBox selectAll = actionModeLayout.selectAll;
         
