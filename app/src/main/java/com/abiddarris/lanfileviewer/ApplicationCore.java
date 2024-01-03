@@ -55,6 +55,7 @@ public class ApplicationCore extends Application {
             ((FilesLog) Log.err).open();
             ((FilesLog) Log.out).open();
             ((FilesLog) Log.debug).open();
+            Log.debug.log(TAG, "Log setuped");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -68,7 +69,7 @@ public class ApplicationCore extends Application {
                     }
                     System.exit(1);
                 });
-        Log.debug.log(TAG, "Log setuped");
+        
     }
 
     public NetworkFileSource getCurrentFileSource() {

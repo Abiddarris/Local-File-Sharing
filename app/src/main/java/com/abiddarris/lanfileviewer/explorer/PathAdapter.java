@@ -24,13 +24,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     private LayoutInflater inflater;
     private String[] paths = new String[0];
-    private String parent;
-    private RecyclerView recyclerView;
-
-    public PathAdapter(RecyclerView recyclerView) {
-        this.recyclerView = recyclerView;
-    }
-
+    
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup group, int type) {
         return new ViewHolder(LayoutPathButtonBinding.inflate(inflater));

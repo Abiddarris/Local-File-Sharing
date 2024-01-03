@@ -58,6 +58,8 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         
         createNotificationChannel();
         
+        Log.debug.log(TAG, adapter);
+        
         adapter = new ServerListAdapter(this);
     }
     

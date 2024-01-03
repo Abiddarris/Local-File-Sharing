@@ -37,7 +37,9 @@ public abstract class ActionRunnable extends BaseRunnable {
     }
     
     protected void setMaxProgress(double maxProgress) {
-        handler.post((c) -> getView().progressIndicator.setMax((int) maxProgress));
+        handler.post((c) -> {
+            getView().progressIndicator.setMax((int) maxProgress);
+        });
     }
 
     protected void updateProgress(double progress) {
