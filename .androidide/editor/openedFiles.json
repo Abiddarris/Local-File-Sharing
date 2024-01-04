@@ -14,6 +14,21 @@
           "line": 161
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/local/LocalFile.java",
+      "selection": {
+        "end": {
+          "column": 52,
+          "index": 2949,
+          "line": 111
+        },
+        "start": {
+          "column": 52,
+          "index": 2949,
+          "line": 111
+        }
+      }
     }
   ],
   "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFile.java"

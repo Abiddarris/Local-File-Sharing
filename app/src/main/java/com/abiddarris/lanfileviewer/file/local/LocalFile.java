@@ -6,6 +6,7 @@ import android.webkit.MimeTypeMap;
 import androidx.documentfile.provider.DocumentFile;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.file.Files;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -108,7 +109,7 @@ public class LocalFile implements File {
         Uri uri = toUri();
 
         String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
+        String extension = Files.getExtension(this);
         if (extension != null) {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
         }
