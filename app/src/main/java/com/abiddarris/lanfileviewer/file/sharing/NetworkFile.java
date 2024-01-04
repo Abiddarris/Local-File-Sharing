@@ -108,6 +108,7 @@ public class NetworkFile implements File {
             listFiles = new NetworkFile[paths.length()];
             for (int i = 0; i < paths.length(); i++) {
                 String path = paths.optString(i);
+                
                 listFiles[i] = source.getFile(path);
             }
         }
@@ -161,7 +162,6 @@ public class NetworkFile implements File {
                 device.getHost().getHostAddress(), device.getPort(),
                 encodePath(getPath()));
             
-            Log.debug.log(TAG, "uri : " + uri);
             return Uri.parse(uri);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("cannot create uri for this file", e);

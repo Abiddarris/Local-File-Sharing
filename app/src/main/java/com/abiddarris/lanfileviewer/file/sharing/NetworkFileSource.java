@@ -75,10 +75,10 @@ public class NetworkFileSource extends FileSource {
             connection = (HttpURLConnection) server.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
-            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json; charset=\"UTF-8\"");
         
             OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(json.toString().getBytes());
+            outputStream.write(json.toString().getBytes("UTF-8"));
             outputStream.flush();
         
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));

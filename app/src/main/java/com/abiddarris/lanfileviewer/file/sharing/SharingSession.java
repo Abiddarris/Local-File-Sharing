@@ -233,7 +233,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
                 for (File subFile : subFiles) {
                     listFiles.put(subFile.getPath());
                 }
-
+                
                 response.put(KEY_LIST_FILES, listFiles);
             }
         }
