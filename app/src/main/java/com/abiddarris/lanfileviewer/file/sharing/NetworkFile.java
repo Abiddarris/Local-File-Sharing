@@ -18,6 +18,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -154,10 +155,29 @@ public class NetworkFile implements File {
 
     @Override
     public Uri toUri() {
-        SharingDevice device = source.getDevice();
-        return Uri.parse("http://" + device.getHost()
-            .getHostAddress() + ":" + device.getPort() +
-             getPath());
+        try {
+            SharingDevice device = source.getDevice();
+            String uri = String.format("http://%s:%s%s", 
+                device.getHost().getHostAddress(), device.getPort(),
+                encodePath(getPath()));
+            
+            Log.debug.log(TAG, "uri : " + uri);
+            return Uri.parse(uri);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("cannot create uri for this file", e);
+        }
+    }
+    
+    private static String encodePath(String path) throws UnsupportedEncodingException {
+        String[] paths = path.split("/");
+        
+        StringBuilder builder = new StringBuilder();
+        for(String pathPart : paths) {
+            builder.append(URLEncoder.encode(pathPart, "UTF-8"))
+                .append("/");
+        }       
+
+        return builder.toString();
     }
 
     @Override
