@@ -156,28 +156,28 @@ public class NetworkFile implements File {
 
     @Override
     public Uri toUri() {
-        try {
-            SharingDevice device = source.getDevice();
-            String uri = String.format("http://%s:%s%s", 
-                device.getHost().getHostAddress(), device.getPort(),
-                encodePath(getPath()));
-            
-            return Uri.parse(uri);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("cannot create uri for this file", e);
-        }
+        SharingDevice device = source.getDevice();
+        String uri = String.format("http://%s:%s%s", 
+            device.getHost().getHostAddress(), device.getPort(),
+            encodePath(getPath()));
+        
+        return Uri.parse(uri);
     }
     
-    private static String encodePath(String path) throws UnsupportedEncodingException {
-        String[] paths = path.split("/");
+    private static String encodePath(String path) {
+        try {
+            String[] paths = path.split("/");
         
-        StringBuilder builder = new StringBuilder();
-        for(String pathPart : paths) {
-            builder.append(URLEncoder.encode(pathPart, "UTF-8"))
-                .append("/");
-        }       
+            StringBuilder builder = new StringBuilder();
+            for(String pathPart : paths) {
+                builder.append(URLEncoder.encode(pathPart, "UTF-8"))
+                    .append("/");
+            }       
 
-        return builder.toString();
+            return builder.toString();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("cannot create uri for this file", e);
+        }    
     }
 
     @Override
@@ -368,7 +368,7 @@ public class NetworkFile implements File {
         String host = device.getHost().getHostAddress();
         int port = device.getPort();
         
-        return Uri.parse(String.format("http://%s:%s%s?type=thumbnail", host, port, path));
+        return Uri.parse(String.format("http://%s:%s%s?type=thumbnail", host, port, encodePath(path)));
     }
     
 }
