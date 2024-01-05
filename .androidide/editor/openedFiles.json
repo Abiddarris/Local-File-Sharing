@@ -1,37 +1,7 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/SelectMode.java",
-      "selection": {
-        "end": {
-          "column": 44,
-          "index": 3916,
-          "line": 93
-        },
-        "start": {
-          "column": 44,
-          "index": 3916,
-          "line": 93
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/BottomToolbarMode.java",
-      "selection": {
-        "end": {
-          "column": 10,
-          "index": 1341,
-          "line": 52
-        },
-        "start": {
-          "column": 10,
-          "index": 1341,
-          "line": 52
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/drawable/ic_home.xml",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/.gitignore",
       "selection": {
         "end": {
           "column": 0,
@@ -46,17 +16,17 @@
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/themes.xml",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_select.xml",
       "selection": {
         "end": {
-          "column": 12,
-          "index": 1875,
-          "line": 41
+          "column": 0,
+          "index": 0,
+          "line": 0
         },
         "start": {
-          "column": 15,
-          "index": 1520,
-          "line": 35
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     },
@@ -64,32 +34,32 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_select_mode.xml",
       "selection": {
         "end": {
-          "column": 19,
-          "index": 339,
-          "line": 9
+          "column": 15,
+          "index": 3933,
+          "line": 108
         },
         "start": {
-          "column": 5,
-          "index": 325,
-          "line": 9
+          "column": 15,
+          "index": 3933,
+          "line": 108
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/dimens.xml",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/utils/DrawableTinter.java",
       "selection": {
         "end": {
-          "column": 12,
-          "index": 578,
-          "line": 11
+          "column": 0,
+          "index": 0,
+          "line": 0
         },
         "start": {
-          "column": 12,
-          "index": 578,
-          "line": 11
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/dimens.xml"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/utils/DrawableTinter.java"
 }

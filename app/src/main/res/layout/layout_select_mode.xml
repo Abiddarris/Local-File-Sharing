@@ -47,7 +47,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_height="@dimen/explorer_action_button_height"
+         android:layout_height="@dimen/explorer_action_button_height"
          android:layout_width="@dimen/explorer_action_button_width"
          style="@style/SelectActionLayout"
          android:id="@+id/download">
@@ -95,6 +95,7 @@
         <ImageView
              android:layout_height="@dimen/explorer_action_button_image_size"
              android:layout_width="@dimen/explorer_action_button_image_size"
+             android:src="@drawable/abc_ic_menu_overflow_material"
              style="@style/ImageStyle" />
 
         <TextView
