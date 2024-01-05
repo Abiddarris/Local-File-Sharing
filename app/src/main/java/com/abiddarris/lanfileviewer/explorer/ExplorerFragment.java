@@ -124,6 +124,10 @@ public abstract class ExplorerFragment extends Fragment {
             case R.id.createFolder :
                 new CreateFolderDialog(getExplorer())
                     .show(getChildFragmentManager(), null);
+                break;
+            case R.id.sort_by :
+                new SortByDialog()
+                    .show(getParentFragmentManager(), null);
         }
         
         return super.onOptionsItemSelected(item);

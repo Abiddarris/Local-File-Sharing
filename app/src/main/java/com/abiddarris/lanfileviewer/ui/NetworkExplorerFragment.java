@@ -22,6 +22,7 @@ import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.actions.uploads.UploadRunnable;
 import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
 import com.abiddarris.lanfileviewer.explorer.SelectorExplorerFragment;
+import com.abiddarris.lanfileviewer.explorer.SortByDialog;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
@@ -78,12 +79,6 @@ public class NetworkExplorerFragment extends ExplorerFragment implements SharedP
             uploadLauncher.launch(bundle);
            
             return true;
-        }
-        
-        switch(item.getItemId()) {
-            case R.id.sort_by :
-                new SortByDialog()
-                    .show(getParentFragmentManager(), null);
         }
         
         return super.onOptionsItemSelected(item);

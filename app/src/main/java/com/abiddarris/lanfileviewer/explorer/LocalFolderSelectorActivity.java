@@ -18,7 +18,6 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
-import com.abiddarris.lanfileviewer.ui.SortByDialog;
 import com.gretta.util.log.Log;
 
 public class LocalFolderSelectorActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {

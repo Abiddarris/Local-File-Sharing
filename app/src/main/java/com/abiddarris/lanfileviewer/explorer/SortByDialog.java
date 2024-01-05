@@ -1,4 +1,5 @@
-package com.abiddarris.lanfileviewer.ui;
+package com.abiddarris.lanfileviewer.explorer;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;

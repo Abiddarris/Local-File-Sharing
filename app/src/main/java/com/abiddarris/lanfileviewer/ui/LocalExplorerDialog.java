@@ -14,6 +14,7 @@ import com.abiddarris.lanfileviewer.explorer.ExplorerActivity;
 import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
 import com.abiddarris.lanfileviewer.explorer.ExplorerPathFragment;
 import com.abiddarris.lanfileviewer.explorer.SelectorExplorerFragment;
+import com.abiddarris.lanfileviewer.explorer.SortByDialog;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
 
