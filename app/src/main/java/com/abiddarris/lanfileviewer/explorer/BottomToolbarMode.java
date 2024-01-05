@@ -13,6 +13,7 @@ public abstract class BottomToolbarMode extends NavigateMode {
     public static final String TAG = Log.getTag(BottomToolbarMode.class);
     
     private boolean shown;
+    private boolean animating;
     private float initialY;
     
     public BottomToolbarMode(Explorer explorer) {
@@ -40,11 +41,13 @@ public abstract class BottomToolbarMode extends NavigateMode {
     public abstract void onBottomToolbarShown(RelativeLayout group);
 
     public void showBottomBar() {
-        if(isShown()) return;
+        if(isShown() || animating) return;
         shown = true;
+        animating = true;
         
         Log.debug.log(TAG, "Showing Bottom actions");
-        RelativeLayout group = getExplorer().getUI().bottomAction;
+        RelativeLayout group = getExplorer()
+            .getUI().bottomAction;
         group.removeAllViews();
         
         onBottomToolbarShown(group);
@@ -55,8 +58,10 @@ public abstract class BottomToolbarMode extends NavigateMode {
     }
 
     public void hideBottomBar() {
-        if(!isShown()) return;
+        if(!isShown() || animating) return;
         shown = false;
+        animating = true;
+        
         Log.debug.log(TAG, "Hiding Bottom actions");
         
         RelativeLayout group = getExplorer()
@@ -87,6 +92,8 @@ public abstract class BottomToolbarMode extends NavigateMode {
             group.setY(initialY);
             group.removeAllViews();
             group.setVisibility(View.GONE);
+            
+            animating = false;
         }
         
     }
@@ -108,6 +115,14 @@ public abstract class BottomToolbarMode extends NavigateMode {
             animator.addUpdateListener((vAnimator) -> {
                 Log.debug.log(TAG, "Showing animation : " + vAnimator.getAnimatedValue());
                 group.setY((float) vAnimator.getAnimatedValue());
+            });
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    super.onAnimationEnd(animator);
+                     
+                    animating = false;            
+                }        
             });
             animator.start();
             group.getViewTreeObserver().removeOnGlobalLayoutListener(this);

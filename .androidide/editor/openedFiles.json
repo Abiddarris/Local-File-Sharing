@@ -19,14 +19,29 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/BottomToolbarMode.java",
       "selection": {
         "end": {
-          "column": 79,
-          "index": 1769,
-          "line": 64
+          "column": 10,
+          "index": 1341,
+          "line": 52
         },
         "start": {
-          "column": 79,
-          "index": 1769,
-          "line": 64
+          "column": 10,
+          "index": 1341,
+          "line": 52
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/drawable/ic_home.xml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     }
