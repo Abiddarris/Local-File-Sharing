@@ -44,7 +44,52 @@
           "line": 0
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/themes.xml",
+      "selection": {
+        "end": {
+          "column": 12,
+          "index": 1875,
+          "line": 41
+        },
+        "start": {
+          "column": 15,
+          "index": 1520,
+          "line": 35
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_select_mode.xml",
+      "selection": {
+        "end": {
+          "column": 19,
+          "index": 339,
+          "line": 9
+        },
+        "start": {
+          "column": 5,
+          "index": 325,
+          "line": 9
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/dimens.xml",
+      "selection": {
+        "end": {
+          "column": 12,
+          "index": 578,
+          "line": 11
+        },
+        "start": {
+          "column": 12,
+          "index": 578,
+          "line": 11
+        }
+      }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/BottomToolbarMode.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/dimens.xml"
 }
