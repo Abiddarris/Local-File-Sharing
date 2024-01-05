@@ -66,8 +66,13 @@ public abstract class ExplorerFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        // binding.toolbar.setTitle(requireArguments().getString(TITLE,));
+        Bundle args = getArguments();
+        if(args != null) {
+            getActivity()
+            .setTitle(args.getString(TITLE, getString(R.string.app_name)));
 
+        }
+        
         explorer = new Explorer(this, binding, binding.refreshlayout);
         for(OnExplorerCreatedListener listener : explorerCreatedListener) {
             listener.onExplorerCreated(this, explorer);
