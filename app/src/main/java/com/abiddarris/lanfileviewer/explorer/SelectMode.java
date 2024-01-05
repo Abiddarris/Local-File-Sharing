@@ -92,8 +92,6 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
         Context context = getExplorer().getContext();
         AppCompatActivity compat = (AppCompatActivity)context;
         compat.startSupportActionMode(this);
-        
-        super.onModeSelected();
     }
     
     @Override
@@ -169,8 +167,10 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
         }
         
         if(checked.size() == 0) {
+            hideBottomBar();
             selectAll.setText(" Select item");
         } else {
+            showBottomBar();
             selectAll.setText(checked.size() + " selected");
         }
     }
