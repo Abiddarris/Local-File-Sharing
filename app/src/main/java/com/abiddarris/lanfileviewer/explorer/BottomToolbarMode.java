@@ -62,7 +62,7 @@ public abstract class BottomToolbarMode extends NavigateMode {
         RelativeLayout group = getExplorer()
             .getUI().bottomAction;
         
-        ValueAnimator animator = ValueAnimator.ofFloat(group.getY(), initialY);
+        ValueAnimator animator = ValueAnimator.ofFloat(group.getY(), initialY + group.getHeight());
         animator.setDuration(500);
         animator.addUpdateListener((vAnimator) -> {
             Log.debug.log(TAG, "Hide animation : " + vAnimator.getAnimatedValue());
