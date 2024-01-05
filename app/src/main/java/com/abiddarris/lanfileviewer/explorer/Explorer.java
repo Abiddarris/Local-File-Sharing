@@ -17,7 +17,7 @@ import java.util.List;
 public class Explorer {
 
     Mode navigateMode;
-    ModifyMode selectMode;
+    SelectMode selectMode;
 
     private ExplorerFragment fragment;
     private FileSorter sorter = FileSorter.createSorter(FileSorter.NAME | FileSorter.ASCENDING);
@@ -39,7 +39,7 @@ public class Explorer {
         this.refresher = refresher;
 
         navigateMode = fragment.getMainMode(this);
-        selectMode = fragment.getModifyMode(this);
+        selectMode = fragment.getSelectMode(this);
         adapter = new FileAdapter(this);
         
         setMode(navigateMode);

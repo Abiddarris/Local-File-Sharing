@@ -136,8 +136,8 @@ public abstract class ExplorerFragment extends Fragment {
        return new NavigateMode(explorer);
     }
 
-    public ModifyMode getModifyMode(Explorer explorer) {
-        return new ModifyMode(explorer);
+    public SelectMode getSelectMode(Explorer explorer) {
+        return new SelectMode(explorer);
     }
 
     public final FileSource getSource() {

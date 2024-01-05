@@ -33,15 +33,14 @@ public abstract class BottomToolbarMode extends NavigateMode {
     }
     
 
-    public abstract void onModifyOptionsCreated(RelativeLayout group);
+    public abstract void onBottomToolbarShown(RelativeLayout group);
 
     public void showBottomBar() {
         Log.debug.log(TAG, "Showing Bottom actions");
         RelativeLayout group = getExplorer().getUI().bottomAction;
         group.removeAllViews();
         
-        onModifyOptionsCreated(group);
-
+        onBottomToolbarShown(group);
         group.setVisibility(View.VISIBLE);
         group.getViewTreeObserver()
                 .addOnGlobalLayoutListener(

@@ -84,4 +84,5 @@
     <string name="notification_channel_description">Main notification channel</string>
     <string name="notification_title">Background service</string>
     <string name="notification_description">Sharing files locally...</string>
+    <string name="others">Others</string>
 </resources>

@@ -36,9 +36,8 @@ public class SelectorExplorerFragment extends ExplorerFragment {
         return new MainMode(explorer);
     }
     
-    
     @Override
-    public ModifyMode getModifyMode(Explorer explorer) {
+    public SelectMode getSelectMode(Explorer explorer) {
         return new GetFileMode(explorer);
     }
     
@@ -76,14 +75,14 @@ public class SelectorExplorerFragment extends ExplorerFragment {
         }    
     }
     
-    private class GetFileMode extends ModifyMode {
+    private class GetFileMode extends SelectMode {
     
         public GetFileMode(Explorer explorer) {
             super(explorer);
         }
     
         @Override
-        public void onModifyOptionsCreated(RelativeLayout group) {
+        public void onBottomToolbarShown(RelativeLayout group) {
             LayoutInflater inflater = LayoutInflater.from(
                 getExplorer().getContext());
           

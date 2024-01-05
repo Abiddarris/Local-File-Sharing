@@ -27,7 +27,7 @@ public class CopyMode extends BottomToolbarMode {
     }
 
     @Override
-    public void onModifyOptionsCreated(RelativeLayout group) {
+    public void onBottomToolbarShown(RelativeLayout group) {
         LayoutInflater inflater = LayoutInflater.from(getExplorer().getContext());
         LayoutCopyMoveBinding binding = LayoutCopyMoveBinding.inflate(inflater);
         

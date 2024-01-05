@@ -26,5 +26,23 @@
         <item name="android:paddingTop">@dimen/abc_dialog_padding_top_material</item>
   </style>
     
+  <style name="ImageStyle" parent="AppTheme">
+    <item name="android:id">@+id/image</item>
+    <item name="android:layout_centerHorizontal">true</item>   
+    <item name="android:layout_marginTop">3dp</item>
+    <item name="android:scaleType">fitCenter</item>
+  </style>   
+    
+  <style name="TextStyle" parent="AppTheme">
+    <item name="android:layout_marginBottom">10dp</item>  
+    <item name="android:layout_marginTop">10dp</item>    
+    <item name="android:layout_below">@id/image</item>
+    <item name="android:layout_centerHorizontal">true</item>
+    <item name="android:textSize">@dimen/explorer_action_button_text_size</item>
+  </style>  
+    
+  <style name="SelectActionLayout" parent="AppTheme"> 
+    <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+ </style>
   <style name="AppTheme" parent="Base.AppTheme" />
 </resources>

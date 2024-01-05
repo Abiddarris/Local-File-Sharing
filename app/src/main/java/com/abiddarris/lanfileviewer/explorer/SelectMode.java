@@ -16,13 +16,14 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionDialog;
 import com.abiddarris.lanfileviewer.actions.runnables.DownloadRunnable;
-import com.abiddarris.lanfileviewer.databinding.LayoutModifyBinding;
 import com.abiddarris.lanfileviewer.databinding.LayoutSelectBinding;
+import com.abiddarris.lanfileviewer.databinding.LayoutSelectModeBinding;
 import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
@@ -36,24 +37,34 @@ import java.util.List;
 import java.util.Set;
 import kotlin.jvm.internal.Lambda;
 
-public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback {
+public class SelectMode extends BottomToolbarMode implements ActionMode.Callback {
     
     private ActionMode view;
     private ActivityResultLauncher<Void> launcher;
     private boolean hide = true;
     private boolean programaticlyEvent;
     private CopyMode copyMode;
+    private LayoutSelectModeBinding binding;
     private Menu menu;
     private MoveMode moveMode;
     private Set<File> checked = new HashSet<>();
     private LayoutSelectBinding actionModeLayout;
     
-    public static final String TAG = Log.getTag(ModifyMode.class);
+    public static final String TAG = Log.getTag(SelectMode.class);
     
-    public ModifyMode(Explorer explorer) {
+    public SelectMode(Explorer explorer) {
         super(explorer);
         
         FileSource source = FileSource.getDefaultLocalSource(explorer.getContext());
+        View toolbar = LayoutInflater.from(getExplorer().getContext())
+            .inflate(R.layout.layout_select_mode, null);
+        
+        binding = LayoutSelectModeBinding.bind(toolbar);
+        binding.copy.setOnClickListener((v) -> copy());
+        binding.move.setOnClickListener((v) -> move());
+        binding.download.setOnClickListener((v) -> download());
+        binding.delete.setOnClickListener((v) -> delete());
+        binding.others.setOnClickListener((v) -> showPopupMenu());
         
         launcher = explorer.getFragment()
             .registerForActivityResult(new LocalFolderSelectorActivity.FileContract(source),
@@ -99,11 +110,11 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
             File f = adapter.get(pos);
             if(b) {
                 checked.add(f);   
-                updateActionModeView();    
+                onFileStateChanged();    
                 return;     
             } 
             checked.remove(f);
-            updateActionModeView();
+            onFileStateChanged();
         });
     }
     
@@ -115,7 +126,6 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
     
     @Override
     public void onItemLongClickListener(ViewHolder holder, int pos) {
-        // TODO: Implement this method
     }
     
     @Override
@@ -138,7 +148,10 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
     }
     
     public void select(int pos) {
-    	File file = getExplorer().getAdapter().get(pos);
+    	File file = getExplorer()
+            .getAdapter()
+            .get(pos);
+        
         checked.add(file);
     }
     
@@ -146,12 +159,7 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
         return checked.toArray(new File[0]);
     }
     
-    private void updateActionModeView() {
-        if(this.menu != null) {
-            MenuItem menu = this.menu.findItem(R.id.rename);
-            menu.setVisible(!(checked.size() > 1));
-        }
-        
+    private void onFileStateChanged() {
         CheckBox selectAll = actionModeLayout.selectAll;
         
         boolean check = checked.size() == getExplorer().getAdapter().getItemCount();
@@ -184,7 +192,7 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
             FileAdapter adapter = getExplorer().getAdapter();    
             if(!b) {
                 checked.clear();
-                updateActionModeView();
+                onFileStateChanged();
                 adapter.notifyDataSetChanged();    
                 return;    
             }
@@ -192,11 +200,12 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
             for(int i = 0; i < adapter.getItemCount(); i++) {
             	checked.add(adapter.get(i));
             }
-            updateActionModeView();
+            onFileStateChanged();
             adapter.notifyDataSetChanged();
         });
         
         this.view.setCustomView(view);
+        onFileStateChanged();
         
         return true;
     }
@@ -206,14 +215,12 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
         return false;
     }
-    
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem menu) {
         return false;
     }
     
-
     @Override
     public void onDestroyActionMode(ActionMode mode) {
         if(getExplorer().getMode() == this) {
@@ -222,24 +229,45 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
     }
     
     @Override
-    public void onModifyOptionsCreated(RelativeLayout group) {
-        View view = LayoutInflater.from(getExplorer().getContext())
-            .inflate(R.layout.layout_modify, null);
+    public void onBottomToolbarShown(RelativeLayout group) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams
             (RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        group.addView(view, params);
+        group.addView(binding.getRoot(), params);
+    }
+    
+    private void copy() {
+        setCopyMode(copyMode);
+    }
+    
+    private void move() {
+        setCopyMode(moveMode);
+    }
+    
+    private void download() {
+        launcher.launch(null);
+    }
+    
+    private void delete() {
+        new DeleteConfirmationDialog(getExplorer(), checked.toArray(new File[0]))
+                    .show(getExplorer().getFragment().getParentFragmentManager(), null);
+    }
+    
+    private void showPopupMenu() {
+        PopupMenu popup = new PopupMenu(getExplorer().getContext(), binding.others);
+        popup.getMenuInflater()
+            .inflate(R.menu.explorer_action, popup.getMenu());
+        popup.setOnMenuItemClickListener((item) -> onPopupMenuClicked(item));
+        popup.setOnDismissListener((p) -> menu = null);
         
-        LayoutModifyBinding binding = LayoutModifyBinding.bind(view);
-        binding.actions.setOnMenuItemClickListener(item -> onActionClick(item));
+        MenuItem menu = popup.getMenu()
+            .findItem(R.id.rename);
+        menu.setVisible(!(checked.size() > 1));
         
-        menu = binding.actions.getMenu();
+        popup.show();
     }
 
-    private boolean onActionClick(MenuItem item) {
+    private boolean onPopupMenuClicked(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.copy : 
-                setCopyMode(copyMode);
-                break;
             case R.id.rename :
                 File target = checked.toArray(new File[0])[0];
                 new RenameDialog(getExplorer(), target)
@@ -249,15 +277,6 @@ public class ModifyMode extends BottomToolbarMode implements ActionMode.Callback
                 new DetailDialog(checked.toArray(new File[0]))
                       .show(getExplorer().getFragment().getParentFragmentManager(), null);
                 break;
-            case R.id.download :
-                launcher.launch(null);
-                break;
-            case R.id.delete :
-                new DeleteConfirmationDialog(getExplorer(), checked.toArray(new File[0]))
-                    .show(getExplorer().getFragment().getParentFragmentManager(), null);
-                break;
-            case R.id.move :
-                setCopyMode(moveMode);
         }
         return false;
     }
