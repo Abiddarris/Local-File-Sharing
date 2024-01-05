@@ -128,6 +128,10 @@ public abstract class ExplorerFragment extends Fragment {
             case R.id.sort_by :
                 new SortByDialog()
                     .show(getParentFragmentManager(), null);
+                break;
+            case R.id.edit :
+                getExplorer()
+                    .setMode(getExplorer().selectMode);
         }
         
         return super.onOptionsItemSelected(item);
