@@ -8,12 +8,13 @@ import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.actions.runnables.CopyRunnable;
 import com.abiddarris.lanfileviewer.databinding.LayoutCopyMoveBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 
 public class CopyMode extends BottomToolbarMode {
 
-    private Set<File> items;
+    private File[] items;
 
     public CopyMode(Explorer explorer) {
         super(explorer);
@@ -31,10 +32,11 @@ public class CopyMode extends BottomToolbarMode {
         LayoutInflater inflater = LayoutInflater.from(getExplorer().getContext());
         LayoutCopyMoveBinding binding = LayoutCopyMoveBinding.inflate(inflater);
         
-        String totalItemsText = String.format(
-            getExplorer().getContext().getString(R.string.item_format), items.size());
-        if(items.size() > 1) totalItemsText += "s";
-      
+        String totalItemsText = Files.formatFromItems(
+            getExplorer().getContext(),
+            items
+        );
+        
         binding.totalItems.setText(totalItemsText);
         binding.cancel.setOnClickListener((v) -> dismissMode());
         binding.action.setText(
@@ -50,7 +52,7 @@ public class CopyMode extends BottomToolbarMode {
         group.addView(binding.getRoot());
     }
     
-    protected ActionRunnable getRunnable(Set<File> items, File dest) {
+    protected ActionRunnable getRunnable(File[] items, File dest) {
         return new CopyRunnable(dest, items); 
     }
     
@@ -62,11 +64,7 @@ public class CopyMode extends BottomToolbarMode {
         getExplorer().setMode(getExplorer().navigateMode);
     }
 
-    public Set<File> getItems() {
-        return this.items;
-    }
-
-    public void setItems(Set<File> items) {
+    public void setItems(File[] items) {
         this.items = items;
     }
 }

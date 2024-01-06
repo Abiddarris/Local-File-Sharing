@@ -285,8 +285,7 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
     private void setCopyMode(CopyMode mode) {
         hide = false;
             
-        Set<File> items = new HashSet<>(checked);
-        mode.setItems(items);
+        mode.setItems(checked.toArray(new File[0]));
         getExplorer().setMode(mode);
     }
 }

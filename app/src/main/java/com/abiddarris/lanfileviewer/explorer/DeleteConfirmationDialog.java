@@ -26,20 +26,7 @@ public class DeleteConfirmationDialog extends DialogFragment {
     
     @Override
     public Dialog onCreateDialog(Bundle bundle) {
-        int fileCount = Files.getFilesCount(items);
-        int folderCount = Files.getDirectoriesCount(items);
-        
-        int messageId;
-        if(folderCount != 0 && fileCount != 0) {
-            messageId = R.string.item_format;
-        } else if(folderCount != 0) {
-            messageId = folderCount == 1 ? R.string.one_folder_format : R.string.plural_folder_format;
-        } else {
-            messageId = fileCount == 1 ? R.string.one_file_format : R.string.plural_files_format;
-        }
-        
-        String message = String.format(getString(messageId), items.length);
-        
+        String message = Files.formatFromItems(requireContext(), items);
         AlertDialog dialog = new MaterialAlertDialogBuilder(getContext())
             .setMessage(getString(R.string.delete) + " " + message + '?')
             .setNeutralButton(R.string.cancel, (d, type) -> {})

@@ -19,10 +19,10 @@ public class CopyRunnable extends ActionRunnable {
     
     public static final String TAG = Log.getTag(CopyRunnable.class);
 
-    public CopyRunnable(File dest, Set<File> items) {
+    public CopyRunnable(File dest, File[] items) {
         this.source = dest.getSource();
         this.dest = dest;
-        this.items = items.toArray(new File[0]);
+        this.items = items;
     }
     
     @Override

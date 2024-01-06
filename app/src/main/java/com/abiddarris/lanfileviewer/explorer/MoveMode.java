@@ -18,8 +18,8 @@ public class MoveMode extends CopyMode {
     }
     
     @Override
-    protected ActionRunnable getRunnable(Set<File> items, File dest) {
-        return new MoveRunnable(items.toArray(new File[0]), dest);
+    protected ActionRunnable getRunnable(File[] items, File dest) {
+        return new MoveRunnable(items, dest);
     }
     
 }
