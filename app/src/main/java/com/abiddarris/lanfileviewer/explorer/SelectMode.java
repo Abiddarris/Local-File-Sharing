@@ -171,9 +171,10 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
             hideBottomBar();
             selectAll.setText(" Select item");
         } else {
-            showBottomBar();
+            if(!isShown()) showBottomBar();
             selectAll.setText(checked.size() + " selected");
         }
+        
     }
     
 

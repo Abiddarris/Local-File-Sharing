@@ -7,6 +7,8 @@ import android.animation.ValueAnimator;
 import android.animation.AnimatorListenerAdapter;
 import com.gretta.util.log.Log;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BottomToolbarMode extends NavigateMode {
 
@@ -15,6 +17,7 @@ public abstract class BottomToolbarMode extends NavigateMode {
     private boolean shown;
     private boolean animating;
     private float initialY;
+    private List<State> lostStates = new ArrayList<>();
     
     public BottomToolbarMode(Explorer explorer) {
         super(explorer);
@@ -41,7 +44,10 @@ public abstract class BottomToolbarMode extends NavigateMode {
     public abstract void onBottomToolbarShown(RelativeLayout group);
 
     public void showBottomBar() {
-        if(isShown() || animating) return;
+        if(isShown() || animating) {
+            addLostState(State.SHOWN);
+            return;
+        }
         shown = true;
         animating = true;
         
@@ -62,7 +68,10 @@ public abstract class BottomToolbarMode extends NavigateMode {
     }
 
     public void hideBottomBar(boolean withAnimation) {
-        if(!isShown() || animating) return;
+        if(!isShown() || animating) {
+            addLostState(State.HIDDEN);
+            return;
+        }
         
         Log.debug.log(TAG, "Hiding Bottom actions");
         
@@ -88,7 +97,39 @@ public abstract class BottomToolbarMode extends NavigateMode {
         animator.addListener(listener);
         animator.start();
     }
+    
+    private void addLostState(State state) {
+        synchronized(lostStates) {
+            lostStates.add(state);
+            Log.debug.log(TAG, "Lost state " + state);
+        }
+    }
 
+    private void onAnimationEnd() {
+        synchronized(lostStates) {
+            Log.debug.log(TAG, "Checking lost state");
+            if(lostStates.size() == 0) {
+                Log.debug.log(TAG, "Nothing lost");
+                return;
+            }
+        
+            State state = lostStates.get(lostStates.size() - 1);
+            Log.debug.log(TAG, "getting lost state " + state);
+        
+            lostStates.clear();
+            Log.debug.log(TAG, "clearing lost states");
+            switch(state) {
+                case SHOWN :
+                    if(!isShown())
+                        showBottomBar();
+                    break;
+                case HIDDEN :
+                    if(isShown())
+                        hideBottomBar();
+            }
+        }
+    }
+    
     private class AnimationEndListener extends AnimatorListenerAdapter {
        
         private RelativeLayout group;
@@ -106,6 +147,8 @@ public abstract class BottomToolbarMode extends NavigateMode {
             group.setVisibility(View.GONE);
             
             animating = false;
+            
+            BottomToolbarMode.this.onAnimationEnd();
         }
         
     }
@@ -133,11 +176,16 @@ public abstract class BottomToolbarMode extends NavigateMode {
                 public void onAnimationEnd(Animator animator) {
                     super.onAnimationEnd(animator);
                      
-                    animating = false;            
+                    animating = false; 
+                   
+                    BottomToolbarMode.this.onAnimationEnd();  
                 }        
             });
             animator.start();
             group.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }
+    }
+    private enum State {
+        SHOWN,HIDDEN
     }
 }
