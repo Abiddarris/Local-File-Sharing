@@ -71,6 +71,7 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
             new ActivityResultCallback<File>() {
                 @Override
                 public void onActivityResult(File file) {
+                    if(file == null) return;
                     Log.debug.log(TAG, file.getPath());
                     
                     File[] items = checked.toArray(new File[0]);
