@@ -24,6 +24,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     private LayoutInflater inflater;
     private String[] paths = new String[0];
+    private RecyclerView recyclerView;
     
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup group, int type) {
@@ -35,7 +36,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
         holder.name.setText(paths[index]);
         holder.name.setBackgroundColor(
                 ContextCompat.getColor(context, android.R.color.transparent));
-
+        
         if (index == paths.length - 1)
             holder.name.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
         else holder.name.setTextColor(Color.WHITE);
@@ -57,6 +58,20 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     public int getItemCount() {
         return paths.length;
     }
+    
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView view) {
+        super.onAttachedToRecyclerView(view);
+        
+        recyclerView = view;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView view) {
+        recyclerView = null;
+        
+        super.onDetachedFromRecyclerView(view);
+    }
 
     public void setExplorer(Explorer explorer) {
         this.explorer = explorer;
@@ -70,6 +85,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
 
             handler.post((c) -> {
                 notifyDataSetChanged();
+                handler.post((c1) -> recyclerView.smoothScrollToPosition(getItemCount() - 1));     
             });
         });
     }
@@ -86,6 +102,16 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     public void setPaths(String[] paths) {
         this.paths = paths;
     }
+    
+    public Context getContext() {
+        return this.context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+
+        inflater = LayoutInflater.from(context);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -98,13 +124,4 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
         }
     }
 
-    public Context getContext() {
-        return this.context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
-
-        inflater = LayoutInflater.from(context);
-    }
 }
