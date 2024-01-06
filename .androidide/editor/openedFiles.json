@@ -109,17 +109,32 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/SelectMode.java",
       "selection": {
         "end": {
-          "column": 48,
-          "index": 9761,
-          "line": 287
+          "column": 33,
+          "index": 7808,
+          "line": 229
         },
         "start": {
-          "column": 48,
-          "index": 9761,
-          "line": 287
+          "column": 33,
+          "index": 7808,
+          "line": 229
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/BottomToolbarMode.java",
+      "selection": {
+        "end": {
+          "column": 32,
+          "index": 2250,
+          "line": 82
+        },
+        "start": {
+          "column": 32,
+          "index": 2250,
+          "line": 82
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/CopyMode.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/BottomToolbarMode.java"
 }

@@ -226,6 +226,8 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
     public void onDestroyActionMode(ActionMode mode) {
         if(getExplorer().getMode() == this) {
             getExplorer().setMode(getExplorer().navigateMode);
+        } else {
+            hideBottomBar(false);
         }
     }
     
