@@ -29,7 +29,37 @@
           "line": 73
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/dimens.xml",
+      "selection": {
+        "end": {
+          "column": 50,
+          "index": 366,
+          "line": 7
+        },
+        "start": {
+          "column": 50,
+          "index": 366,
+          "line": 7
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFileSource.java",
+      "selection": {
+        "end": {
+          "column": 4,
+          "index": 2532,
+          "line": 70
+        },
+        "start": {
+          "column": 3,
+          "index": 2531,
+          "line": 70
+        }
+      }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/SelectMode.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/dimens.xml"
 }
