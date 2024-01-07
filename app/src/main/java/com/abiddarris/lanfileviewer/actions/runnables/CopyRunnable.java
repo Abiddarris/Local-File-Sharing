@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
+import android.content.Context;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.FileSource;
@@ -27,8 +28,12 @@ public class CopyRunnable extends ActionRunnable {
     
     @Override
     public String getTitle() {
-        String title = getDialog().getString(R.string.copy_dialog_title);
-        return String.format(title, items.length);
+        Context context = getDialog()
+            .getContext();
+        
+        String copy = context.getString(R.string.copying);
+        String formattedItems = Files.formatFromItems(context, items);
+        return String.format("%s %s", copy, formattedItems);
     }
     
 

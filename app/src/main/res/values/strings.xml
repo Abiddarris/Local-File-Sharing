@@ -63,7 +63,6 @@
     <string name="request_sd_card_permission_message">This application cannot write to a sd card. Please select SD Card folder to grant write access!</string>
     <string name="move_to_here">Move to here</string>
     <string name="item_format">%s items</string>
-    <string name="copy_dialog_title">Copying %s items</string>
     <string name="rename_folder">Rename folder</string>
     <string name="rename_file">Rename file</string>
     <string name="fail_rename_file_message">Fail to rename the file</string>
@@ -85,4 +84,5 @@
     <string name="notification_title">Background service</string>
     <string name="notification_description">Sharing files locally...</string>
     <string name="others">Others</string>
+    <string name="copying">Copying</string>
 </resources>
