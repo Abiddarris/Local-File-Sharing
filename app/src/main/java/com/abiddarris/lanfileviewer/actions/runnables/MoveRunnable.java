@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
+import android.content.Context;
+import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
@@ -19,6 +21,16 @@ public class MoveRunnable extends ActionRunnable {
         this.items = items;
         this.dest = dest;
         this.source = dest.getSource();
+    }
+    
+    @Override
+    public String getTitle() {
+        Context context = getDialog()
+            .getContext();
+        
+        String copy = context.getString(R.string.moving);
+        String formattedItems = Files.formatFromItems(context, items);
+        return String.format("%s %s", copy, formattedItems);
     }
 
     @Override

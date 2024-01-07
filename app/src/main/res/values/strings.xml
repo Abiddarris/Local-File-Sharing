@@ -85,4 +85,5 @@
     <string name="notification_description">Sharing files locally...</string>
     <string name="others">Others</string>
     <string name="copying">Copying</string>
+    <string name="moving">Moving</string>
 </resources>
