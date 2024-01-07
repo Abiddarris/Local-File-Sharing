@@ -76,7 +76,7 @@
     <string name="one_folder_format">%s folder</string>
     <string name="plural_folder_format">%s folders</string>
     <string name="save_to">Save to</string>
-    <string name="download_dialog_title">Downloading %s items</string>
+    <string name="downloading">Downloading</string>
     <string name="deleting">Deleting</string>
     <string name="copy_to_here">Copy to here</string>
     <string name="notification_channel_title">Main notification</string>

@@ -19,14 +19,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/DownloadRunnable.java",
       "selection": {
         "end": {
-          "column": 0,
-          "index": 0,
-          "line": 0
+          "column": 15,
+          "index": 945,
+          "line": 30
         },
         "start": {
-          "column": 0,
-          "index": 0,
-          "line": 0
+          "column": 15,
+          "index": 945,
+          "line": 30
         }
       }
     },
@@ -34,14 +34,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/MoveRunnable.java",
       "selection": {
         "end": {
-          "column": 8,
-          "index": 883,
-          "line": 29
+          "column": 0,
+          "index": 1865,
+          "line": 60
         },
         "start": {
-          "column": 8,
-          "index": 883,
-          "line": 29
+          "column": 0,
+          "index": 1865,
+          "line": 60
         }
       }
     },
@@ -109,17 +109,17 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/strings.xml",
       "selection": {
         "end": {
-          "column": 41,
-          "index": 4680,
-          "line": 87
+          "column": 42,
+          "index": 4120,
+          "line": 78
         },
         "start": {
-          "column": 41,
-          "index": 4680,
-          "line": 87
+          "column": 42,
+          "index": 4120,
+          "line": 78
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/MoveRunnable.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/DownloadRunnable.java"
 }
