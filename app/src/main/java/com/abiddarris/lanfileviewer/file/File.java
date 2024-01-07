@@ -65,7 +65,7 @@ public interface File {
         private volatile boolean completed;
         private volatile boolean cancel;
         private volatile Exception e;
-        private volatile long size;
+        private volatile long size = -1;
         private volatile long currentProgress;
 
         public Progress() {}
@@ -83,6 +83,9 @@ public interface File {
         }
 
         public long getSize() {
+            while(size == - 1) {
+                if(Thread.currentThread().isInterrupted()) break;
+            }
             return this.size;
         }
 

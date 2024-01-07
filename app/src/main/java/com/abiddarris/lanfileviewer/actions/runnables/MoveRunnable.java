@@ -68,7 +68,7 @@ public class MoveRunnable extends ActionRunnable {
     
     private void moveFile(File originalFile, File destFile) {
         File.Progress progress = originalFile.move(destFile);
-        setMaxProgress(originalFile.length());
+        setMaxProgress(progress.getSize());
         
         while(!progress.isCompleted()) {
             if(Thread.currentThread().isInterrupted()) {

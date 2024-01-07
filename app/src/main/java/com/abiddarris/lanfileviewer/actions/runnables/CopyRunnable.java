@@ -74,7 +74,7 @@ public class CopyRunnable extends ActionRunnable {
 
     private void copyFile(File originalFile, File destFile) {
         File.Progress progress = originalFile.copy(destFile);
-        setMaxProgress(originalFile.length());
+        setMaxProgress(progress.getSize());
         
         Log.debug.log(getTag(), "original file " + originalFile.length());
         Log.debug.log(getTag(), "progress max " + progress.getSize());
