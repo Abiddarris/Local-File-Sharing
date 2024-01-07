@@ -89,7 +89,6 @@ public class MoveRunnable extends ActionRunnable {
 
     private void moveDirectory(File file) {
         setMaxProgress(1);
-        updateProgress(0);
 
         boolean success = file.makeDirs();
         

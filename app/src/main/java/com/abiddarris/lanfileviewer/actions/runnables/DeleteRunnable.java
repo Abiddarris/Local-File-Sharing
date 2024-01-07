@@ -51,7 +51,6 @@ public class DeleteRunnable extends ActionRunnable {
             index++;
             
             setMaxProgress(1);
-            updateProgress(0);
             
             boolean success = file.delete();
             if(!success) {
@@ -76,7 +75,6 @@ public class DeleteRunnable extends ActionRunnable {
             index++;
             
             setMaxProgress(1);
-            updateProgress(0);
             
             boolean success = file.delete();
             if(!success) {

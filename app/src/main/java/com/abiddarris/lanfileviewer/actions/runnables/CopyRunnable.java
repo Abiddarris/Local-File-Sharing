@@ -75,7 +75,6 @@ public class CopyRunnable extends ActionRunnable {
     private void copyFile(File originalFile, File destFile) {
         File.Progress progress = originalFile.copy(destFile);
         setMaxProgress(progress.getSize());
-        updateProgress(0);
         
         while(!progress.isCompleted()) {
             if(Thread.currentThread().isInterrupted()) {
@@ -94,8 +93,7 @@ public class CopyRunnable extends ActionRunnable {
 
     private void copyDirectory(File file) {
         setMaxProgress(1);
-        updateProgress(0);
-
+        
         boolean success = file.makeDirs();
         
         updateProgress(1);

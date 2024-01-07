@@ -1,6 +1,7 @@
 package com.abiddarris.lanfileviewer.utils;
 
 import android.os.Handler;
+import android.os.Message;
 
 public class HandlerLogSupport {
 
@@ -10,7 +11,15 @@ public class HandlerLogSupport {
         this.handler = handler;
     }
 
-    public void post(RunnableInterface runnable) {
-        handler.post(new BaseRunnable(runnable));
+    public boolean post(RunnableInterface runnable) {
+        return handler.post(new BaseRunnable(runnable));
+    }
+    
+    public Message obtainMessage() {
+        return handler.obtainMessage();
+    }
+    
+    public boolean sendMessage(Message message) {
+    	return handler.sendMessage(message);
     }
 }

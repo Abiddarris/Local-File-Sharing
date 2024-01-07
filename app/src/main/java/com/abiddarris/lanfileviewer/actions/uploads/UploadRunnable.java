@@ -81,7 +81,6 @@ public class UploadRunnable extends ActionRunnable {
 
     private void uploadFile(File src, File dest) throws IOException {
         setMaxProgress(src.length());
-        updateProgress(0);
         
         NetworkOutputStream networkStream = (NetworkOutputStream) dest.newOutputStream();
         networkStream.setMimeType(src.getMimeType());
@@ -115,7 +114,6 @@ public class UploadRunnable extends ActionRunnable {
 
     private void uploadDirectory(File file) {
         setMaxProgress(1);
-        updateProgress(0);
 
         boolean success = file.makeDirs();
         

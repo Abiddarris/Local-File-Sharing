@@ -73,7 +73,6 @@ public class DownloadRunnable extends ActionRunnable {
     
     public void downloadDirectory(File file) {
     	setMaxProgress(1);
-        updateProgress(0);
         
         file.makeDirs();
         
@@ -82,8 +81,7 @@ public class DownloadRunnable extends ActionRunnable {
     
     public void downloadFile(File originalFile, File dest) throws IOException {
     	setMaxProgress(originalFile.length());
-        updateProgress(0);
-       
+        
         BufferedInputStream is = new BufferedInputStream(originalFile.newInputStream());
         BufferedOutputStream os = new BufferedOutputStream(dest.newOutputStream());
         byte[] buf = new byte[8 * 1024];
