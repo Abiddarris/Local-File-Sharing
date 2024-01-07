@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.actions.uploads;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import com.abiddarris.lanfileviewer.R;
@@ -36,9 +37,12 @@ public class UploadRunnable extends ActionRunnable {
     
     @Override
     public String getTitle() {
-        ActionDialog dialog = getDialog();
-        return String.format(
-            dialog.getString(R.string.upload_dialog_title), items.length);
+        Context context = getDialog()
+            .getContext();
+        
+        String copy = context.getString(R.string.uploading);
+        String formattedItems = Files.formatFromItems(context, items);
+        return String.format("%s %s", copy, formattedItems);
     }
 
     @Override

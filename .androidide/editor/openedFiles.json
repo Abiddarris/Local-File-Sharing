@@ -109,17 +109,32 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/strings.xml",
       "selection": {
         "end": {
-          "column": 42,
-          "index": 4120,
-          "line": 78
+          "column": 38,
+          "index": 1706,
+          "line": 38
         },
         "start": {
-          "column": 42,
-          "index": 4120,
-          "line": 78
+          "column": 38,
+          "index": 1706,
+          "line": 38
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/uploads/UploadRunnable.java",
+      "selection": {
+        "end": {
+          "column": 15,
+          "index": 1349,
+          "line": 39
+        },
+        "start": {
+          "column": 15,
+          "index": 1349,
+          "line": 39
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/DownloadRunnable.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/uploads/UploadRunnable.java"
 }
