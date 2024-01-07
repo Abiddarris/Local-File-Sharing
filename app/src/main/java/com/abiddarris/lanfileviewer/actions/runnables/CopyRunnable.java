@@ -74,7 +74,10 @@ public class CopyRunnable extends ActionRunnable {
 
     private void copyFile(File originalFile, File destFile) {
         File.Progress progress = originalFile.copy(destFile);
-        setMaxProgress(progress.getSize());
+        setMaxProgress(originalFile.length());
+        
+        Log.debug.log(getTag(), "original file " + originalFile.length());
+        Log.debug.log(getTag(), "progress max " + progress.getSize());
         
         while(!progress.isCompleted()) {
             if(Thread.currentThread().isInterrupted()) {
@@ -84,6 +87,7 @@ public class CopyRunnable extends ActionRunnable {
             Log.debug.log(TAG, progress.getCurrentProgress());
             updateProgress(progress.getCurrentProgress());
         }
+        Log.debug.log(TAG, progress.getCurrentProgress());
         updateProgress(progress.getCurrentProgress());
         
         if(progress.getException() == null) return;

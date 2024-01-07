@@ -9,6 +9,7 @@ import com.abiddarris.lanfileviewer.databinding.DialogActionProgressBinding;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
+import com.gretta.util.log.Log;
 
 public abstract class ActionRunnable extends BaseRunnable implements Handler.Callback {
 
@@ -52,20 +53,33 @@ public abstract class ActionRunnable extends BaseRunnable implements Handler.Cal
             
                 getView().name.setText(name);
                 getView().progress.setText((index) + "/" + totalFiles);
+            
+                Log.debug.log(getTag(), "updating file info with var name : " + name + ", index : " + index + ", totalFiles" + totalFiles);
                 break;
             case UPDATE_MAX_PROGRESS :
                 data = message.getData();
                 long maxProgress = data.getLong(KEY_MAX_PROGRESS);
                 getView().progressIndicator.setMax((int) maxProgress);
                 getView().progressIndicator.setProgress(0);
+            
+                Log.debug.log(getTag(), "setting max progress : " + maxProgress);
                 break;
             case UPDATE_PROGRESS :
                 data = message.getData();
+                
                 long progress = data.getLong(KEY_PROGRESS);
-                int percentage = data.getInt(KEY_PERCENTAGE);
+                int max = getView().progressIndicator.getMax();
+                double oldProgress = getView().progressIndicator.getProgress();
+                double oldPercentage = Math.floor(oldProgress / max * 100);
+        
+                int percentage = (int)Math.floor((double)progress / max * 100);
+                Log.debug.log(getTag(), "try to update progress with max : " + max + ", oldProgress : " + oldProgress + ", old percentage : " + oldPercentage + ", percentage : " + percentage);
+                if(percentage > oldPercentage) {
+                    getView().progressIndicator.setProgress((int) progress);
+                    getView().progressPercent.setText(percentage + "%");
             
-                getView().progressIndicator.setProgress((int) progress);
-                getView().progressPercent.setText(percentage + "%");
+                    Log.debug.log(getTag(), "updating progress progress : " + progress + ", percentage : " + percentage);
+                }
         }
         return true;
     }
@@ -96,22 +110,13 @@ public abstract class ActionRunnable extends BaseRunnable implements Handler.Cal
     }
 
     protected void updateProgress(long progress) {
-        int max = getView().progressIndicator.getMax();
-        double oldProgress = getView().progressIndicator.getProgress();
-        double oldPercentage = Math.floor(oldProgress / max * 100);
+        Message message = handler.obtainMessage();
         
-        int percentage = (int)Math.floor((double)progress / max * 100);
-        if(percentage > oldPercentage) {
-            Bundle bundle = new Bundle();
-            bundle.putLong(KEY_PROGRESS, progress);
-            bundle.putInt(KEY_PERCENTAGE, percentage);
+        Bundle bundle = message.getData();
+        bundle.putLong(KEY_PROGRESS, progress);
         
-            Message message = handler.obtainMessage();
-            message.what = UPDATE_PROGRESS;
-            message.setData(bundle);
-        
-            handler.sendMessage(message);
-        }
+        message.what = UPDATE_PROGRESS;
+        handler.sendMessage(message);
     }
 
     protected void start() {
