@@ -15,6 +15,7 @@ import java.util.Set;
 public class CopyMode extends BottomToolbarMode {
 
     private File[] items;
+    private LayoutCopyMoveBinding binding;
 
     public CopyMode(Explorer explorer) {
         super(explorer);
@@ -30,11 +31,10 @@ public class CopyMode extends BottomToolbarMode {
     @Override
     public void onBottomToolbarShown(RelativeLayout group) {
         LayoutInflater inflater = LayoutInflater.from(getExplorer().getContext());
-        LayoutCopyMoveBinding binding = LayoutCopyMoveBinding.inflate(inflater);
+        binding = LayoutCopyMoveBinding.inflate(inflater);
         
         String totalItemsText = Files.formatFromItems(
-            getExplorer().getContext(),
-            items
+            getExplorer().getContext(),items
         );
         
         binding.totalItems.setText(totalItemsText);
@@ -50,6 +50,21 @@ public class CopyMode extends BottomToolbarMode {
         });
         
         group.addView(binding.getRoot());
+    }
+    
+    @Override
+    public void onParentChanged(File newParent) {
+        for(File file : items) {
+        	if(file.getPath().equals(newParent.getPath())) {
+                if(binding.action.isEnabled()) {
+                    binding.action.setEnabled(false);
+                }
+                return;
+            }
+        }
+        if(!binding.action.isEnabled()) {
+            binding.action.setEnabled(true);
+        }
     }
     
     protected ActionRunnable getRunnable(File[] items, File dest) {

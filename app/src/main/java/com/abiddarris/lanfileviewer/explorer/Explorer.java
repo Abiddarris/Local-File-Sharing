@@ -47,7 +47,8 @@ public class Explorer {
 
     public void open(File file) {
         if (file.isDirectory()) {
-            this.parent = file;
+            setParent(file);
+            
             refresher.setRefreshing(true);
             update();
             return;
@@ -118,6 +119,12 @@ public class Explorer {
         for(OnExplorerUpdatedListener listener : updatedListeners) {
             listener.onUpdated(this);
         }
+    }
+    
+    private void setParent(File parent) {
+        this.parent = parent;
+        
+        getMode().onParentChanged(this.parent);
     }
 
     public File getParent() {

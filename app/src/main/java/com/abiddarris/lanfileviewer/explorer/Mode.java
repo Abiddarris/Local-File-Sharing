@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import com.abiddarris.lanfileviewer.file.File;
 import java.util.NavigableSet;
 
 public abstract class Mode {
@@ -10,6 +11,8 @@ public abstract class Mode {
         this.explorer = explorer;
     }
 
+    public void onParentChanged(File newParent) {}
+    
     public abstract void onItemClickListener(FileAdapter.ViewHolder holder, int pos);
 
     public abstract void onItemLongClickListener(FileAdapter.ViewHolder holder, int pos);

@@ -1,37 +1,52 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFileSource.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/Explorer.java",
       "selection": {
         "end": {
           "column": 8,
-          "index": 5721,
-          "line": 151
+          "index": 3755,
+          "line": 126
         },
         "start": {
           "column": 8,
-          "index": 5721,
-          "line": 151
+          "index": 3755,
+          "line": 126
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkOutputStream.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/CopyMode.java",
       "selection": {
         "end": {
-          "column": 29,
-          "index": 3900,
-          "line": 119
+          "column": 35,
+          "index": 1888,
+          "line": 55
         },
         "start": {
-          "column": 18,
-          "index": 3889,
-          "line": 119
+          "column": 35,
+          "index": 1888,
+          "line": 55
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/NavigateMode.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/Mode.java",
+      "selection": {
+        "end": {
+          "column": 36,
+          "index": 307,
+          "line": 13
+        },
+        "start": {
+          "column": 36,
+          "index": 307,
+          "line": 13
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/SelectMode.java",
       "selection": {
         "end": {
           "column": 0,
@@ -42,24 +57,9 @@
           "column": 0,
           "index": 0,
           "line": 0
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/BottomToolbarMode.java",
-      "selection": {
-        "end": {
-          "column": 52,
-          "index": 4101,
-          "line": 143
-        },
-        "start": {
-          "column": 52,
-          "index": 4101,
-          "line": 143
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/BottomToolbarMode.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/Mode.java"
 }
