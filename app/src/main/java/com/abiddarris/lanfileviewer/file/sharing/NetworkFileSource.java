@@ -149,7 +149,7 @@ public class NetworkFileSource extends FileSource {
     protected File newFile(File parent, String name) {
         String path = parent.getPath() + "/" + name;
         File f = new NetworkFile(this,path);
-        Log.debug.log(TAG, path);
+        
         return f;
     }
 

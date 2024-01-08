@@ -44,10 +44,32 @@ public abstract class BottomToolbarMode extends NavigateMode {
     public abstract void onBottomToolbarShown(RelativeLayout group);
 
     public void showBottomBar() {
-        if(isShown() || animating) {
+        if(isShown()) return;
+        
+        showBottomBarInternal();
+    }
+    
+    public void hideBottomBar() {
+        hideBottomBar(true);
+    }
+
+    public void hideBottomBar(boolean withAnimation) {
+        if(!isShown()) return;
+       
+        if(animating) {
+            addLostState(State.HIDDEN);
+            return;
+        }
+        
+        hideBottomBarInternal(withAnimation);
+    }
+    
+    private void showBottomBarInternal() {
+    	if(isShown() || animating) {
             addLostState(State.SHOWN);
             return;
         }
+        
         shown = true;
         animating = true;
         
@@ -63,16 +85,10 @@ public abstract class BottomToolbarMode extends NavigateMode {
                 .addOnGlobalLayoutListener(new OnGroupVisible(group));
     }
     
-    public void hideBottomBar() {
-        hideBottomBar(true);
-    }
-
-    public void hideBottomBar(boolean withAnimation) {
-        if(!isShown() || animating) {
+    private void hideBottomBarInternal(boolean withAnimation) {
+        if(!isShown() | animating) {
             addLostState(State.HIDDEN);
-            return;
         }
-        
         Log.debug.log(TAG, "Hiding Bottom actions");
         
         shown = false;
@@ -121,11 +137,11 @@ public abstract class BottomToolbarMode extends NavigateMode {
             switch(state) {
                 case SHOWN :
                     if(!isShown())
-                        showBottomBar();
+                        showBottomBarInternal();
                     break;
                 case HIDDEN :
                     if(isShown())
-                        hideBottomBar();
+                        hideBottomBarInternal(true);
             }
         }
     }
