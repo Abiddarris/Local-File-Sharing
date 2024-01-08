@@ -49,14 +49,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/SelectMode.java",
       "selection": {
         "end": {
-          "column": 46,
-          "index": 7945,
-          "line": 236
+          "column": 0,
+          "index": 8032,
+          "line": 238
         },
         "start": {
-          "column": 46,
-          "index": 7945,
-          "line": 236
+          "column": 0,
+          "index": 8032,
+          "line": 238
         }
       }
     },
@@ -226,5 +226,5 @@
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_copy_move.xml"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/SelectMode.java"
 }

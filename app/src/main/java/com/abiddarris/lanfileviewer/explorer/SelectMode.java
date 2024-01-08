@@ -240,6 +240,15 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
         group.addView(binding.getRoot(), params);
     }
     
+    @Override
+    public void onParentChanged(File newParent) {
+        super.onParentChanged(newParent);
+        
+        getExplorer()
+            .setMode(getExplorer().navigateMode);
+    }
+    
+    
     private void copy() {
         setCopyMode(copyMode);
     }
