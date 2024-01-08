@@ -1,6 +1,7 @@
 package com.abiddarris.lanfileviewer.explorer;
 
 import android.animation.Animator;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.view.View;
 import android.animation.ValueAnimator;
@@ -41,7 +42,7 @@ public abstract class BottomToolbarMode extends NavigateMode {
     	return shown;
     }
 
-    public abstract void onBottomToolbarShown(RelativeLayout group);
+    public abstract void onBottomToolbarShown(ViewGroup group);
 
     public void showBottomBar() {
         if(isShown()) return;
@@ -74,7 +75,7 @@ public abstract class BottomToolbarMode extends NavigateMode {
         animating = true;
         
         Log.debug.log(TAG, "Showing Bottom actions");
-        RelativeLayout group = getExplorer()
+        ViewGroup group = getExplorer()
             .getUI().bottomAction;
         group.removeAllViews();
         
@@ -92,7 +93,7 @@ public abstract class BottomToolbarMode extends NavigateMode {
         Log.debug.log(TAG, "Hiding Bottom actions");
         
         shown = false;
-        RelativeLayout group = getExplorer()
+        ViewGroup group = getExplorer()
             .getUI().bottomAction;
         
         AnimationEndListener listener = new AnimationEndListener(group);
@@ -148,9 +149,9 @@ public abstract class BottomToolbarMode extends NavigateMode {
     
     private class AnimationEndListener extends AnimatorListenerAdapter {
        
-        private RelativeLayout group;
+        private ViewGroup group;
         
-        private AnimationEndListener(RelativeLayout group) {
+        private AnimationEndListener(ViewGroup group) {
             this.group = group;
         }
         
@@ -171,9 +172,9 @@ public abstract class BottomToolbarMode extends NavigateMode {
     
     private class OnGroupVisible implements OnGlobalLayoutListener {
       
-        private RelativeLayout group;
+        private ViewGroup group;
         
-        private OnGroupVisible(RelativeLayout group) {
+        private OnGroupVisible(ViewGroup group) {
             this.group = group;
         }
         

@@ -1,6 +1,7 @@
 package com.abiddarris.lanfileviewer.explorer;
 
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionDialog;
@@ -29,7 +30,7 @@ public class CopyMode extends BottomToolbarMode {
     }
 
     @Override
-    public void onBottomToolbarShown(RelativeLayout group) {
+    public void onBottomToolbarShown(ViewGroup group) {
         LayoutInflater inflater = LayoutInflater.from(getExplorer().getContext());
         binding = LayoutCopyMoveBinding.inflate(inflater);
         

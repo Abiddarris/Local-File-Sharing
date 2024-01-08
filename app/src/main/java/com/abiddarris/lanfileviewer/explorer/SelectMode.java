@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
@@ -233,7 +234,7 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
     }
     
     @Override
-    public void onBottomToolbarShown(RelativeLayout group) {
+    public void onBottomToolbarShown(ViewGroup group) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams
             (RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         group.addView(binding.getRoot(), params);

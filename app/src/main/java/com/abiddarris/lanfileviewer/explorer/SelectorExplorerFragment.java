@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.view.LayoutInflater;
 import android.widget.Button;
@@ -82,7 +83,7 @@ public class SelectorExplorerFragment extends ExplorerFragment {
         }
     
         @Override
-        public void onBottomToolbarShown(RelativeLayout group) {
+        public void onBottomToolbarShown(ViewGroup group) {
             LayoutInflater inflater = LayoutInflater.from(
                 getExplorer().getContext());
           

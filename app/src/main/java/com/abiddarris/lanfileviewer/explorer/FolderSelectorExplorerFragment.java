@@ -1,6 +1,7 @@
 package com.abiddarris.lanfileviewer.explorer;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import com.abiddarris.lanfileviewer.R;
@@ -29,7 +30,7 @@ public class FolderSelectorExplorerFragment extends ExplorerFragment {
 
         @Override
         public void onModeSelected() {
-            RelativeLayout group = getExplorer().getUI().bottomAction;
+            ViewGroup group = getExplorer().getUI().bottomAction;
             group.setVisibility(View.VISIBLE);
             getLayoutInflater().inflate(R.layout.layout_action_button, group, true);
 
