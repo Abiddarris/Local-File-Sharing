@@ -4,14 +4,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/Explorer.java",
       "selection": {
         "end": {
-          "column": 8,
-          "index": 3755,
-          "line": 126
+          "column": 20,
+          "index": 1618,
+          "line": 47
         },
         "start": {
-          "column": 8,
-          "index": 3755,
-          "line": 126
+          "column": 16,
+          "index": 1614,
+          "line": 47
         }
       }
     },
@@ -79,14 +79,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_copy_move.xml",
       "selection": {
         "end": {
-          "column": 40,
-          "index": 258,
-          "line": 5
+          "column": 47,
+          "index": 357,
+          "line": 9
         },
         "start": {
-          "column": 40,
-          "index": 258,
-          "line": 5
+          "column": 47,
+          "index": 357,
+          "line": 9
         }
       }
     },
@@ -179,7 +179,52 @@
           "line": 106
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/CreateFolderDialog.java",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/FileNameInputValidator.java",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/ExplorerFragment.java",
+      "selection": {
+        "end": {
+          "column": 45,
+          "index": 3541,
+          "line": 95
+        },
+        "start": {
+          "column": 45,
+          "index": 3541,
+          "line": 95
+        }
+      }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/SelectorExplorerFragment.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_copy_move.xml"
 }

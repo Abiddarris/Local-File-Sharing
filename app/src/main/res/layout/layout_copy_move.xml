@@ -7,10 +7,10 @@
      android:id="@+id/coordinator">
 
     <TextView
+         android:textColor="@color/colorPrimary"
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
          android:layout_centerVertical="true"
-         android:textColor="@color/colorAccent"
          android:layout_marginLeft="10dp"
          android:id="@+id/totalItems"
          android:text="1 item" />
@@ -19,7 +19,6 @@
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
          android:layout_alignParentEnd="true"
-         android:textColor="@color/colorAccent"
          style="@style/Widget.Material3.Button.TextButton"
          android:text="action"
          android:id="@+id/action" />
@@ -28,7 +27,6 @@
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
          android:layout_toLeftOf="@+id/action"
-         android:textColor="@color/colorAccent"
          style="@style/Widget.Material3.Button.TextButton"
          android:text="@string/cancel"
          android:id="@+id/cancel" />
