@@ -84,7 +84,7 @@ public class ActionDialog extends DialogFragment {
         }
     }
     
-    public File getFile(FileSource source, String path) throws Exception {
+    public File getFile(FileSource source, File src, String path) throws Exception {
         File file = source.getFile(path);
         file.updateDataSync();
         
@@ -104,7 +104,7 @@ public class ActionDialog extends DialogFragment {
         handler.post((c) -> {
             getDialog().hide();
                 
-            optionsDialog.show(getParentFragmentManager(), lock, file.getName());
+            optionsDialog.show(getParentFragmentManager(), lock, file.getName(), src.getPath().equalsIgnoreCase(path));
         });
         
         try {

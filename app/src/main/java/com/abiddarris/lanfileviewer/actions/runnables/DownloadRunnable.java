@@ -61,7 +61,7 @@ public class DownloadRunnable extends ActionRunnable {
             String localPath = originalFile.getPath()
                 .replace(parent.getPath(), "");
 
-            File destFile = getDialog().getFile(source, dest.getPath() + localPath);
+            File destFile = getDialog().getFile(source, originalFile, dest.getPath() + localPath);
             destFile.updateDataSync();
 
             if (destFile == null) continue;

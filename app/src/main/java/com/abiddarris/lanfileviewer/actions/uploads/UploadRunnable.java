@@ -69,7 +69,7 @@ public class UploadRunnable extends ActionRunnable {
                 .replace(parent.getPath(), "");
             
             File destFile = getDialog()
-                .getFile(destSource, dest.getPath() + localPath);
+                .getFile(destSource, originalFile, dest.getPath() + localPath);
            
             if(destFile == null) continue;
             

@@ -3,6 +3,7 @@ package com.abiddarris.lanfileviewer.actions;
 import android.app.Dialog;
 import android.gesture.Prediction;
 import android.os.Bundle;
+import android.view.View;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -36,7 +37,7 @@ public class OperationOptionsDialog extends DialogFragment {
             .create();
     }
     
-    protected void show(FragmentManager manager, CountDownLatch lock, String name) {
+    protected void show(FragmentManager manager, CountDownLatch lock, String name, boolean hideReplaceOption) {
     	this.lock = lock;
         
         binding.fileName.setText(String.format(
@@ -45,6 +46,12 @@ public class OperationOptionsDialog extends DialogFragment {
         binding.rename.setOnClickListener((v) -> setResult(context.renameOption));
         binding.replace.setOnClickListener((v) -> setResult(context.replaceOption));
         binding.skip.setOnClickListener((v) -> setResult(context.skipOption));
+        
+        if(hideReplaceOption) {
+            binding.replace.setVisibility(View.GONE);
+        } else {
+            binding.replace.setVisibility(View.VISIBLE);
+        }
         
         if(firstShow) {
             show(manager, null);

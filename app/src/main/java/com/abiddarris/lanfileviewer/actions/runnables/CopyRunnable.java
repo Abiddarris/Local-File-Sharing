@@ -62,7 +62,7 @@ public class CopyRunnable extends ActionRunnable {
                 .replace(parent.getPath(), "");
             
             File destFile = getDialog()
-                .getFile(source, dest.getPath() + localPath);
+                .getFile(source, originalFile, dest.getPath() + localPath);
             destFile.updateDataSync();
             
             if(destFile == null) continue;
