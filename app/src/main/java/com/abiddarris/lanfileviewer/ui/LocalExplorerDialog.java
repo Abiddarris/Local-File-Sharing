@@ -17,6 +17,7 @@ import com.abiddarris.lanfileviewer.explorer.SelectorExplorerFragment;
 import com.abiddarris.lanfileviewer.explorer.SortByDialog;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
+import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 
 public class LocalExplorerDialog extends ExplorerActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     

@@ -15,22 +15,22 @@
              android:layout_width="match_parent"
              android:visibility="gone"
              android:layout_alignParentBottom="true"
-             android:id="@+id/bottomAction">
+             android:id="@+id/bottomAction" />
 
-        </com.google.android.material.bottomappbar.BottomAppBar>
-
-        <androidx.recyclerview.widget.RecyclerView
+        <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
              android:layout_height="match_parent"
              android:layout_width="match_parent"
              android:layout_below="@id/appbar"
-             android:layout_above="@id/bottomAction"
-             android:id="@+id/filesList"
-             android:scrollbars="vertical"
-             app:fastScrollEnabled="true"
-             app:fastScrollHorizontalThumbDrawable="@drawable/fast_scroll_thumb"
-             app:fastScrollHorizontalTrackDrawable="@drawable/fast_scroll_track" 
-             app:fastScrollVerticalThumbDrawable="@drawable/fast_scroll_thumb"
-             app:fastScrollVerticalTrackDrawable="@drawable/fast_scroll_track"/>
+             app:handleWidth="25dp"
+             app:handleHeight="40dp"
+             android:layout_above="@id/bottomAction">
+
+            <androidx.recyclerview.widget.RecyclerView
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+                 android:id="@+id/filesList" />
+
+        </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
 
     </RelativeLayout>
 
