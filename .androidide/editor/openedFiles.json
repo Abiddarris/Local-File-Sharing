@@ -19,14 +19,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/fragment_file_explorer.xml",
       "selection": {
         "end": {
-          "column": 35,
-          "index": 1038,
-          "line": 24
+          "column": 42,
+          "index": 555,
+          "line": 13
         },
         "start": {
-          "column": 35,
-          "index": 1038,
-          "line": 24
+          "column": 42,
+          "index": 555,
+          "line": 13
         }
       }
     }
