@@ -10,6 +10,7 @@
          android:layout_height="match_parent"
          android:layout_width="match_parent"
          android:layout_below="@id/appbar"
+         app:handleVisibilityDuration="2500"
          app:supportSwipeToRefresh="true"
          app:handleWidth="25dp"
          app:handleHeight="40dp">
