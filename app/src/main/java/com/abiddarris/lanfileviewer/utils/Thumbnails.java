@@ -28,7 +28,8 @@ import java.util.concurrent.ExecutionException;
 public class Thumbnails {
     
     public static final String TAG = Log.getTag(Thumbnails.class);
-    
+    private static final int THUMBNAIL_DATAS_SAVER_DELAY = 1000 * 60;
+
     private static File thumbmailsFolder;
     private static int lastThumbnailSize;
     private static HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
@@ -101,6 +102,29 @@ public class Thumbnails {
         
         try(ObjectInputStream inputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(thumbnailDatas)))){
             thumbnails = (HashMap) inputStream.readObject();
+            for(String path : thumbnails.keySet()) {
+                File thumbnail = thumbnails.get(path);
+                if(!thumbnail.exists()) {
+                    Log.err.log(TAG, thumbnail  + " does not exist anymore");
+                }
+            }
+            
+            for(File file : getThumbnailsCacheFolder(context).listFiles()) {
+                boolean exists = false;
+                for(File thumbnail : thumbnails.values()) {
+                    if(thumbnail.getPath().equalsIgnoreCase(file.getPath()) || thumbnailDatas.getPath().equalsIgnoreCase(file.getPath())) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if(!exists) {
+                    boolean success = file.delete();
+                    if(!success) {
+                        Log.err.log(TAG, "Failed to delete " + file);
+                    }
+                    Log.debug.log(TAG, file + " does not associated with any file");
+                }
+            }
         } catch (IOException | ClassNotFoundException e) {
             Log.err.log(TAG, e);
             thumbnails = new HashMap<>();
@@ -108,7 +132,7 @@ public class Thumbnails {
         
         Log.debug.log(TAG, "Loading thumbnail datas takes " + timer.reset() + " ms");
         
-        handler.postDelayed((c) -> saveThumbnailDatas(thumbnailDatas), 1000 * 60);
+        handler.postDelayed(new ThumbnailDatasSaver(thumbnailDatas), THUMBNAIL_DATAS_SAVER_DELAY);
     }
 
     private static void saveThumbnailDatas(File thumbnailDatas) throws IOException {
@@ -125,11 +149,10 @@ public class Thumbnails {
             outputStream.flush();
         } 
         
-        boolean success = thumbnailDatas.delete();
-        if(!success) {
-            throw new IOException("Cannot save thumbnail datas! unable to delete " + thumbnailDatas.getPath());
-        }
+        lastThumbnailSize = thumbnails.size();
         
+        boolean success = thumbnailDatas.delete();
+
         success = temp.renameTo(thumbnailDatas);
         if(!success) {
             throw new IOException("Cannot save thumbnail datas! unable to rename " + temp.getPath() + " to " + thumbnailDatas.getPath());
@@ -143,6 +166,23 @@ public class Thumbnails {
             thumbmailsFolder = new File(context.getCacheDir(), "thumbnail-cache");
         }
     	return thumbmailsFolder;
+    }
+    
+    private static class ThumbnailDatasSaver extends BaseRunnable {
+        
+        private File thumbnailDatas;
+        
+        public ThumbnailDatasSaver(File thumbnailDatas) {
+            this.thumbnailDatas = thumbnailDatas;
+        }
+        
+        @Override
+        public void onExecute(BaseRunnable context) throws Exception {
+            saveThumbnailDatas(thumbnailDatas);
+           
+            handler.postDelayed(this, THUMBNAIL_DATAS_SAVER_DELAY);
+        }
+        
     }
     
 }
