@@ -22,4 +22,8 @@ public class HandlerLogSupport {
     public boolean sendMessage(Message message) {
     	return handler.sendMessage(message);
     }
+    
+    public boolean postDelayed(RunnableInterface runnable, long delayed) {
+    	return handler.postDelayed(new BaseRunnable(runnable), delayed);
+    }
 }
