@@ -24,6 +24,9 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Thumbnails {
     
@@ -32,7 +35,7 @@ public class Thumbnails {
 
     private static File thumbmailsFolder;
     private static int lastThumbnailSize;
-    private static HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
+    private static ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     private static Map<String,File> thumbnails; 
     
     @Nullable
@@ -96,7 +99,7 @@ public class Thumbnails {
         File thumbnailDatas = new File(thumbmailsFolder, "thumbnail-datas");
         if(!thumbnailDatas.exists()) {
             thumbnails = new HashMap<>();
-            handler.postDelayed((c) -> saveThumbnailDatas(thumbnailDatas), 1000 * 60);
+            executor.scheduleWithFixedDelay(new ThumbnailDatasSaver(thumbnailDatas), 0, 1, TimeUnit.MINUTES);
             return;
         }
         
@@ -132,7 +135,7 @@ public class Thumbnails {
         
         Log.debug.log(TAG, "Loading thumbnail datas takes " + timer.reset() + " ms");
         
-        handler.postDelayed(new ThumbnailDatasSaver(thumbnailDatas), THUMBNAIL_DATAS_SAVER_DELAY);
+        executor.scheduleWithFixedDelay(new ThumbnailDatasSaver(thumbnailDatas), 0, 1, TimeUnit.MINUTES);
     }
 
     private static void saveThumbnailDatas(File thumbnailDatas) throws IOException {
@@ -179,8 +182,6 @@ public class Thumbnails {
         @Override
         public void onExecute(BaseRunnable context) throws Exception {
             saveThumbnailDatas(thumbnailDatas);
-           
-            handler.postDelayed(this, THUMBNAIL_DATAS_SAVER_DELAY);
         }
         
     }
