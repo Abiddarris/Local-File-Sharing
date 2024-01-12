@@ -64,7 +64,7 @@ public class RenameDialog extends DialogFragment {
     
     private void checkSuccess(boolean success) {
         handler.post((c) -> {
-            explorer.update();
+            explorer.refresh();
             
             if(!success) {
                 Context context = explorer.getContext();         

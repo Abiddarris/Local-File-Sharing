@@ -70,7 +70,7 @@ public class CreateFolderDialog extends DialogFragment {
     }
 
     private void refreshExplorer() {
-        handler.post((c) -> explorer.update());
+        handler.post((c) -> explorer.refresh());
     }
 
     private void showFailedToast() {

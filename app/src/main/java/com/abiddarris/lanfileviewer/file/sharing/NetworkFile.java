@@ -56,6 +56,7 @@ public class NetworkFile implements File {
 
     @Override
     public void updateData(Callback callback) {
+        Log.debug.log(TAG, "Updating file : " + path);
         JSONObject request = new JSONObject();
         try {
             onCreateUpdateRequest(request);
@@ -72,6 +73,7 @@ public class NetworkFile implements File {
     }
     
     public void updateDataSync() {
+        Log.debug.log(TAG, "Updating sync file : " + path);
         JSONObject request = new JSONObject();
         try {
             onCreateUpdateRequest(request);

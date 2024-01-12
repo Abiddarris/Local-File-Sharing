@@ -10,15 +10,19 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.gretta.util.log.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Explorer {
 
+    public static final String TAG = Log.getTag(Explorer.class);
+    
     Mode navigateMode;
     SelectMode selectMode;
 
+    private boolean loading;
     private ExplorerFragment fragment;
     private FileSorter sorter = FileSorter.createSorter(FileSorter.NAME | FileSorter.ASCENDING);
     private FragmentFileExplorerBinding ui;
@@ -46,9 +50,14 @@ public class Explorer {
     }
 
     public void open(File file) {
+        if(loading) {
+            Log.debug.log(TAG, "cannot open " + file + " reason : already loading something");
+            return;
+        }
         if (file.isDirectory()) {
             setParent(file);
             
+            loading = true;
             refresher.setRefreshing(true);
             update();
             return;
@@ -60,8 +69,17 @@ public class Explorer {
         intent.setDataAndType(file.toUri(), mimeType == null ? "*" : mimeType);
         getContext().startActivity(intent);
     }
+    
+    public void refresh() {
+        if(loading) {
+            Log.debug.log(TAG, "cannot refresh " + parent + " reason : already refreshing");
+            return;
+        }
+        loading = true;
+        update();
+    }
 
-    public void update() {
+    private void update() {
         parent.updateData((e) -> {
             if(e != null){
                 new ExceptionDialog(e)
@@ -115,6 +133,7 @@ public class Explorer {
         adapter.setFiles(files);
 
         adapter.getMainThread().post((c) -> refresher.setRefreshing(false));
+        loading = false;
         
         for(OnExplorerUpdatedListener listener : updatedListeners) {
             listener.onUpdated(this);

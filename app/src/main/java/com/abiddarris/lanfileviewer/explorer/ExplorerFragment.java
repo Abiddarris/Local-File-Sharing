@@ -86,10 +86,7 @@ public abstract class ExplorerFragment extends Fragment {
         binding.filesList.addItemDecoration(
                 new DividerItemDecoration(getContext(), layoutManager.getOrientation()));
 
-        binding.refreshlayout.setOnRefreshListener(
-                () -> {
-                    explorer.update();
-                });
+        binding.refreshlayout.setOnRefreshListener(() -> explorer.refresh());
 
         pressed = new OnBackPressed();
 
