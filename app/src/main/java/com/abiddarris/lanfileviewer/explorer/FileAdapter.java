@@ -28,6 +28,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     private Explorer explorer;
     private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     private LayoutInflater inflater;
+    private RecyclerView recyclerView;
     
     public FileAdapter(Explorer explorer) {
         this.explorer = explorer;
@@ -43,10 +44,25 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     	this.files = files;
         
         handler.post((c)-> notifyDataSetChanged());
+        handler.post((c) -> recyclerView.smoothScrollToPosition(0));
     }
     
     public File get(int pos) {
     	return files[pos];
+    }
+    
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        
+        this.recyclerView = recyclerView;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        
+        recyclerView = null;
     }
     
     @Override
@@ -144,5 +160,4 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         }
         
     }
-
 }
