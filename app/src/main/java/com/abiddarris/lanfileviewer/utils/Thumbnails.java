@@ -33,15 +33,20 @@ public class Thumbnails {
     public static final String TAG = Log.getTag(Thumbnails.class);
     private static final int THUMBNAIL_DATAS_SAVER_DELAY = 1000 * 60;
 
+    private static boolean loaded;
     private static File thumbmailsFolder;
     private static int lastThumbnailSize;
     private static ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-    private static Map<String,File> thumbnails; 
+    private static volatile Map<String,File> thumbnails; 
     
     @Nullable
     public static File getThumbnail(Context context, File file) {
-        if(thumbnails == null) {
+        if(!loaded) {
+            loaded = true;
             loadThumbnailDatas(context);
+        }
+        
+        while(thumbnails == null) {
         }
         
         Timer timer = new Timer();
