@@ -32,6 +32,7 @@ public class Explorer {
     private Mode mode;
     private List<File> cache = new ArrayList<>();
     private List<OnExplorerUpdatedListener> updatedListeners = new ArrayList<>();
+    private OnExplorerUpdatedListener temporaryListener;
     private SwipeRefreshLayout refresher;
 
     public Explorer(
@@ -71,11 +72,16 @@ public class Explorer {
     }
     
     public void refresh() {
+        refresh(null);
+    }
+    
+    public void refresh(OnExplorerUpdatedListener listener) {
         if(loading) {
             Log.debug.log(TAG, "cannot refresh " + parent + " reason : already refreshing");
             return;
         }
         loading = true;
+        temporaryListener = listener;
         update();
     }
 
@@ -134,6 +140,11 @@ public class Explorer {
 
         adapter.getMainThread().post((c) -> refresher.setRefreshing(false));
         loading = false;
+        
+        if(temporaryListener != null) 
+            temporaryListener.onUpdated(this);
+        
+        temporaryListener = null;
         
         for(OnExplorerUpdatedListener listener : updatedListeners) {
             listener.onUpdated(this);

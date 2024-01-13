@@ -47,8 +47,16 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         handler.post((c) -> recyclerView.smoothScrollToPosition(0));
     }
     
+    public File[] getFiles() {
+    	return files;
+    }
+    
     public File get(int pos) {
     	return files[pos];
+    }
+    
+    public RecyclerView getAttachedRecyclerView() {
+        return recyclerView;
     }
     
     @Override
