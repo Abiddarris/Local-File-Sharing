@@ -14,6 +14,7 @@
          android:id="@+id/move">
 
         <ImageView
+             android:src="@drawable/ic_move"
              android:layout_height="@dimen/explorer_action_button_image_size"
              android:layout_width="@dimen/explorer_action_button_image_size"
              style="@style/ImageStyle" />

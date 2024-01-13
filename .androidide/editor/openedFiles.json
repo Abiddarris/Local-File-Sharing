@@ -1,50 +1,50 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/Explorer.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_action_button.xml",
       "selection": {
         "end": {
-          "column": 16,
-          "index": 3821,
-          "line": 124
+          "column": 0,
+          "index": 0,
+          "line": 0
         },
         "start": {
-          "column": 16,
-          "index": 3821,
-          "line": 124
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/RenameDialog.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_file_explorer.xml",
       "selection": {
         "end": {
-          "column": 71,
-          "index": 3631,
-          "line": 94
+          "column": 0,
+          "index": 0,
+          "line": 0
         },
         "start": {
-          "column": 71,
-          "index": 3631,
-          "line": 94
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/FileAdapter.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_select_mode.xml",
       "selection": {
         "end": {
-          "column": 28,
-          "index": 1856,
-          "line": 58
+          "column": 43,
+          "index": 617,
+          "line": 16
         },
         "start": {
-          "column": 28,
-          "index": 1856,
-          "line": 58
+          "column": 43,
+          "index": 617,
+          "line": 16
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/RenameDialog.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_select_mode.xml"
 }
