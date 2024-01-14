@@ -23,18 +23,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.security.auth.callback.Callback;
 
-public class LocalFile implements File {
+public class LocalFile extends File {
 
     private java.io.File file;
-    private File parent;
     private LocalFileSource source;
     private static ExecutorService service = Executors.newCachedThreadPool();
 
     public static final String TAG = Log.getTag(LocalFile.class);
 
     protected LocalFile(LocalFileSource source, File parent, java.io.File file) {
+        super(parent);
+        
         this.source = source;
-        this.parent = parent;
         this.file = file;
     }
 
@@ -58,11 +58,6 @@ public class LocalFile implements File {
         source.getSecurityManager().checkRead(this);
 
         return file.isFile();
-    }
-
-    @Override
-    public File getParentFile() {
-        return parent;
     }
 
     @Override

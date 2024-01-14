@@ -6,7 +6,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import org.json.JSONObject;
 
-public interface File {
+public abstract class File {
+    
+    private File parentFile;
+    
+    protected File() {}
+    
+    protected File(File parentFile) {
+        this.parentFile = parentFile;
+    }
 
     public abstract void updateData(Callback callback);
 
@@ -18,7 +26,9 @@ public interface File {
 
     public abstract boolean isFile();
 
-    public abstract File getParentFile();
+    public final File getParentFile() {
+        return parentFile;
+    }
 
     public abstract String getName();
 

@@ -10,15 +10,14 @@ import androidx.preference.PreferenceManager;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.RootFile;
-import com.abiddarris.lanfileviewer.file.RootFileContainer;
 import com.gretta.util.log.Log;
 import java.util.Arrays;
 
 public class LocalFileSource extends FileSource {
 
     private DocumentFile sdCardDocumentFile;
-    private RootFileContainer root;
-    private RootFile sdCardStorage;
+    private RootFile root;
+    private File sdCardStorage;
     
     public static final String SD_CARD_URI_KEY = "sdCardUriKey";
     public static final String TAG = Log.getTag(LocalFileSource.class);
@@ -26,10 +25,11 @@ public class LocalFileSource extends FileSource {
     public LocalFileSource(Context context) {
         super(context);
         
-        root = new RootFileContainer(this);
+        root = new RootFile(this);
         
-        RootFile internalStorage = new LocalRootFile(this, root,
+        File internalStorage = new LocalFile(this, root,
             Environment.getExternalStorageDirectory());
+        
         root.addRoots(internalStorage);
         
         String sdCardPath = getSDCardPath(context);
@@ -46,7 +46,7 @@ public class LocalFileSource extends FileSource {
                 sdCardDocumentFile = DocumentFile.fromTreeUri(context, uri);
             }
             
-            sdCardStorage = new LocalRootFile(this, root, file);
+            sdCardStorage = new LocalFile(this, root, file);
             root.addRoots(sdCardStorage);
             
             registerToCache(sdCardStorage);
@@ -57,7 +57,7 @@ public class LocalFileSource extends FileSource {
     }
 
     @Override
-    public RootFileContainer getRoot() {
+    public RootFile getRoot() {
         return root;
     }
     

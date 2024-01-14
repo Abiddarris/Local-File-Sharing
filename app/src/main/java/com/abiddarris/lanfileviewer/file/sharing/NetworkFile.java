@@ -31,7 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NetworkFile implements File {
+public class NetworkFile extends File {
 
     private boolean exists;
     private boolean isDirectory;
@@ -49,7 +49,9 @@ public class NetworkFile implements File {
     
     private static final String TAG = Log.getTag(NetworkFile.class);
 
-    protected NetworkFile(NetworkFileSource source, String path) {
+    protected NetworkFile(NetworkFileSource source, File parent, String path) {
+        super(parent);
+        
         this.path = path;
         this.source = source;
     }
@@ -129,11 +131,6 @@ public class NetworkFile implements File {
     @Override
     public boolean isFile() {
         return isFile;
-    }
-
-    @Override
-    public File getParentFile() {
-        return parentFile;
     }
 
     @Override

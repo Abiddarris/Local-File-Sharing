@@ -1,33 +1,32 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
-import android.content.Context;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
+import android.content.Context;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.RootFile;
-import com.abiddarris.lanfileviewer.file.RootFileContainer;
 import com.gretta.util.log.Log;
 import java.io.BufferedInputStream;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.ProtocolException;
-import java.util.concurrent.ExecutorService;
-import java.net.URL;
-import java.io.IOException;
-import org.json.JSONException;
-import java.util.concurrent.Executors;
-import java.net.HttpURLConnection;
-import java.io.OutputStream;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class NetworkFileSource extends FileSource {
     
     private ExecutorService executor = Executors.newFixedThreadPool(16);
-    private RootFileContainer root;
+    private RootFile root;
     private SharingDevice device;
     private URL server;
     
@@ -45,11 +44,11 @@ public class NetworkFileSource extends FileSource {
             .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_GET_TOP_DIRECTORY_FILES));
         JSONObject response = sendRequestSync(request);
         JSONArray jsonTopDirectoryFiles = response.optJSONArray(KEY_TOP_DIRECTORY_FILES);
-        root = new RootFileContainer(this); 
+        root = new RootFile(this); 
             
         for(int i = 0; i < jsonTopDirectoryFiles.length(); ++i) {
             String path = jsonTopDirectoryFiles.optString(i);
-            RootFile child = new NetworkRootFile(this, root, path);
+            File child = new NetworkFile(this, root, path);
          
             registerToCache(child); 
             root.addRoots(child);
@@ -141,14 +140,14 @@ public class NetworkFileSource extends FileSource {
     }
 
     @Override
-    public RootFileContainer getRoot() {
+    public RootFile getRoot() {
         return root;
     }
 
     @Override
     protected File newFile(File parent, String name) {
         String path = parent.getPath() + "/" + name;
-        File f = new NetworkFile(this,path);
+        File f = new NetworkFile(this, parent, path);
         
         return f;
     }

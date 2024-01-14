@@ -20,7 +20,7 @@ public abstract class FileSource {
     private Map<String,File> cache = new HashMap<>();
     private SecurityManager securityManager = new SecurityManager();
     
-    public abstract RootFileContainer getRoot();
+    public abstract RootFile getRoot();
     
     protected abstract File newFile(File parent, String name);
     

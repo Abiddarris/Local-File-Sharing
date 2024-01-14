@@ -1,7 +1,82 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_action_button.xml",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/RootFile.java",
+      "selection": {
+        "end": {
+          "column": 19,
+          "index": 345,
+          "line": 15
+        },
+        "start": {
+          "column": 19,
+          "index": 345,
+          "line": 15
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/local/LocalFileSource.java",
+      "selection": {
+        "end": {
+          "column": 19,
+          "index": 1945,
+          "line": 59
+        },
+        "start": {
+          "column": 19,
+          "index": 1945,
+          "line": 59
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/local/LocalFile.java",
+      "selection": {
+        "end": {
+          "column": 81,
+          "index": 1260,
+          "line": 33
+        },
+        "start": {
+          "column": 81,
+          "index": 1260,
+          "line": 33
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFileSource.java",
+      "selection": {
+        "end": {
+          "column": 20,
+          "index": 1253,
+          "line": 37
+        },
+        "start": {
+          "column": 20,
+          "index": 1253,
+          "line": 37
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFile.java",
+      "selection": {
+        "end": {
+          "column": 8,
+          "index": 1740,
+          "line": 53
+        },
+        "start": {
+          "column": 8,
+          "index": 1740,
+          "line": 53
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/JSONRequest.java",
       "selection": {
         "end": {
           "column": 0,
@@ -16,65 +91,20 @@
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_file_explorer.xml",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/FileSource.java",
       "selection": {
         "end": {
-          "column": 0,
-          "index": 0,
-          "line": 0
+          "column": 28,
+          "index": 413,
+          "line": 13
         },
         "start": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/layout_select_mode.xml",
-      "selection": {
-        "end": {
-          "column": 43,
-          "index": 617,
-          "line": 16
-        },
-        "start": {
-          "column": 43,
-          "index": 617,
-          "line": 16
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/AndroidManifest.xml",
-      "selection": {
-        "end": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        },
-        "start": {
-          "column": 0,
-          "index": 0,
-          "line": 0
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/themes.xml",
-      "selection": {
-        "end": {
-          "column": 49,
-          "index": 736,
-          "line": 14
-        },
-        "start": {
-          "column": 37,
-          "index": 724,
-          "line": 14
+          "column": 28,
+          "index": 413,
+          "line": 13
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/themes.xml"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFileSource.java"
 }
