@@ -44,9 +44,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     }
     
     public void setFiles(File[] files) {
-    	this.files = files;
-        
-        handler.post((c)-> notifyDataSetChanged());
+        handler.post((c)-> {
+            this.files = files;
+            notifyDataSetChanged();
+        });
         handler.post((c) -> recyclerView.smoothScrollToPosition(0));
     }
     
