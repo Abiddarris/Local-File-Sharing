@@ -362,12 +362,13 @@ public class NetworkFile extends File {
     }
     
     @Override
-    public Uri getThumbnail() {
+    public void createThumbnail(ThumbnailCallback callback) {
         SharingDevice device = source.getDevice();
         String host = device.getHost().getHostAddress();
         int port = device.getPort();
         
-        return Uri.parse(String.format("http://%s:%s%s?type=thumbnail", host, port, encodePath(path)));
+        Uri uri = Uri.parse(String.format("http://%s:%s%s?type=thumbnail", host, port, encodePath(path)));
+        callback.onThumbnailCreated(uri);
     }
     
 }

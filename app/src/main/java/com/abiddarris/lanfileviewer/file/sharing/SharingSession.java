@@ -303,17 +303,11 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         String type = session.getParms().get("type");
         if(type != null && type.equalsIgnoreCase("thumbnail")) {
             Timer timer = new Timer();
+           
             java.io.File f = Thumbnails.getThumbnail(getContext(), new java.io.File(file.getAbsolutePath()));
             
             Log.debug.log(TAG, "file : " + file.getPath() + ", originalSize : " + file.length() + ", time : " + timer.reset() + " ms, thumb : " + f + ", size :" + (f != null ? f.length() : 0));
-            
-            
-           /* try {
-                target.lock.await();
-            } catch (InterruptedException e) {
-                Log.err.log(TAG, e);
-            }*/
-        
+     
             if(f == null) {
                 return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "not found");
             }

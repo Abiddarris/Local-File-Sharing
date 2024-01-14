@@ -16,11 +16,14 @@ import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.DrawableTinter;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.bumptech.glide.Glide;
+import com.gretta.util.log.Log;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
+    
+    public static final String TAG = Log.getTag(FileAdapter.class);
     
     private boolean showBox;
     private Context context;
@@ -119,22 +122,22 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
 
     private void setIcon(final ImageView imageView, final File file) {
         if(hasThumbnail(file)) {
-            Object thumbnail = file.getThumbnail();
-            if(thumbnail instanceof File) {
-                thumbnail = ((File)thumbnail)
-                    .getAbsolutePath();
-            }
-            Glide.with(context)
-                .load(thumbnail)
-                .timeout(6000)
-                .error(R.drawable.icons8_file)
-                .centerCrop()
-                .into(imageView);
+            file.createThumbnail((uri) -> {
+                Log.debug.log(TAG, "icon uri " + uri);
+                Glide.with(context)
+                    .load(uri)
+                    .timeout(6000)
+                    .error(R.drawable.icons8_file)
+                    .centerCrop()
+                    .into(imageView);
+            });
+        
             return;
         }
         Glide.with(context) 
             .clear(imageView);
         
+        Log.debug.log(TAG, file.getPath() + " does not have thumbnail");
         DrawableTinter.withContext(context)
             .withColor(R.color.colorPrimary)
             .withDrawable(file.isFile() ? R.drawable.icons8_file : R.drawable.icons8_folder)

@@ -140,8 +140,9 @@ public class RootFile extends File {
     }
     
     @Override
-    public Object getThumbnail() {
-    	return null;
+    public void createThumbnail(ThumbnailCallback callback) {
+        callback.onThumbnailCreated(null);
     }
+    
     
 }

@@ -2,11 +2,15 @@ package com.abiddarris.lanfileviewer.file.local;
 
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.webkit.MimeTypeMap;
 import androidx.documentfile.provider.DocumentFile;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.Files;
+import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
+import com.abiddarris.lanfileviewer.utils.Thumbnails;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -27,8 +31,10 @@ public class LocalFile extends File {
 
     private java.io.File file;
     private LocalFileSource source;
+    
     private static ExecutorService service = Executors.newCachedThreadPool();
-
+    private static HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
+    
     public static final String TAG = Log.getTag(LocalFile.class);
 
     protected LocalFile(LocalFileSource source, File parent, java.io.File file) {
@@ -101,8 +107,6 @@ public class LocalFile extends File {
 
     @Override
     public String getMimeType() {
-        Uri uri = toUri();
-
         String type = null;
         String extension = Files.getExtension(this);
         if (extension != null) {
@@ -287,8 +291,13 @@ public class LocalFile extends File {
     }
 
     @Override
-    public File getThumbnail() {
-        return this;
+    public void createThumbnail(ThumbnailCallback callback) {
+        service.submit(() -> {
+            java.io.File thumb = Thumbnails.getThumbnail(getSource().getContext(), file);
+            handler.post((c) -> {
+                callback.onThumbnailCreated(Uri.fromFile(thumb));    
+            });
+        });
     }
 
     private static interface OnCopyDoneListener {

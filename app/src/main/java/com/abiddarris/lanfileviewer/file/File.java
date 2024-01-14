@@ -15,6 +15,10 @@ public abstract class File {
     protected File(File parentFile) {
         this.parentFile = parentFile;
     }
+    
+    public final File getParentFile() {
+        return parentFile;
+    }
 
     public abstract void updateData(Callback callback);
 
@@ -25,10 +29,6 @@ public abstract class File {
     public abstract boolean isDirectory();
 
     public abstract boolean isFile();
-
-    public final File getParentFile() {
-        return parentFile;
-    }
 
     public abstract String getName();
 
@@ -62,12 +62,16 @@ public abstract class File {
     
     public abstract Progress move(File dest);
     
-    public abstract Object getThumbnail();
-    
     public abstract String getPath();
+    
+    public abstract void createThumbnail(ThumbnailCallback callback);
     
     public static interface Callback {
         void onDataUpdated(Exception e);
+    }
+    
+    public static interface ThumbnailCallback {
+        void onThumbnailCreated(Uri thumb);
     }
 
     public static class Progress {
