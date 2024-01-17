@@ -31,6 +31,7 @@ public class LocalFile extends File {
 
     private java.io.File file;
     private LocalFileSource source;
+    private File[] files;
     
     private static ExecutorService service = Executors.newCachedThreadPool();
     private static HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
@@ -46,11 +47,22 @@ public class LocalFile extends File {
 
     @Override
     public void updateData(Callback callback) {
-        callback.onDataUpdated(null);
+        service.execute(() -> {
+            updateDataSync();
+            callback.onDataUpdated(null);
+        });
     }
 
     @Override
-    public void updateDataSync() {}
+    public void updateDataSync() {
+        java.io.File[] javaFiles = file.listFiles();
+        if (javaFiles == null) return;
+
+        files = new File[javaFiles.length];
+        for (int i = 0; i < files.length; ++i) {
+            files[i] = source.getFile(getPath() + "/" + javaFiles[i].getName());
+        }
+    }
 
     @Override
     public boolean isDirectory() {
@@ -76,14 +88,6 @@ public class LocalFile extends File {
     @Override
     public File[] listFiles() {
         source.getSecurityManager().checkRead(this);
-
-        java.io.File[] javaFiles = file.listFiles();
-        if (javaFiles == null) return null;
-
-        File[] files = new File[javaFiles.length];
-        for (int i = 0; i < files.length; ++i) {
-            files[i] = source.getFile(getPath() + "/" + javaFiles[i].getName());
-        }
 
         return files;
     }

@@ -140,9 +140,11 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         
         Map<String,String> params = session.getParms();
         File dest = source.getFile(params.get("path"));
+        dest.updateDataSync();
         
         File tempFile = source.getFile(body.get("stream"));
-       
+        tempFile.updateDataSync();
+        
         BufferedInputStream is = new BufferedInputStream(tempFile.newInputStream());
         BufferedOutputStream os = new BufferedOutputStream(dest.newOutputStream());
         byte[] buf = new byte[8 * 1024];
@@ -183,6 +185,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         if(key.equals(REQUEST_GET_TOP_DIRECTORY_FILES)) {
         	JSONArray topDirectoryFiles = new JSONArray();
             File root = source.getRoot();
+            root.updateDataSync();
             for(File subroot : root.listFiles()) {
                 topDirectoryFiles.put(subroot.getPath());
             }
@@ -219,6 +222,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
 
     private void fetchFileRelated(JSONObject request, JSONObject response, String key, String path) throws JSONException {
         File file = source.getFile(path);
+        file.updateDataSync();
         
         if(key.equalsIgnoreCase(REQUEST_GET_NAME)) {
             response.put(KEY_NAME, file.getName());
@@ -273,6 +277,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         if(key.equalsIgnoreCase(REQUEST_COPY)) {
             File dest = source.getFile(
                 request.getString(KEY_DEST));
+            dest.updateDataSync();
             
             File.Progress progress = file.copy(dest);
             progresses.put(progress.hashCode(), progress);
@@ -288,6 +293,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         } else if(key.equalsIgnoreCase(REQUEST_MOVE)) {
             File dest = source.getFile(
                 request.getString(KEY_DEST));
+            dest.updateDataSync();
             
             File.Progress progress = file.move(dest);
             progresses.put(progress.hashCode(), progress);
@@ -300,6 +306,8 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
 
     private Response getFile(IHTTPSession session) throws IOException {
         File file = source.getFile(session.getUri());
+        file.updateDataSync();
+        
         String type = session.getParms().get("type");
         if(type != null && type.equalsIgnoreCase("thumbnail")) {
             Timer timer = new Timer();
@@ -312,6 +320,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
                 return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "not found");
             }
             file = source.getFile(f.getPath());
+            file.updateDataSync();
         }
         
         if(session.getHeaders().get("range") != null) {
