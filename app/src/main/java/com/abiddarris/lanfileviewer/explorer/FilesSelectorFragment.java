@@ -21,14 +21,14 @@ import com.gretta.util.log.Log;
 import java.util.Arrays;
 import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
 
-public class SelectorExplorerFragment extends ExplorerFragment {
+public class FilesSelectorFragment extends SelectorFragment {
     
     public static final String ACTION_TEXT = "actionText";
     public static final String RESULT_KEY = "resultKey";
     
-    public static final String TAG = Log.getTag(SelectorExplorerFragment.class);
+    public static final String TAG = Log.getTag(FilesSelectorFragment.class);
     
-    public SelectorExplorerFragment(FileSource source) {
+    public FilesSelectorFragment(FileSource source) {
         super(source);
     }
     
@@ -43,18 +43,8 @@ public class SelectorExplorerFragment extends ExplorerFragment {
     }
     
     private void onSelected(File... files) {
-        String[] paths = new String[files.length];
-        for(int i = 0; i < paths.length; ++i) {
-        	paths[i] = files[i].getPath();
-        }    
-                
-        Intent intent = new Intent();
-        intent.putExtra(SelectorExplorerFragment.FileContract.RESULT, paths);
-                
-        getActivity()
-            .setResult(Activity.RESULT_OK, intent);
-        getActivity()
-            .finish();    
+        getOnSelectedListener()
+            .onSelected(files);
     }
     
     private class MainMode extends NavigateMode {
@@ -91,7 +81,7 @@ public class SelectorExplorerFragment extends ExplorerFragment {
         
             Button button = group.findViewById(R.id.action_button);
             button.setText(requireArguments()
-                .getString(SelectorExplorerFragment.ACTION_TEXT));
+                .getString(ACTION_TEXT));
         
             button.setOnClickListener(v -> {
                 File[] files = getSelection();
@@ -100,42 +90,6 @@ public class SelectorExplorerFragment extends ExplorerFragment {
         }
     }
     
-    public static class FileContract extends ActivityResultContract<Bundle, File[]> {
-        
-        private FileSource source;
-        private Class<? extends Activity> activity;
-        
-        public static final String RESULT = "result";
-        
-        public FileContract(FileSource source, Class<? extends Activity> activity) {
-            this.source = source;
-            this.activity = activity;
-        }
     
-        @Override
-        public Intent createIntent(Context context, Bundle bundle) {
-            Intent intent = new Intent(context, activity);
-            intent.putExtra("extra", bundle);
-            return intent;
-        }
-        
-        @Override
-        public File[] parseResult(int resultCode, Intent intent) {
-            Log.debug.log(TAG, "result code : " + resultCode);
-            
-            if(intent == null) return null;
-            
-            String[] paths = intent.getStringArrayExtra(RESULT);
-            if(paths == null) return null;
-            
-            File[] files = new File[paths.length];
-            for(int i = 0; i < files.length; ++i) {
-            	files[i] = source.getFile(paths[i]);
-            }
-            
-            return files;
-        }
-        
-    }
     
 }

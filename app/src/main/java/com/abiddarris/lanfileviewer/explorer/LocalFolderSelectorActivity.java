@@ -62,9 +62,9 @@ public class LocalFolderSelectorActivity extends AppCompatActivity implements Sh
         
         fragment = new FolderSelectorExplorerFragment(
             LocalFileSource.getDefaultLocalSource(this));
-        fragment.setOnFolderSelectedListener((file) -> {
+        fragment.setOnSelectedListener((files) -> {
             Intent intent = new Intent();
-            intent.putExtra(FileContract.RESULT, file.getPath());
+            intent.putExtra(FileContract.RESULT, files[0].getPath());
                 
             setResult(Activity.RESULT_OK, intent);
             finish();    

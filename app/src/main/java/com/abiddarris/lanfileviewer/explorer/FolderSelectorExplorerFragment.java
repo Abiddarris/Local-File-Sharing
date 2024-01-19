@@ -9,9 +9,7 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
 
-public class FolderSelectorExplorerFragment extends ExplorerFragment {
-
-    private OnFolderSelectedListener onFolderSelectedListener;
+public class FolderSelectorExplorerFragment extends SelectorFragment {
 
     public FolderSelectorExplorerFragment(FileSource source) {
         super(source);
@@ -37,7 +35,8 @@ public class FolderSelectorExplorerFragment extends ExplorerFragment {
             Button button = group.findViewById(R.id.action_button);
             button.setText(getString(R.string.select));
             button.setOnClickListener((v) -> {
-                onFolderSelectedListener.onFolderSelected(getExplorer().getParent());
+                getOnSelectedListener()
+                    .onSelected(getExplorer().getParent());
             });
         }
 
@@ -54,15 +53,5 @@ public class FolderSelectorExplorerFragment extends ExplorerFragment {
         public void onItemLongClickListener(ViewHolder holder, int pos) {}
     }
 
-    public static interface OnFolderSelectedListener {
-        void onFolderSelected(File folder);
-    }
-
-    public OnFolderSelectedListener getOnFolderSelectedListener() {
-        return this.onFolderSelectedListener;
-    }
-
-    public void setOnFolderSelectedListener(OnFolderSelectedListener onFolderSelectedListener) {
-        this.onFolderSelectedListener = onFolderSelectedListener;
-    }
+    
 }

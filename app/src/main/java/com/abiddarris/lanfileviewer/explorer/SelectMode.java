@@ -28,7 +28,6 @@ import com.abiddarris.lanfileviewer.databinding.LayoutSelectModeBinding;
 import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
-import com.abiddarris.lanfileviewer.ui.LocalExplorerDialog;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.gretta.util.log.Log;
 import java.util.ArrayList;

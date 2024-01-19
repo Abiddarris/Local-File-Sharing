@@ -25,7 +25,6 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFile;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
-import com.abiddarris.lanfileviewer.ui.LocalExplorerDialog;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gretta.util.log.Log;
 import java.util.ArrayList;

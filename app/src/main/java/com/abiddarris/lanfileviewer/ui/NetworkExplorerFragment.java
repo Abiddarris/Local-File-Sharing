@@ -21,7 +21,8 @@ import com.abiddarris.lanfileviewer.actions.ActionDialog;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.actions.uploads.UploadRunnable;
 import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
-import com.abiddarris.lanfileviewer.explorer.SelectorExplorerFragment;
+import com.abiddarris.lanfileviewer.explorer.FilesSelectorFragment;
+import com.abiddarris.lanfileviewer.explorer.LocalFilesSelectorActivity;
 import com.abiddarris.lanfileviewer.explorer.SortByDialog;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
@@ -43,7 +44,7 @@ public class NetworkExplorerFragment extends ExplorerFragment implements SharedP
     @CallSuper
     public void onCreate(Bundle bundle) {
         uploadLauncher = registerForActivityResult(
-            new SelectorExplorerFragment.FileContract(LocalFileSource.getDefaultLocalSource(getContext()), LocalExplorerDialog.class), new ActivityResultCallback<File[]>(){
+            new LocalFilesSelectorActivity.FileContract(LocalFileSource.getDefaultLocalSource(getContext()), LocalFilesSelectorActivity.class), new ActivityResultCallback<File[]>(){
                 @Override
                 public void onActivityResult(File[] files) {
                     if(files == null) return;
@@ -74,7 +75,7 @@ public class NetworkExplorerFragment extends ExplorerFragment implements SharedP
         if(item == upload) {
             Bundle bundle = new Bundle();
             bundle.putString(ExplorerFragment.TITLE, getString(R.string.upload));
-            bundle.putString(SelectorExplorerFragment.ACTION_TEXT, getString(R.string.upload));
+            bundle.putString(FilesSelectorFragment.ACTION_TEXT, getString(R.string.upload));
             
             uploadLauncher.launch(bundle);
            

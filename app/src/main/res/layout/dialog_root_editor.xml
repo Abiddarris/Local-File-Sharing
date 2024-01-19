@@ -10,7 +10,9 @@
          android:layout_width="match_parent"
          style="@style/DialogRootLayoutStyle">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+             style="?attr/materialIconButtonStyle"
+             app:icon="@drawable/ic_trash"
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
              android:layout_margin="10dp"
@@ -20,7 +22,7 @@
              android:text="@string/add" />
 
         <androidx.recyclerview.widget.RecyclerView
-             android:layout_height="match_parent"
+             android:layout_height="wrap_content"
              android:layout_width="match_parent"
              android:layout_above="@+id/add"
              android:id="@+id/rootList" />
