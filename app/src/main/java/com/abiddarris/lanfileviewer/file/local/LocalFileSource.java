@@ -143,4 +143,12 @@ public class LocalFileSource extends FileSource {
             .commit();
     }
   
+    public static String getInternalStoragePath() {
+        return Environment.getExternalStorageDirectory()
+            .getPath();
+    }
+    
+    public static String getExternalStoragePath(Context context) {
+    	return getSDCardPath(context);
+    }
 }

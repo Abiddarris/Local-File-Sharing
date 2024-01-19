@@ -5,18 +5,26 @@
      android:layout_height="match_parent"
      android:layout_width="match_parent">
 
-    <Button
-         android:layout_height="wrap_content"
-         android:layout_width="wrap_content"
-         android:layout_margin="10dp"
-         android:layout_alignParentEnd="true"
-         android:id="@+id/add"
-         android:text="@string/add" />
-
-    <androidx.recyclerview.widget.RecyclerView
-         android:id="@+id/rootList"
+    <RelativeLayout
          android:layout_height="match_parent"
          android:layout_width="match_parent"
-         android:layout_below="@+id/add" />
+         style="@style/DialogRootLayoutStyle">
+
+        <Button
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_margin="10dp"
+             android:layout_alignParentEnd="true"
+             android:layout_alignParentBottom="true"
+             android:id="@+id/add"
+             android:text="@string/add" />
+
+        <androidx.recyclerview.widget.RecyclerView
+             android:layout_height="match_parent"
+             android:layout_width="match_parent"
+             android:layout_above="@+id/add"
+             android:id="@+id/rootList" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

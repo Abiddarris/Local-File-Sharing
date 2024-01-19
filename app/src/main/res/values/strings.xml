@@ -19,7 +19,7 @@
     <string name="stop_scan">Stop Scan</string>
     <string name="files">Files</string>
     <string name="add">Add</string>
-    <string name="root_files">Main Files</string>
+    <string name="root_files">Root Files</string>
     <string name="upload">Upload</string>
     <string name="move">Move</string>
     <string name="copy">Copy</string>

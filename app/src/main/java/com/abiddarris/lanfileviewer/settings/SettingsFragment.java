@@ -43,7 +43,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         if(pref instanceof RootEditorPreference) {
             RootEditorDialog dialog = new RootEditorDialog();
             dialog.setTargetFragment(SettingsFragment.this,0);
-            dialog.show(getFragmentManager(), null);
+            dialog.show(getActivity().getSupportFragmentManager(), null);
             return;
         }    
         super.onDisplayPreferenceDialog(pref);

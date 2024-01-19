@@ -13,7 +13,6 @@ public class RootEditorPreference extends DialogPreference {
         super(context,attrs);
         
         setPersistent(false);
-        setDialogLayoutResource(R.layout.dialog_root_editor);
     }
     
 }
