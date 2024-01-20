@@ -58,6 +58,16 @@ public class RootAdapter extends Adapter<RootAdapter.RootViewHolder>{
         notifyDataSetChanged();
     }
     
+    public void addRoot(File root) {
+        for(File file : getRoots()) {
+            if(file.getAbsolutePath().equalsIgnoreCase(root.getAbsolutePath())) {
+                return;
+            }
+        }
+        
+        getRoots().add(root);
+    }
+    
     protected static class RootViewHolder extends ViewHolder {
         
         private LayoutRootFileEditorBinding binding;

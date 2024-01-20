@@ -44,7 +44,7 @@ public class NetworkExplorerFragment extends ExplorerFragment implements SharedP
     @CallSuper
     public void onCreate(Bundle bundle) {
         uploadLauncher = registerForActivityResult(
-            new LocalFilesSelectorActivity.FileContract(LocalFileSource.getDefaultLocalSource(getContext()), LocalFilesSelectorActivity.class), new ActivityResultCallback<File[]>(){
+            new LocalFilesSelectorActivity.FileContract(getContext()), new ActivityResultCallback<File[]>(){
                 @Override
                 public void onActivityResult(File[] files) {
                     if(files == null) return;

@@ -117,19 +117,17 @@ public class LocalFilesSelectorActivity extends AppCompatActivity implements Sha
     
     public static class FileContract extends ActivityResultContract<Bundle, File[]> {
         
-        private FileSource source;
-        private Class<? extends Activity> activity;
-        
         public static final String RESULT = "result";
-        
-        public FileContract(FileSource source, Class<? extends Activity> activity) {
-            this.source = source;
-            this.activity = activity;
-        }
     
+        private Context context;
+        
+        public FileContract(Context context) {
+            this.context = context;
+        }
+        
         @Override
         public Intent createIntent(Context context, Bundle bundle) {
-            Intent intent = new Intent(context, activity);
+            Intent intent = new Intent(context, LocalFilesSelectorActivity.class);
             intent.putExtra("extra", bundle);
             return intent;
         }
@@ -142,6 +140,8 @@ public class LocalFilesSelectorActivity extends AppCompatActivity implements Sha
             
             String[] paths = intent.getStringArrayExtra(RESULT);
             if(paths == null) return null;
+            
+            FileSource source = FileSource.getDefaultLocalSource(context);
             
             File[] files = new File[paths.length];
             for(int i = 0; i < files.length; ++i) {

@@ -24,7 +24,10 @@
          android:id="@+id/absolutePath"
          android:text="/storage/emulated/0/Android" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
+         android:background="?attr/selectableItemBackgroundBorderless"
+         style="?attr/materialIconButtonStyle"
+         app:icon="@drawable/ic_trash"
          android:layout_height="50dp"
          android:layout_width="50dp"
          android:layout_centerVertical="true"

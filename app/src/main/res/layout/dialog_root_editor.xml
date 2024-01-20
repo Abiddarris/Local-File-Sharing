@@ -2,30 +2,26 @@
 <RelativeLayout
      xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:app="http://schemas.android.com/apk/res-auto"
-     android:layout_height="match_parent"
+     android:layout_height="wrap_content"
      android:layout_width="match_parent">
 
     <RelativeLayout
-         android:layout_height="match_parent"
+         android:layout_height="wrap_content"
          android:layout_width="match_parent"
          style="@style/DialogRootLayoutStyle">
-
-        <com.google.android.material.button.MaterialButton
-             style="?attr/materialIconButtonStyle"
-             app:icon="@drawable/ic_trash"
-             android:layout_height="wrap_content"
-             android:layout_width="match_parent"
-             android:layout_margin="10dp"
-             android:layout_alignParentEnd="true"
-             android:layout_alignParentBottom="true"
-             android:id="@+id/add"
-             android:text="@string/add" />
 
         <androidx.recyclerview.widget.RecyclerView
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
-             android:layout_above="@+id/add"
              android:id="@+id/rootList" />
+
+        <Button
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_below="@id/rootList"
+             android:layout_margin="10dp"
+             android:id="@+id/add"
+             android:text="@string/add" />
 
     </RelativeLayout>
 
