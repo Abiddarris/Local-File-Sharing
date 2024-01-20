@@ -22,20 +22,28 @@ public class LocalFileSource extends FileSource {
     public static final String SD_CARD_URI_KEY = "sdCardUriKey";
     public static final String TAG = Log.getTag(LocalFileSource.class);
     
-    public LocalFileSource(Context context) {
+    public LocalFileSource(Context context, java.io.File[] files) {
         super(context);
         
         root = new RootFile(this);
         
-        File internalStorage = new LocalFile(this, root,
-            Environment.getExternalStorageDirectory());
+        for(java.io.File file : files) {
+            File rootChild = new LocalFile(this, root, file);
+            
+            root.addRoots(rootChild);
+            
+            registerToCache(rootChild);
+        }
         
-        root.addRoots(internalStorage);
+        initSdCardSupport(context);
         
+        registerToCache(root);
+    }
+    
+    private void initSdCardSupport(Context context) {
         String sdCardPath = getSDCardPath(context);
         
         Log.debug.log(TAG, sdCardPath);
-        
         if(sdCardPath != null) {
             java.io.File file = new java.io.File(sdCardPath);
             
@@ -47,11 +55,25 @@ public class LocalFileSource extends FileSource {
             }
             
             sdCardStorage = new LocalFile(this, root, file);
-            root.addRoots(sdCardStorage);
-            
-            registerToCache(sdCardStorage);
         }
+    }
+    
+    public LocalFileSource(Context context) {
+        super(context);
         
+        root = new RootFile(this);
+        
+        File internalStorage = new LocalFile(this, root,
+            Environment.getExternalStorageDirectory());
+        
+        root.addRoots(internalStorage);
+        
+        initSdCardSupport(context);
+        
+        if(sdCardStorage != null) {
+            registerToCache(sdCardStorage);
+            root.addRoots(sdCardStorage);
+        } 
         registerToCache(root);
         registerToCache(internalStorage);
     }
@@ -62,18 +84,18 @@ public class LocalFileSource extends FileSource {
     }
     
     protected DocumentFile findDocumentFile(File file) {
-        String filePath = file.getPath();
+        String filePath = file.getAbsolutePath();
     	if(sdCardStorage == null || !filePath.toLowerCase()
-            .startsWith(sdCardStorage.getPath().toLowerCase())) {
+            .startsWith(sdCardStorage.getAbsolutePath().toLowerCase())) {
             Log.debug.log(TAG, "Returning from findDocumentFile(File)");
             return null;
         }
         
-        if(filePath.length() == sdCardStorage.getPath().length()) {
+        if(filePath.length() == sdCardStorage.getAbsolutePath().length()) {
             return sdCardDocumentFile;
         }
         
-        String[] paths = filePath.substring(sdCardStorage.getPath().length() + 1)
+        String[] paths = filePath.substring(sdCardStorage.getAbsolutePath().length() + 1)
             .split("/");
         
         Log.debug.log(TAG, Arrays.toString(paths));

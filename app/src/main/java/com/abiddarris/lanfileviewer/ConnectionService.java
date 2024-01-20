@@ -29,6 +29,7 @@ import com.abiddarris.lanfileviewer.file.sharing.SharingSession;
 import com.abiddarris.lanfileviewer.settings.Settings;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.gretta.util.log.Log;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -118,7 +119,8 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         
         Log.debug.log(TAG, "Registering Server");
         
-        FileSource source = LocalFileSource.getDefaultLocalSource(this);
+        List<java.io.File> roots = Settings.getRoots(this);
+        FileSource source = new LocalFileSource(this, roots.toArray(new java.io.File[0]));
         source.setSecurityManager(new SecurityManagerImpl());
         
         String name = Settings.getDefaultName(this);
