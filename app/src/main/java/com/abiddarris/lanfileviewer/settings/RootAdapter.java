@@ -38,13 +38,14 @@ public class RootAdapter extends Adapter<RootAdapter.RootViewHolder>{
         binding.name.setText(root.getName());
         binding.absolutePath.setText(root.getAbsolutePath());
         binding.remove.setOnClickListener((v) -> {
+            int pos = roots.indexOf(root);
             roots.remove(root);
-            notifyItemRemoved(index);
+                
+            notifyItemRemoved(pos);
             onRootRemoved.onRemove(this);
         });
     }
     
-
     @Override
     public int getItemCount() {
         return roots.size();
