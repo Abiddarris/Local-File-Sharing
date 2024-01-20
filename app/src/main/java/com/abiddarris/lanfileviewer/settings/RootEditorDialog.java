@@ -62,6 +62,10 @@ public class RootEditorDialog extends DialogFragment {
             
             getRootsLauncher.launch(bundle1);
         });
+        binding.resetToDefault.setOnClickListener(v -> {
+            adapter.setRoots(Settings.getDefaultRoots(getContext()));
+            adapter.notifyDataSetChanged();    
+        });
         
         dialog = new MaterialAlertDialogBuilder(getContext())
             .setView(binding.getRoot())

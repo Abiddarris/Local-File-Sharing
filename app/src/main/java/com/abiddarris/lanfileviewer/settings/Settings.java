@@ -24,12 +24,7 @@ public class Settings {
     public static List<File> getRoots(Context context) {
     	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         Set<String> rootPaths = preferences.getStringSet("roots", createDefaultRoots(context));
-        List<File> roots = new ArrayList<>();
-        int index = 0;
-        for(String path : rootPaths) {
-            roots.add(new File(path));
-        	index++;
-        }
+        List<File> roots = toList(rootPaths);
         
         Log.debug.log(TAG, "root paths : " + rootPaths);
         Log.debug.log(TAG, "roots : " + roots);
@@ -47,6 +42,21 @@ public class Settings {
         preferences.edit()
             .putStringSet("roots", paths)
             .commit();
+    }
+    
+    public static List<File> getDefaultRoots(Context context) {
+    	return toList(createDefaultRoots(context));
+    }
+    
+    private static List<File> toList(Set<String> paths) {
+        List<File> roots = new ArrayList<>();
+        int index = 0;
+        for(String path : paths) {
+            roots.add(new File(path));
+        	index++;
+        }
+        
+        return roots;
     }
     
     private static Set<String> createDefaultRoots(Context context) {
