@@ -73,6 +73,7 @@ public class RootEditorDialog extends DialogFragment {
     }
     
     public void save() {
+        Settings.setRoots(getContext(), adapter.getRoots());
     }
     
     private class ResultCallback implements ActivityResultCallback<File[]> {

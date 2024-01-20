@@ -37,6 +37,18 @@ public class Settings {
         return roots;
     }
     
+    public static void setRoots(Context context, List<File> files) {
+    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Set<String> paths = new HashSet<>();
+        for(File file : files) {
+        	paths.add(file.getAbsolutePath());
+        }
+        
+        preferences.edit()
+            .putStringSet("roots", paths)
+            .commit();
+    }
+    
     private static Set<String> createDefaultRoots(Context context) {
     	Set<String> roots = new HashSet<>();
         roots.add(LocalFileSource.getInternalStoragePath());
