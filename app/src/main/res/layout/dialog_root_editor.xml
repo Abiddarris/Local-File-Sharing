@@ -23,6 +23,14 @@
              android:id="@+id/add"
              android:text="@string/add" />
 
+        <Button
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:layout_below="@id/add"
+             android:layout_margin="10dp"
+             android:text="@string/reset_to_default"
+             android:id="@+id/reset_to_default" />
+
     </RelativeLayout>
 
 </RelativeLayout>

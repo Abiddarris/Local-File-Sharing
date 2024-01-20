@@ -4,17 +4,92 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/local/LocalFileSource.java",
       "selection": {
         "end": {
-          "column": 75,
-          "index": 3138,
+          "column": 13,
+          "index": 3200,
+          "line": 100
+        },
+        "start": {
+          "column": 13,
+          "index": 3200,
+          "line": 100
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/RootEditorDialog.java",
+      "selection": {
+        "end": {
+          "column": 44,
+          "index": 3588,
           "line": 97
         },
         "start": {
-          "column": 75,
-          "index": 3138,
+          "column": 44,
+          "index": 3588,
           "line": 97
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/RootAdapter.java",
+      "selection": {
+        "end": {
+          "column": 41,
+          "index": 1521,
+          "line": 42
+        },
+        "start": {
+          "column": 41,
+          "index": 1521,
+          "line": 42
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/dimens.xml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/strings.xml",
+      "selection": {
+        "end": {
+          "column": 34,
+          "index": 4677,
+          "line": 88
+        },
+        "start": {
+          "column": 18,
+          "index": 4661,
+          "line": 88
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/dialog_root_editor.xml",
+      "selection": {
+        "end": {
+          "column": 6,
+          "index": 905,
+          "line": 25
+        },
+        "start": {
+          "column": 6,
+          "index": 905,
+          "line": 25
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/local/LocalFileSource.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/dialog_root_editor.xml"
 }

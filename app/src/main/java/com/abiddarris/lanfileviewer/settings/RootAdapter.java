@@ -16,6 +16,7 @@ public class RootAdapter extends Adapter<RootAdapter.RootViewHolder>{
     
     private LayoutInflater inflater;
     private List<File> roots = new ArrayList<>();
+    private OnRootRemoved onRootRemoved;
     
     public RootAdapter(Context context) {
         inflater = LayoutInflater.from(context);
@@ -39,6 +40,7 @@ public class RootAdapter extends Adapter<RootAdapter.RootViewHolder>{
         binding.remove.setOnClickListener((v) -> {
             roots.remove(root);
             notifyItemRemoved(index);
+            onRootRemoved.onRemove(this);
         });
     }
     
@@ -79,5 +81,18 @@ public class RootAdapter extends Adapter<RootAdapter.RootViewHolder>{
         }
         
     }
+    
+    public static interface OnRootRemoved {
+        
+        void onRemove(RootAdapter adapter);
+        
+    }
 
+    public OnRootRemoved getOnRootRemoved() {
+        return this.onRootRemoved;
+    }
+    
+    public void setOnRootRemoved(OnRootRemoved onRootRemoved) {
+        this.onRootRemoved = onRootRemoved;
+    }
 }

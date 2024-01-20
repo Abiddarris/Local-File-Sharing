@@ -26,6 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 public class RootEditorDialog extends DialogFragment {
     
     private ActivityResultLauncher<Bundle> getRootsLauncher;
+    private AlertDialog dialog;
     private DialogRootEditorBinding binding;
     private RootAdapter adapter;
     
@@ -62,12 +63,19 @@ public class RootEditorDialog extends DialogFragment {
             getRootsLauncher.launch(bundle1);
         });
         
-        AlertDialog dialog = new MaterialAlertDialogBuilder(getContext())
+        dialog = new MaterialAlertDialogBuilder(getContext())
             .setView(binding.getRoot())
             .setCancelable(false)
             .setNeutralButton(R.string.cancel, (v,v2) -> {})
             .setPositiveButton(R.string.ok, (v,v2) -> save())
             .create();
+        
+        adapter.setOnRootRemoved((adapter) -> {
+            if(adapter.getRoots().size() == 0) {
+               dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setEnabled(false);
+            }   
+        });
         
         return dialog;
     }
@@ -86,6 +94,11 @@ public class RootEditorDialog extends DialogFragment {
                 adapter.addRoot(new java.io.File(file.getAbsolutePath()));
             }
             adapter.notifyDataSetChanged();
+            
+            if(adapter.getRoots().size() > 0) {
+               dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setEnabled(true);
+            }
         }
         
     }
