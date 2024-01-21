@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionDialog;
+import com.abiddarris.lanfileviewer.actions.runnables.DownloadAndOpenRunnable;
 import com.abiddarris.lanfileviewer.actions.runnables.DownloadRunnable;
 import com.abiddarris.lanfileviewer.databinding.LayoutSelectBinding;
 import com.abiddarris.lanfileviewer.databinding.LayoutSelectModeBinding;
@@ -272,10 +273,14 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
         popup.setOnMenuItemClickListener((item) -> onPopupMenuClicked(item));
         popup.setOnDismissListener((p) -> menu = null);
         
-        MenuItem menu = popup.getMenu()
-            .findItem(R.id.rename);
-        menu.setVisible(!(checked.size() > 1));
-        
+        popup.getMenu()
+            .setGroupVisible(R.id.singleSelect,!(checked.size() > 1));
+      
+        popup.getMenu()
+            .findItem(R.id.downloadAndOpen)
+            .setVisible(checked.size() == 1 && checked.iterator()
+                                                .next()
+                                                .isFile());
         popup.show();
     }
 
@@ -290,6 +295,13 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
                 new DetailDialog(checked.toArray(new File[0]))
                       .show(getExplorer().getFragment().getParentFragmentManager(), null);
                 break;
+            case R.id.downloadAndOpen :
+                File file = checked.toArray(new File[0])[0];
+                new ActionDialog(getExplorer(), DownloadAndOpenRunnable.create(getExplorer().getContext(), file))
+                    .show(getExplorer().getFragment().getParentFragmentManager(), null);
+                getExplorer()
+                    .setMode(getExplorer().navigateMode);
+                    
         }
         return false;
     }

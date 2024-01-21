@@ -8,13 +8,22 @@
         android:id="@+id/detail"/>
     
     <item
-        android:title="@string/rename"
-        app:showAsAction="never"
-        android:id="@+id/rename"/>
-    
-    <item
         android:title="@string/compress"
         app:showAsAction="never"
         android:id="@+id/compress"/>
+    
+    <group
+        android:id="@+id/singleSelect">
+        <item
+            android:title="@string/rename"
+            app:showAsAction="never"
+            android:id="@+id/rename"/>
+        
+        <item
+            android:title="@string/download_and_open"
+            app:showAsAction="never"
+            android:id="@+id/downloadAndOpen"/>
+        
+    </group>
     
 </menu>

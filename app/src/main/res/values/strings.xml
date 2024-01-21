@@ -87,4 +87,5 @@
     <string name="copying">Copying</string>
     <string name="moving">Moving</string>
     <string name="reset_to_default">Reset to Default</string>
+    <string name="download_and_open">Download and Open</string>
 </resources>
