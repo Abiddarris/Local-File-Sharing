@@ -11,14 +11,15 @@
          style="@style/DialogRootLayoutStyle">
 
         <androidx.recyclerview.widget.RecyclerView
-             android:layout_height="wrap_content"
+             android:layout_height="match_parent"
              android:layout_width="match_parent"
+             android:layout_above="@id/add"
              android:id="@+id/rootList" />
 
         <Button
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
-             android:layout_below="@id/rootList"
+             android:layout_above="@id/reset_to_default"
              android:layout_margin="10dp"
              android:id="@+id/add"
              android:text="@string/add" />
@@ -26,8 +27,8 @@
         <Button
              android:layout_height="wrap_content"
              android:layout_width="match_parent"
-             android:layout_below="@id/add"
              android:layout_margin="10dp"
+             android:layout_alignParentBottom="true"
              android:text="@string/reset_to_default"
              android:id="@+id/reset_to_default" />
 

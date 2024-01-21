@@ -1,65 +1,20 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/Settings.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/dialog_root_editor.xml",
       "selection": {
         "end": {
-          "column": 12,
-          "index": 1685,
-          "line": 47
+          "column": 17,
+          "index": 1306,
+          "line": 36
         },
         "start": {
-          "column": 12,
-          "index": 1685,
-          "line": 47
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/RootEditorDialog.java",
-      "selection": {
-        "end": {
-          "column": 50,
-          "index": 2541,
-          "line": 64
-        },
-        "start": {
-          "column": 50,
-          "index": 2541,
-          "line": 64
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/FileSource.java",
-      "selection": {
-        "end": {
-          "column": 15,
-          "index": 1638,
-          "line": 56
-        },
-        "start": {
-          "column": 15,
-          "index": 1638,
-          "line": 56
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/RootAdapter.java",
-      "selection": {
-        "end": {
-          "column": 16,
-          "index": 1501,
-          "line": 42
-        },
-        "start": {
-          "column": 16,
-          "index": 1501,
-          "line": 42
+          "column": 17,
+          "index": 1306,
+          "line": 36
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/RootAdapter.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/dialog_root_editor.xml"
 }
