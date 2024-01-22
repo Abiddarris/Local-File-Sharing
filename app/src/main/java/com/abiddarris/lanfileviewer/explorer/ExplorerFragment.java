@@ -128,6 +128,10 @@ public abstract class ExplorerFragment extends Fragment {
             case R.id.edit :
                 getExplorer()
                     .setMode(getExplorer().selectMode);
+                break;
+            case R.id.go_to :
+                new GoToDialog(getExplorer(), getSource())
+                    .show(getParentFragmentManager(), null);
         }
         
         return super.onOptionsItemSelected(item);

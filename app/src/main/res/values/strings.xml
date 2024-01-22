@@ -94,4 +94,6 @@
     <string name="download_cache">Downloads Cache</string>
     <string name="delete_download_cache">Delete download cache</string>
     <string name="delete_confirmation">Do you want to delete %s to free up %s?</string>
+    <string name="go_to">Go to</string>
+    <string name="go">Go</string>
 </resources>

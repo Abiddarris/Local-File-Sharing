@@ -15,5 +15,10 @@
         android:id="@+id/sort_by"
         android:title="@string/sort_by"
         android:showAsAction="never"/>
+    
+    <item
+        android:id="@+id/go_to"
+        android:title="@string/go_to"
+        android:showAsAction="never"/>
 
 </menu>
