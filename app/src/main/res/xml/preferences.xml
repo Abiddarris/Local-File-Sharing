@@ -21,7 +21,8 @@
     <PreferenceCategory
         app:title="@string/files">
         
-        <com.abiddarris.lanfileviewer.settings.RootEditorPreference
+        <com.abiddarris.lanfileviewer.settings.CustomPreference
+            app:key="roots"
             app:title="@string/root_files"/>
         
     </PreferenceCategory>
@@ -42,6 +43,21 @@
             app:entryValues="@array/modify_permission_values"
             app:key="deleteAccess"
             app:title="@string/delete_access"/>
+        
+    </PreferenceCategory>
+    
+     <PreferenceCategory
+        app:title="@string/cache">
+        
+        <com.abiddarris.lanfileviewer.settings.CustomPreference
+            app:key="roots"
+            app:summary="@string/delete_download_cache"
+            app:title="@string/download_cache"/>
+        
+        <com.abiddarris.lanfileviewer.settings.CustomPreference
+            app:key="roots"
+            app:summary="@string/delete_thumbnails_cache"
+            app:title="@string/thumbnails_cache"/>
         
     </PreferenceCategory>
   

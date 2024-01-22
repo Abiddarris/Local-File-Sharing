@@ -2,17 +2,25 @@ package com.abiddarris.lanfileviewer.settings;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import androidx.fragment.app.DialogFragment;
 import androidx.preference.DialogPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 import com.abiddarris.lanfileviewer.R;
 
-public class RootEditorPreference extends DialogPreference {
+public class CustomPreference extends DialogPreference {
     
-    public RootEditorPreference(Context context, AttributeSet attrs) {
+    public CustomPreference(Context context, AttributeSet attrs) {
         super(context,attrs);
         
         setPersistent(false);
+    }
+    
+    static DialogFragment createFrom(final Preference pref) {
+        if(pref.getKey().equals("roots")) {
+            return new RootEditorDialog();
+        }
+        return null;
     }
     
 }

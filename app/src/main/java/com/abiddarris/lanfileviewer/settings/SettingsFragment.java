@@ -40,9 +40,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     
     @Override
     public void onDisplayPreferenceDialog(Preference pref) {
-        if(pref instanceof RootEditorPreference) {
-            RootEditorDialog dialog = new RootEditorDialog();
-            dialog.setTargetFragment(SettingsFragment.this,0);
+        if(pref instanceof CustomPreference) {
+            DialogFragment dialog = CustomPreference.createFrom(pref);
+            dialog.setTargetFragment(this,0);
             dialog.show(getActivity().getSupportFragmentManager(), null);
             return;
         }    

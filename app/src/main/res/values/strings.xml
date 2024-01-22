@@ -88,4 +88,9 @@
     <string name="moving">Moving</string>
     <string name="reset_to_default">Reset to Default</string>
     <string name="download_and_open">Download and Open</string>
+    <string name="cache">Cache</string>
+    <string name="thumbnails_cache">Thumbnails Cache</string>
+    <string name="delete_thumbnails_cache">Delete thumbnails cache</string>
+    <string name="download_cache">Downloads Cache</string>
+    <string name="delete_download_cache">Delete download cache</string>
 </resources>
