@@ -93,4 +93,5 @@
     <string name="delete_thumbnails_cache">Delete thumbnails cache</string>
     <string name="download_cache">Downloads Cache</string>
     <string name="delete_download_cache">Delete download cache</string>
+    <string name="delete_confirmation">Do you want to delete %s to free up %s?</string>
 </resources>

@@ -169,7 +169,7 @@ public class Thumbnails {
         Log.debug.log(TAG, "Save operation takes " + timer.reset() + " ms");
     }
     
-    private static File getThumbnailsCacheFolder(Context context) {
+    public static File getThumbnailsCacheFolder(Context context) {
         if(thumbmailsFolder == null) {
             thumbmailsFolder = new File(context.getCacheDir(), "thumbnail-cache");
         }

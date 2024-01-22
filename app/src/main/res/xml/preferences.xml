@@ -55,7 +55,7 @@
             app:title="@string/download_cache"/>
         
         <com.abiddarris.lanfileviewer.settings.CustomPreference
-            app:key="roots"
+            app:key="thumbnailsCache"
             app:summary="@string/delete_thumbnails_cache"
             app:title="@string/thumbnails_cache"/>
         

@@ -34,14 +34,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/CustomPreference.java",
       "selection": {
         "end": {
-          "column": 4,
-          "index": 542,
-          "line": 18
+          "column": 0,
+          "index": 328,
+          "line": 9
         },
         "start": {
-          "column": 4,
-          "index": 542,
-          "line": 18
+          "column": 0,
+          "index": 328,
+          "line": 9
         }
       }
     },
@@ -49,14 +49,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/xml/preferences.xml",
       "selection": {
         "end": {
-          "column": 14,
-          "index": 1344,
-          "line": 44
+          "column": 36,
+          "index": 1793,
+          "line": 57
         },
         "start": {
-          "column": 14,
-          "index": 1344,
-          "line": 44
+          "column": 21,
+          "index": 1778,
+          "line": 57
         }
       }
     },
@@ -79,17 +79,47 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/values/strings.xml",
       "selection": {
         "end": {
-          "column": 45,
-          "index": 4992,
-          "line": 93
+          "column": 78,
+          "index": 5156,
+          "line": 95
         },
         "start": {
-          "column": 45,
-          "index": 4992,
-          "line": 93
+          "column": 78,
+          "index": 5156,
+          "line": 95
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/DeleteThumbnailsCacheDialog.java",
+      "selection": {
+        "end": {
+          "column": 8,
+          "index": 1250,
+          "line": 32
+        },
+        "start": {
+          "column": 8,
+          "index": 1250,
+          "line": 32
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/utils/Thumbnails.java",
+      "selection": {
+        "end": {
+          "column": 11,
+          "index": 6764,
+          "line": 171
+        },
+        "start": {
+          "column": 11,
+          "index": 6764,
+          "line": 171
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/CustomPreference.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/DeleteThumbnailsCacheDialog.java"
 }

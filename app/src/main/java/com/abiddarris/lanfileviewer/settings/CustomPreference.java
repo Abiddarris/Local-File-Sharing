@@ -19,6 +19,8 @@ public class CustomPreference extends DialogPreference {
     static DialogFragment createFrom(final Preference pref) {
         if(pref.getKey().equals("roots")) {
             return new RootEditorDialog();
+        } else if(pref.getKey().equals("thumbnailsCache")) {
+            return new DeleteThumbnailsCacheDialog();
         }
         return null;
     }
