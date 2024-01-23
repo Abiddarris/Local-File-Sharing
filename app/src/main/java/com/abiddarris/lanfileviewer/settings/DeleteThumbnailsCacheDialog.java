@@ -31,7 +31,7 @@ public class DeleteThumbnailsCacheDialog extends DialogFragment {
         files = new ArrayList<>();
         Files.getFilesTree(files, cache);
         
-        long size = Files.getFilesTreeSize(files);
+        long size = cache.getFilesTreeSize();
         
         String message = String.format(getString(R.string.delete_confirmation),
             getString(R.string.thumbnails_cache).toLowerCase(), Files.formatSize(size));

@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import android.graphics.drawable.Drawable;
 import com.bumptech.glide.request.transition.Transition;
@@ -301,6 +302,16 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             response.put(KEY_PROGRESS_ID, progress.hashCode());
         } else if(key.equalsIgnoreCase(REQUEST_ABSOLUTE_PATH)) {
             response.put(KEY_ABSOLUTE_PATH, file.getAbsolutePath());
+        } else if(key.equalsIgnoreCase(REQUEST_GET_FILES_TREE)) {
+            List<File> trees = file.getFilesTree();
+            JSONArray files = new JSONArray();
+            for(File tree : trees) {
+                files.put(tree.getPath());
+            }
+            
+            response.put(KEY_FILES_TREE, files);
+        } else if(key.equalsIgnoreCase(REQUEST_GET_FILES_TREE_SIZE)) {
+            response.put(KEY_FILES_TREE_SIZE, file.getFilesTreeSize());
         }
     }
 

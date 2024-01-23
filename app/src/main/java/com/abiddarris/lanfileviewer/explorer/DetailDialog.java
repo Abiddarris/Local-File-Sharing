@@ -98,7 +98,7 @@ public class DetailDialog extends DialogFragment {
          
             if(Thread.currentThread().isInterrupted()) return;   
                 
-            long size = Files.getFilesTreeSize(files);
+            long size = Files.getFilesTreeSize(items);
             String formattedSize = Files.formatSize(size);             
            
             if(Thread.currentThread().isInterrupted()) return;   

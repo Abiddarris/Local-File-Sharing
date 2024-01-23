@@ -11,27 +11,14 @@ public class Files {
     private static final SimpleDateFormat currentYear = new SimpleDateFormat("dd LLL HH.mm");
     
     public static void getFilesTree(List<File> files, File parent) {
-        files.add(parent);
-        parent.updateDataSync();
-        if(parent.isFile()) {
-            return;
-        }
-        
-        File[] children = parent.listFiles();
-        if(children == null) return;
-        
-        for(File file : children) {
-            getFilesTree(files,file);
-        }
+        files.addAll(parent.getFilesTree());
     }
     
-    public static long getFilesTreeSize(List<File> files) {
+    public static long getFilesTreeSize(File[] items) {
     	long size = 0;
         
-        for(File file : files) {
-        	if(file.isFile()) {
-                size += file.length();
-            }
+        for(File file : items) {
+        	size += file.getFilesTreeSize();
         }
         
         return size;

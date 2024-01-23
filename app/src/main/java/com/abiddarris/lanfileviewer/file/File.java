@@ -4,11 +4,14 @@ import android.net.Uri;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONObject;
 
 public abstract class File {
     
     private File parentFile;
+    private List<File> filesTree = new ArrayList<>();
     
     protected File() {}
     
@@ -65,6 +68,45 @@ public abstract class File {
     public abstract String getPath();
     
     public abstract void createThumbnail(ThumbnailCallback callback);
+    
+    public synchronized List<File> getFilesTree() {
+        filesTree = new ArrayList<>();
+        
+        getFilesTree(filesTree, this);
+        
+        return filesTree;
+    }
+    
+    private void getFilesTree(List<File> files, File parent) {
+        files.add(parent);
+        parent.updateDataSync();
+        if(parent.isFile()) {
+            return;
+        }
+        
+        File[] children = parent.listFiles();
+        if(children == null) return;
+        
+        for(File file : children) {
+            getFilesTree(files,file);
+        }
+    }
+    
+    public long getFilesTreeSize() {
+        if(filesTree == null) {
+            getFilesTree();
+        }
+        
+        long size = 0;
+        
+        for(File file : filesTree) {
+        	if(file.isFile()) {
+                size += file.length();
+            }
+        }
+        
+        return size;
+    }
     
     public static interface Callback {
         void onDataUpdated(Exception e);

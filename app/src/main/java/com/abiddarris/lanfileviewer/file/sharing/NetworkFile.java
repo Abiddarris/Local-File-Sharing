@@ -23,6 +23,8 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -370,5 +372,42 @@ public class NetworkFile extends File {
         Uri uri = Uri.parse(String.format("http://%s:%s%s?type=thumbnail", host, port, encodePath(path)));
         callback.onThumbnailCreated(uri);
     }
+    
+    @Override
+    public synchronized List<File> getFilesTree() {
+        try {
+            List<File> files = new ArrayList<>();
+            JSONObject request = new JSONObject()
+                .put(KEY_PATH, path)
+                .put(KEY_REQUEST, createRequest(REQUEST_GET_FILES_TREE));
+            
+            JSONObject response = source.sendRequestSync(request);
+            JSONArray trees = response.optJSONArray(KEY_FILES_TREE);
+            for(int i = 0; i < trees.length(); ++i) {
+            	files.add(source
+                    .getFile(trees.getString(i)));
+            }
+            return files;
+        } catch (Exception e) {
+            Log.err.log(TAG, e);
+            return null;
+        }
+    }
+    
+    @Override
+    public long getFilesTreeSize() {
+        try {
+            JSONObject request = new JSONObject()
+                .put(KEY_PATH, path)
+                .put(KEY_REQUEST, createRequest(REQUEST_GET_FILES_TREE_SIZE));
+            
+            JSONObject response = source.sendRequestSync(request);
+            return response.optLong(KEY_FILES_TREE_SIZE);
+        } catch (Exception e) {
+            Log.err.log(TAG, e);
+            return -1;
+        }
+    }
+    
     
 }
