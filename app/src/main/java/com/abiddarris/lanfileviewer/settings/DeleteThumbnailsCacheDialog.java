@@ -21,11 +21,12 @@ public class DeleteThumbnailsCacheDialog extends DialogFragment {
     public static final String TAG = Log.getTag(DeleteThumbnailsCacheDialog.class);
     
     private List<File> files;
+    private File cache;
     
     @Override
     public Dialog onCreateDialog(Bundle bundle) {
         java.io.File file = Thumbnails.getThumbnailsCacheFolder(getContext());
-        File cache = FileSource.getDefaultLocalSource(getContext())
+        cache = FileSource.getDefaultLocalSource(getContext())
             .getFile(file.getPath());
         
         files = new ArrayList<>();
@@ -46,6 +47,10 @@ public class DeleteThumbnailsCacheDialog extends DialogFragment {
     }
 
     private void delete() {
+        DeleteRunnable runnable = new DeleteRunnable(new File[]{cache},
+            Files.formatFromItems(getContext(), files.toArray(new File[0])));
+        new ActionDialog(null, runnable)
+            .show(getParentFragmentManager(),null);
     }
     
 }

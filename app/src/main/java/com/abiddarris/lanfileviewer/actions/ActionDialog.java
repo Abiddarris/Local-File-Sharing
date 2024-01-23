@@ -77,7 +77,8 @@ public class ActionDialog extends DialogFragment {
         super.onDestroy();
         
         executor.shutdownNow();
-        explorer.refresh();
+        if(explorer != null)
+            explorer.refresh();
         
         if(optionsDialog.isAdded()) {
             optionsDialog.dismiss();
