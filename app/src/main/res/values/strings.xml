@@ -96,4 +96,5 @@
     <string name="delete_confirmation">Do you want to delete %s to free up %s?</string>
     <string name="go_to">Go to</string>
     <string name="go">Go</string>
+    <string name="cannot_open_message">Cannot open %s</string>
 </resources>

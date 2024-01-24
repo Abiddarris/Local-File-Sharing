@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import androidx.preference.PreferenceManager;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
+import com.bumptech.glide.Glide;
 import com.gretta.util.log.Log;
 import java.io.File;
 import java.util.ArrayList;
