@@ -17,8 +17,10 @@ public abstract class CacheManager<K,V> {
     protected final String TAG = Log.getTag(getClass());
     
     public final V get(K key) {
-        load();
-        
+        if(!loaded) {
+            load();
+        }
+      
         while(loading) {}
         
         Timer timer = new Timer();
@@ -29,6 +31,7 @@ public abstract class CacheManager<K,V> {
                 Log.debug.log(TAG, "returning from cache with time " + timer.reset() + " ms");
                 return cache;
             }
+            Log.debug.log(TAG, "Cache invalid");
             caches.remove(key);
         }
         
@@ -46,7 +49,7 @@ public abstract class CacheManager<K,V> {
         return loaded;
     }
     
-    public final void load() {
+    public final synchronized void load() {
         if(loaded) {
             return;
         }
@@ -63,7 +66,9 @@ public abstract class CacheManager<K,V> {
         scheduleSave(executor, new BaseRunnable((c) -> save()));
     }
     
-    public final void save() {}
+    public final void save() throws Exception{
+        onSave(caches);
+    }
     
     public void clear() {}
     
@@ -78,6 +83,7 @@ public abstract class CacheManager<K,V> {
     protected void onSave(Map<K,V> caches) throws Exception {}
     
     protected void scheduleSave(ScheduledExecutorService executor, BaseRunnable runnable) {
+        Log.debug.log(TAG, "scheduling...");
         executor.scheduleWithFixedDelay(runnable, 0, 1, TimeUnit.MINUTES);
     }
     
