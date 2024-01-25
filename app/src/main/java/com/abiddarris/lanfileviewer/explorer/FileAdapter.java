@@ -124,7 +124,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     private void setIcon(final ImageView imageView, final File file) {
         if(hasThumbnail(file)) {
             file.createThumbnail((uri) -> {
-                Log.debug.log(TAG, "icon uri " + uri);
                 Glide.with(context)
                     .load(uri)
                     .timeout(6000)
@@ -138,7 +137,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         Glide.with(context) 
             .clear(imageView);
         
-        Log.debug.log(TAG, file.getPath() + " does not have thumbnail");
         DrawableTinter.withContext(context)
             .withColor(R.color.colorPrimary)
             .withDrawable(file.isFile() ? R.drawable.icons8_file : R.drawable.icons8_folder)

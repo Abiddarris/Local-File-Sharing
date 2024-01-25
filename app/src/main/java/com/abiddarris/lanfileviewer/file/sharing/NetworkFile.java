@@ -60,7 +60,7 @@ public class NetworkFile extends File {
 
     @Override
     public void updateData(Callback callback) {
-        Log.debug.log(TAG, "Updating file : " + path);
+        
         JSONObject request = new JSONObject();
         try {
             onCreateUpdateRequest(request);

@@ -1,7 +1,22 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/utils/CacheManager.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/DownloadManager.java",
+      "selection": {
+        "end": {
+          "column": 37,
+          "index": 1189,
+          "line": 30
+        },
+        "start": {
+          "column": 37,
+          "index": 1189,
+          "line": 30
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/Explorer.java",
       "selection": {
         "end": {
           "column": 0,
@@ -16,20 +31,80 @@
       }
     },
     {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/SelectMode.java",
+      "selection": {
+        "end": {
+          "column": 51,
+          "index": 10572,
+          "line": 306
+        },
+        "start": {
+          "column": 51,
+          "index": 10572,
+          "line": 306
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/utils/CacheManager.java",
+      "selection": {
+        "end": {
+          "column": 9,
+          "index": 1489,
+          "line": 51
+        },
+        "start": {
+          "column": 9,
+          "index": 1489,
+          "line": 51
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/FileAdapter.java",
+      "selection": {
+        "end": {
+          "column": 8,
+          "index": 4379,
+          "line": 138
+        },
+        "start": {
+          "column": 8,
+          "index": 4379,
+          "line": 138
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFile.java",
+      "selection": {
+        "end": {
+          "column": 5,
+          "index": 1853,
+          "line": 58
+        },
+        "start": {
+          "column": 5,
+          "index": 1853,
+          "line": 58
+        }
+      }
+    },
+    {
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/utils/ThumbnailManager.java",
       "selection": {
         "end": {
-          "column": 37,
-          "index": 4323,
-          "line": 118
+          "column": 0,
+          "index": 0,
+          "line": 0
         },
         "start": {
-          "column": 37,
-          "index": 4323,
-          "line": 118
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/utils/ThumbnailManager.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/utils/CacheManager.java"
 }

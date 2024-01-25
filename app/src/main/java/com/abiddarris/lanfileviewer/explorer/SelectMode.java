@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,10 +20,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
+import com.abiddarris.lanfileviewer.ApplicationCore;
+import android.content.Intent;
+import com.abiddarris.lanfileviewer.ApplicationCore;
+import android.content.Intent;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionDialog;
-import com.abiddarris.lanfileviewer.actions.runnables.DownloadAndOpenRunnable;
+import com.abiddarris.lanfileviewer.actions.runnables.DownloadManager;
 import com.abiddarris.lanfileviewer.actions.runnables.DownloadRunnable;
 import com.abiddarris.lanfileviewer.databinding.LayoutSelectBinding;
 import com.abiddarris.lanfileviewer.databinding.LayoutSelectModeBinding;
@@ -297,8 +303,22 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
                 break;
             case R.id.downloadAndOpen :
                 File file = checked.toArray(new File[0])[0];
-                new ActionDialog(getExplorer(), DownloadAndOpenRunnable.create(getExplorer().getContext(), file))
-                    .show(getExplorer().getFragment().getParentFragmentManager(), null);
+                Context context = getExplorer().getContext();
+                DownloadManager.getDownloadManager(context)
+                    .get(file, getExplorer(), (result) -> {
+                               
+                        Uri uri = FileProvider.getUriForFile(context, 
+                            context.getPackageName() + ".provider",
+                            new java.io.File(result.getAbsolutePath()));
+        
+                        ApplicationCore.getMainHandler()
+                            .post((c) -> {
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setDataAndType(uri, result.getMimeType());
+                                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                    context.startActivity(intent);
+                            });
+                    });
                 getExplorer()
                     .setMode(getExplorer().navigateMode);
                     
