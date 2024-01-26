@@ -1,6 +1,8 @@
 package com.abiddarris.lanfileviewer.file;
 
 import android.net.Uri;
+import com.abiddarris.lanfileviewer.ApplicationCore;
+import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,11 +13,15 @@ import org.json.JSONObject;
 public abstract class File {
     
     private File parentFile;
+    private FileSource source;
     private List<File> filesTree = new ArrayList<>();
     
-    protected File() {}
+    protected File(FileSource source) {
+        this(source, null);
+    }
     
-    protected File(File parentFile) {
+    protected File(FileSource source, File parentFile) {
+        this.source = source;
         this.parentFile = parentFile;
     }
     
@@ -23,11 +29,37 @@ public abstract class File {
         return parentFile;
     }
 
-    public abstract void updateData(Callback callback);
+    public final void updateData(Callback callback) {
+        getSource().runOnBackground(new BaseRunnable(c -> {
+            Exception exception;
+            try {
+                updateDataSync();
+                
+                exception = null;        
+            } catch (Exception e) {
+                exception = e;        
+            } 
+            final Exception e1 = exception;        
+            ApplicationCore.getMainHandler()
+                .post(ctx -> callback.onDataUpdated(e1));
+        }));
+    }
 
-    public abstract void updateDataSync();
+    public final void updateDataSync() {
+        try {
+            updateInternal();
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot update data", e);
+        }
+    }
+    
+    protected abstract void updateInternal() throws Exception;
 
-    public abstract FileSource getSource();
+    public final FileSource getSource() {
+        return source;
+    }
 
     public abstract boolean isDirectory();
 

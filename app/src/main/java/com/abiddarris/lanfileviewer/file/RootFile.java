@@ -14,16 +14,10 @@ public class RootFile extends File {
     private List<File> roots = new ArrayList<>();
 
     public RootFile(FileSource source) {
-        this.source = source;
+        super(source);
     }
-    
     @Override
-    public void updateData(Callback callback) {
-        callback.onDataUpdated(null);
-    }
-    
-    @Override
-    public void updateDataSync() {
+    public void updateInternal() {
     }
     
 
@@ -90,11 +84,6 @@ public class RootFile extends File {
     @Override
     public boolean exists() {
         return true;
-    }
-    
-    @Override
-    public FileSource getSource() {
-        return source;
     }
     
     @Override

@@ -2,15 +2,19 @@ package com.abiddarris.lanfileviewer.file;
 
 import android.content.Context;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
+import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.gretta.util.log.Log;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public abstract class FileSource {
     
     private static LocalFileSource localFileSource;
     public static final String TAG = Log.getTag(FileSource.class);
-    
+     
+    private ExecutorService executor = Executors.newFixedThreadPool(16);
     private Context context;
     
     public FileSource(Context context) {
@@ -47,11 +51,8 @@ public abstract class FileSource {
         cache.put(file.getPath(),file);
     }
     
-    public static LocalFileSource getDefaultLocalSource(Context context) {
-    	if(localFileSource == null) {
-            localFileSource = new LocalFileSource(context);
-        }
-        return localFileSource;
+    public void runOnBackground(BaseRunnable runnable) {
+        executor.submit(runnable);
     }
 
     public SecurityManager getSecurityManager() {
@@ -64,5 +65,12 @@ public abstract class FileSource {
     
     public Context getContext() {
         return context;
+    }
+    
+    public static LocalFileSource getDefaultLocalSource(Context context) {
+    	if(localFileSource == null) {
+            localFileSource = new LocalFileSource(context);
+        }
+        return localFileSource;
     }
 }

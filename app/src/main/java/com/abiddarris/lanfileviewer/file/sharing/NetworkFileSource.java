@@ -24,8 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class NetworkFileSource extends FileSource {
-    
-    private ExecutorService executor = Executors.newFixedThreadPool(16);
+   
     private RootFile root;
     private SharingDevice device;
     private URL server;
@@ -55,17 +54,6 @@ public class NetworkFileSource extends FileSource {
         }
             
         registerToCache(root);
-    }
-    
-    public void sendRequest(JSONObject json, ResponseCallback callback) {
-        executor.submit(() -> {
-            try {
-                JSONObject response = sendRequestSync(json);
-                callback.onResponseAvailable(response, null);
-            } catch (Exception e) {
-                callback.onResponseAvailable(null, e);
-            }
-        });
     }
     
     public JSONObject sendRequestSync(JSONObject json) throws RequestException {
@@ -154,10 +142,6 @@ public class NetworkFileSource extends FileSource {
         File f = new NetworkFile(this, parent, path);
         
         return f;
-    }
-
-    public static interface ResponseCallback {
-        void onResponseAvailable(JSONObject json, Exception exception);
     }
     
     public SharingDevice getDevice() {

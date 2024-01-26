@@ -135,7 +135,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         return null;
     }
     
-    private Response handleUpload(IHTTPSession session) throws IOException , ResponseException {
+    private Response handleUpload(IHTTPSession session) throws Exception {
     	Map<String,String> body = new HashMap<>();
         session.parseBody(body);
         
@@ -182,7 +182,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         return newFixedLengthResponse(Response.Status.OK, "application/json", response.toString());
     }
     
-    private void fetchOthersRequest(JSONObject request, JSONObject response, String key, String path) throws JSONException , IOException {
+    private void fetchOthersRequest(JSONObject request, JSONObject response, String key, String path) throws Exception {
         if(key.equals(REQUEST_GET_TOP_DIRECTORY_FILES)) {
         	JSONArray topDirectoryFiles = new JSONArray();
             File root = source.getRoot();
@@ -221,7 +221,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         }
     }
 
-    private void fetchFileRelated(JSONObject request, JSONObject response, String key, String path) throws JSONException {
+    private void fetchFileRelated(JSONObject request, JSONObject response, String key, String path) throws Exception {
         File file = source.getFile(path);
         file.updateDataSync();
         
@@ -315,7 +315,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         }
     }
 
-    private Response getFile(IHTTPSession session) throws IOException {
+    private Response getFile(IHTTPSession session) throws Exception {
         File file = source.getFile(session.getUri());
         file.updateDataSync();
         

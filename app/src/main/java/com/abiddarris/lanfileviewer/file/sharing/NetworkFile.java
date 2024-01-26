@@ -52,42 +52,21 @@ public class NetworkFile extends File {
     private static final String TAG = Log.getTag(NetworkFile.class);
 
     protected NetworkFile(NetworkFileSource source, File parent, String path) {
-        super(parent);
+        super(source, parent);
         
         this.path = path;
         this.source = source;
     }
-
-    @Override
-    public void updateData(Callback callback) {
-        
-        JSONObject request = new JSONObject();
-        try {
-            onCreateUpdateRequest(request);
-        } catch (JSONException e) {
-            Log.err.log(TAG, e);
-        }
-
-        source.sendRequest(request, (response, e) -> {
-            if(response != null)
-                 onResponseAvailable(response);
-            
-            if (callback != null)
-                ApplicationCore.getMainHandler().post((c) -> callback.onDataUpdated(e));
-        });
-    }
     
-    public void updateDataSync() {
+    @Override
+    public void updateInternal() throws Exception{
         Log.debug.log(TAG, "Updating sync file : " + path);
         JSONObject request = new JSONObject();
-        try {
-            onCreateUpdateRequest(request);
-            JSONObject response = source.sendRequestSync(request);
         
-            onResponseAvailable(response);    
-        } catch (Exception e) {
-            Log.err.log(TAG, e);
-        }
+        onCreateUpdateRequest(request);
+        JSONObject response = source.sendRequestSync(request);
+        
+        onResponseAvailable(response); 
     }
     
     protected void onCreateUpdateRequest(JSONObject request) throws JSONException {
@@ -119,11 +98,6 @@ public class NetworkFile extends File {
                 listFiles[i] = source.getFile(path);
             }
         }
-    }
-    
-    @Override
-    public FileSource getSource() {
-        return source;
     }
     
     @Override

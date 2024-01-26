@@ -39,22 +39,14 @@ public class LocalFile extends File {
     public static final String TAG = Log.getTag(LocalFile.class);
 
     protected LocalFile(LocalFileSource source, File parent, java.io.File file) {
-        super(parent);
+        super(source, parent);
         
         this.source = source;
         this.file = file;
     }
 
     @Override
-    public void updateData(Callback callback) {
-        service.execute(() -> {
-            updateDataSync();
-            callback.onDataUpdated(null);
-        });
-    }
-
-    @Override
-    public void updateDataSync() {
+    public void updateInternal() {
         java.io.File[] javaFiles = file.listFiles();
         if (javaFiles == null) return;
 
@@ -164,11 +156,6 @@ public class LocalFile extends File {
         source.getSecurityManager().checkRead(this);
 
         return file.exists();
-    }
-
-    @Override
-    public FileSource getSource() {
-        return source;
     }
 
     @Override
