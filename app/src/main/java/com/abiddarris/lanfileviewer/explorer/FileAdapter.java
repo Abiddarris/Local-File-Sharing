@@ -16,6 +16,7 @@ import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.DrawableTinter;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.gretta.util.log.Log;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -126,6 +127,8 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
             file.createThumbnail((uri) -> {
                 Glide.with(context)
                     .load(uri)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .timeout(6000)
                     .error(R.drawable.icons8_file)
                     .centerCrop()
