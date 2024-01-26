@@ -19,13 +19,13 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFileSource.java",
       "selection": {
         "end": {
-          "column": 45,
-          "index": 4086,
+          "column": 10,
+          "index": 4051,
           "line": 106
         },
         "start": {
-          "column": 45,
-          "index": 4086,
+          "column": 10,
+          "index": 4051,
           "line": 106
         }
       }
@@ -59,7 +59,22 @@
           "line": 0
         }
       }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/dialog_exception.xml",
+      "selection": {
+        "end": {
+          "column": 12,
+          "index": 461,
+          "line": 13
+        },
+        "start": {
+          "column": 12,
+          "index": 461,
+          "line": 13
+        }
+      }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFileSource.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/res/layout/dialog_exception.xml"
 }

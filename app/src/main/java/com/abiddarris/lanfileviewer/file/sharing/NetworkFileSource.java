@@ -104,7 +104,7 @@ public class NetworkFileSource extends FileSource {
             Exception exception = getServerException(connection);
             Throwable cause = getCause(e);
             if(exception != cause) {
-                  cause.initCause(exception);
+                cause.initCause(exception);
             }
           
             throw new RequestException("Failed to sent a request", e);
