@@ -62,7 +62,7 @@ public class NetworkFileSource extends FileSource {
             try {
                 JSONObject response = sendRequestSync(json);
                 callback.onResponseAvailable(response, null);
-            } catch (RequestException e) {
+            } catch (Exception e) {
                 callback.onResponseAvailable(null, e);
             }
         });
@@ -72,6 +72,8 @@ public class NetworkFileSource extends FileSource {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) server.openConnection();
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "application/json; charset=\"UTF-8\"");

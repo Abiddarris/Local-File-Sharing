@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Network;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.databinding.FragmentFileExplorerBinding;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
@@ -23,6 +24,7 @@ public class Explorer {
     SelectMode selectMode;
 
     private boolean loading;
+    private boolean error;
     private ExplorerFragment fragment;
     private FileSorter sorter = FileSorter.createSorter(FileSorter.NAME | FileSorter.ASCENDING);
     private FragmentFileExplorerBinding ui;
@@ -88,12 +90,21 @@ public class Explorer {
     private void update() {
         parent.updateData((e) -> {
             if(e != null){
-                new ExceptionDialog(e)
-                      .show(fragment.getChildFragmentManager(), null);
+                showErrorDialog(e);  
                 return;
             }    
             load(parent.listFiles());
         });
+    }
+    
+    private synchronized void showErrorDialog(Exception e) {
+        if(error) {
+            return;
+        }
+        error = true;
+        Log.debug.log(TAG, e.toString());
+        new ExceptionDialog(e)
+                      .show(fragment.getParentFragmentManager(), null);
     }
 
     private void load(File[] files) {
@@ -106,10 +117,9 @@ public class Explorer {
         for (File file : files) {
             file.updateData((e) -> {
                 if(e != null){
-                    new ExceptionDialog(e)
-                          .show(fragment.getChildFragmentManager(), null);
+                    showErrorDialog(e);  
                     return;
-                }
+                }    
                 onFileLoaded(file);
             });
         }

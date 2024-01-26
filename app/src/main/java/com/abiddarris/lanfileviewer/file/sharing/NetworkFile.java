@@ -69,8 +69,9 @@ public class NetworkFile extends File {
         }
 
         source.sendRequest(request, (response, e) -> {
-            onResponseAvailable(response);
-
+            if(response != null)
+                 onResponseAvailable(response);
+            
             if (callback != null)
                 ApplicationCore.getMainHandler().post((c) -> callback.onDataUpdated(e));
         });
