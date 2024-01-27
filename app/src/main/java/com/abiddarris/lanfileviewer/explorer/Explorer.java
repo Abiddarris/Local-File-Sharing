@@ -15,6 +15,7 @@ import com.gretta.util.log.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Future;
 
 public class Explorer {
 
@@ -91,6 +92,7 @@ public class Explorer {
         parent.updateData((e) -> {
             if(e != null){
                 showErrorDialog(e);  
+                cancel();
                 return;
             }    
             load(parent.listFiles());
@@ -117,7 +119,8 @@ public class Explorer {
         for (File file : files) {
             file.updateData((e) -> {
                 if(e != null){
-                    showErrorDialog(e);  
+                    showErrorDialog(e);
+                    cancel();      
                     return;
                 }    
                 onFileLoaded(file);
@@ -159,6 +162,11 @@ public class Explorer {
         for(OnExplorerUpdatedListener listener : updatedListeners) {
             listener.onUpdated(this);
         }
+    }
+    
+    private void cancel() {
+        cache.clear();
+        onLoaded();
     }
     
     private void setParent(File parent) {

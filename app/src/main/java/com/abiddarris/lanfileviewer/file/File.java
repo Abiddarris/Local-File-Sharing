@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 import org.json.JSONObject;
 
 public abstract class File {
@@ -29,8 +30,8 @@ public abstract class File {
         return parentFile;
     }
 
-    public final void updateData(Callback callback) {
-        getSource().runOnBackground(new BaseRunnable(c -> {
+    public final Future updateData(Callback callback) {
+        return getSource().runOnBackground(new BaseRunnable(c -> {
             Exception exception;
             try {
                 updateDataSync();

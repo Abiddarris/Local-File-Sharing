@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public abstract class FileSource {
     
@@ -51,8 +52,8 @@ public abstract class FileSource {
         cache.put(file.getPath(),file);
     }
     
-    public void runOnBackground(BaseRunnable runnable) {
-        executor.submit(runnable);
+    public Future runOnBackground(BaseRunnable runnable) {
+        return executor.submit(runnable);
     }
 
     public SecurityManager getSecurityManager() {
