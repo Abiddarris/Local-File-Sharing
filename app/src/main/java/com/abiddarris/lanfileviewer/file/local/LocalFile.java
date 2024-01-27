@@ -184,7 +184,7 @@ public class LocalFile extends File {
             return source.getContext().getContentResolver().openOutputStream(file.getUri());
         }
 
-        throw new IOException("Cannot open an outputstream");
+        throw new IOException("Cannot open " + file.getPath() +" an outputstream");
     }
 
     @Override

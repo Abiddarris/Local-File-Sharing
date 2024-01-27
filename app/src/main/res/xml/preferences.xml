@@ -50,7 +50,7 @@
         app:title="@string/cache">
         
         <com.abiddarris.lanfileviewer.settings.CustomPreference
-            app:key="roots"
+            app:key="downloadsCache"
             app:summary="@string/delete_download_cache"
             app:title="@string/download_cache"/>
         

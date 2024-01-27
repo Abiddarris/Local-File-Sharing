@@ -37,15 +37,11 @@ public class DownloadManager extends CacheManager<File, File>{
     
     @Override
     protected File create(File item) {
-        java.io.File downloadFolder = new java.io.File(context.getCacheDir(), "download");
         String folderName = Randoms.getRandomString()
             .get(12);
         
-        java.io.File subFolder = new java.io.File(downloadFolder, folderName);
-        subFolder.mkdirs();
-        
-        FileSource source = FileSource.getDefaultLocalSource(context);
-        File dest = source.getFile(subFolder.getAbsolutePath());
+        File dest = FileSource.createFile(context, getDownloadFolder(context), folderName);
+        dest.makeDirs();
         
         Log.debug.log(TAG, "download dest : " + dest.getPath());
         AtomicBoolean done = new AtomicBoolean(false);
@@ -59,7 +55,8 @@ public class DownloadManager extends CacheManager<File, File>{
         while(!done.get()) {
         }
         
-        File file = source.getFile(dest.getPath() + "/" + item.getName());
+        File file = FileSource.getDefaultLocalSource(context)
+            .getFile(dest.getPath() + "/" + item.getName());
         Log.debug.log(TAG, "downloaded file : " + file);
         
         return file;
@@ -96,6 +93,10 @@ public class DownloadManager extends CacheManager<File, File>{
            
             done.set(true);
         }
+    }
+    
+    public static File getDownloadFolder(Context context) {
+        return FileSource.createFile(context, FileSource.getCacheDirectory(context), "download");
     }
     
     public static DownloadManager getDownloadManager(Context context) {

@@ -21,6 +21,8 @@ public class CustomPreference extends DialogPreference {
             return new RootEditorDialog();
         } else if(pref.getKey().equals("thumbnailsCache")) {
             return new DeleteThumbnailsCacheDialog();
+        } else if(pref.getKey().equals("downloadsCache")) {
+            return new DeleteDownloadCacheDialog();
         }
         return null;
     }

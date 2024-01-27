@@ -25,9 +25,7 @@ public class DeleteThumbnailsCacheDialog extends DialogFragment {
     
     @Override
     public Dialog onCreateDialog(Bundle bundle) {
-        java.io.File file = Thumbnails.getThumbnailsCacheFolder(getContext());
-        cache = FileSource.getDefaultLocalSource(getContext())
-            .getFile(file.getPath());
+        cache = getTarget();
         
         files = new ArrayList<>();
         Files.getFilesTree(files, cache);
@@ -35,7 +33,7 @@ public class DeleteThumbnailsCacheDialog extends DialogFragment {
         long size = cache.getFilesTreeSize();
         
         String message = String.format(getString(R.string.delete_confirmation),
-            getString(R.string.thumbnails_cache).toLowerCase(), Files.formatSize(size));
+            getString(getText()).toLowerCase(), Files.formatSize(size));
         
         AlertDialog dialog = new MaterialAlertDialogBuilder(getContext())
             .setMessage(message)
@@ -44,6 +42,14 @@ public class DeleteThumbnailsCacheDialog extends DialogFragment {
             .create();
         
         return dialog;
+    }
+    
+    protected File getTarget() {
+        return FileSource.createFile(getContext(), Thumbnails.getThumbnailsCacheFolder(getContext()));
+    }
+    
+    protected int getText() {
+        return R.string.thumbnails_cache;
     }
 
     private void delete() {

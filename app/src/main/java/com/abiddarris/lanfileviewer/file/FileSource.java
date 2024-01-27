@@ -74,4 +74,19 @@ public abstract class FileSource {
         }
         return localFileSource;
     }
+    
+    public static File createFile(Context context, java.io.File file) {
+        return getDefaultLocalSource(context)
+            .getFile(file.getPath());
+    }
+    
+    public static File createFile(Context context, File parent, String name) {
+        return getDefaultLocalSource(context)
+            .getFile(parent.getPath() + "/" + name);
+    }
+    
+    public static File getCacheDirectory(Context context) {
+        return getDefaultLocalSource(context)
+            .getFile(context.getCacheDir().getPath());
+    }
 }
