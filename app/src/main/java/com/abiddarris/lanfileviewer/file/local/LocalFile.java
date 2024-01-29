@@ -31,7 +31,6 @@ public class LocalFile extends File {
 
     private java.io.File file;
     private LocalFileSource source;
-    private File[] files;
     
     private static ExecutorService service = Executors.newCachedThreadPool();
     private static HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
@@ -39,98 +38,67 @@ public class LocalFile extends File {
     public static final String TAG = Log.getTag(LocalFile.class);
 
     protected LocalFile(LocalFileSource source, File parent, java.io.File file) {
-        super(source, parent);
+        super(source, parent, file.getName());
         
         this.source = source;
         this.file = file;
     }
-
-    @Override
-    public void updateInternal() {
-        java.io.File[] javaFiles = file.listFiles();
-        if (javaFiles == null) return;
-
-        files = new File[javaFiles.length];
-        for (int i = 0; i < files.length; ++i) {
-            files[i] = source.getFile(getPath() + "/" + javaFiles[i].getName());
-        }
-    }
-
-    @Override
-    public boolean isDirectory() {
-        source.getSecurityManager().checkRead(this);
-
-        return file.isDirectory();
-    }
-
-    @Override
-    public boolean isFile() {
-        source.getSecurityManager().checkRead(this);
-
-        return file.isFile();
-    }
-
-    @Override
-    public String getName() {
-        source.getSecurityManager().checkRead(this);
-
-        return file.getName();
-    }
-
-    @Override
-    public File[] listFiles() {
-        source.getSecurityManager().checkRead(this);
-
-        return files;
-    }
-
-    @Override
-    public String getPath() {
-        return getParentFile().getPath() + "/" + getName();
-    }
     
+    protected LocalFile(LocalFileSource source, File parent, String name) {
+        super(source, parent, name);
+        
+        parent.updateDataSync(REQUEST_ABSOLUTE_PATH);
+        
+        this.source = source;
+        this.file = new java.io.File(parent.getAbsolutePath(), name);
+    }
+
     @Override
-    public String getAbsolutePath() {
-        return file.getPath();
+    protected void updateInternal(String[] requests) throws Exception { 
+        super.updateInternal(requests);
+        
+        for(String request : requests) {
+            if(REQUEST_LIST_FILES.equalsIgnoreCase(request)) {
+                java.io.File[] javaFiles = file.listFiles();
+                if (javaFiles == null) {
+                    put(KEY_LIST_FILES, null);
+                    continue;
+                }
+
+                File[] files = new File[javaFiles.length];
+                for (int i = 0; i < files.length; ++i) {
+                    files[i] = source.getFile(getPath() + "/" + javaFiles[i].getName());
+                }
+                put(KEY_LIST_FILES, files);
+            } else if(REQUEST_IS_DIRECTORY.equalsIgnoreCase(request)) {
+                put(KEY_IS_DIRECTORY, file.isDirectory());
+            } else if(REQUEST_IS_FILE.equalsIgnoreCase(request)) {
+                put(KEY_IS_FILE, file.isFile());
+            } else if(REQUEST_GET_MIME_TYPE.equalsIgnoreCase(request)) {
+                String type = null;
+                String extension = Files.getExtension(this);
+                if (extension != null) {
+                    type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
+                }    
+                put(KEY_MIME_TYPE, type == null ? "*/*" : type);
+            } else if(REQUEST_GET_LENGTH.equalsIgnoreCase(request)) {
+                put(KEY_LENGTH, file.length());
+            } else if(REQUEST_GET_LAST_MODIFIED.equals(request)) {
+                put(KEY_LAST_MODIFIED, file.lastModified());
+            } else if(REQUEST_EXISTS.equalsIgnoreCase(request)) {
+                put(KEY_EXISTS, file.exists());
+            } else if(REQUEST_ABSOLUTE_PATH.equalsIgnoreCase(request)) {
+                put(KEY_ABSOLUTE_PATH, file.getAbsolutePath());
+            }
+        }
     }
 
     @Override
     public Uri toUri() {
-        source.getSecurityManager().checkRead(this);
+        source.getSecurityManager()
+            .checkRead(this);
 
         return Uri.fromFile(file);
-    }
-
-    @Override
-    public String getMimeType() {
-        String type = null;
-        String extension = Files.getExtension(this);
-        if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
-        }
-
-        return type == null ? "*/*" : type;
-    }
-
-    @Override
-    public long length() {
-        source.getSecurityManager().checkRead(this);
-
-        return file.length();
-    }
-
-    @Override
-    public long lastModified() {
-        source.getSecurityManager().checkRead(this);
-
-        return file.lastModified();
-    }
-
-    @Override
-    public boolean createNewFile() throws IOException {
-        source.getSecurityManager().checkWrite(this);
-
-        return file.createNewFile();
     }
 
     @Override
@@ -149,13 +117,6 @@ public class LocalFile extends File {
         }
 
         return false;
-    }
-
-    @Override
-    public boolean exists() {
-        source.getSecurityManager().checkRead(this);
-
-        return file.exists();
     }
 
     @Override

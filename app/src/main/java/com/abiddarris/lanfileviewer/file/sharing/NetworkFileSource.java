@@ -41,7 +41,7 @@ public class NetworkFileSource extends FileSource {
         
         JSONObject request = new JSONObject()
             .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_GET_TOP_DIRECTORY_FILES));
-        JSONObject response = sendRequestSync(request);
+        JSONObject response = sendRequest(request);
         JSONArray jsonTopDirectoryFiles = response.optJSONArray(KEY_TOP_DIRECTORY_FILES);
         root = new RootFile(this); 
             
@@ -56,7 +56,7 @@ public class NetworkFileSource extends FileSource {
         registerToCache(root);
     }
     
-    public JSONObject sendRequestSync(JSONObject json) throws RequestException {
+    public JSONObject sendRequest(JSONObject json) throws RequestException {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) server.openConnection();
@@ -138,10 +138,7 @@ public class NetworkFileSource extends FileSource {
 
     @Override
     protected File newFile(File parent, String name) {
-        String path = parent.getPath() + "/" + name;
-        File f = new NetworkFile(this, parent, path);
-        
-        return f;
+        return new NetworkFile(this, parent, name);
     }
     
     public SharingDevice getDevice() {

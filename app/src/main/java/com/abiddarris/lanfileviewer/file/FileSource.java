@@ -17,13 +17,12 @@ public abstract class FileSource {
      
     private ExecutorService executor = Executors.newFixedThreadPool(16);
     private Context context;
+    private Map<String,File> cache = new HashMap<>();
+    private SecurityManager securityManager = new SecurityManager();
     
     public FileSource(Context context) {
         this.context = context;
     }
-    
-    private Map<String,File> cache = new HashMap<>();
-    private SecurityManager securityManager = new SecurityManager();
     
     public abstract RootFile getRoot();
     

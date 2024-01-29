@@ -1,6 +1,6 @@
 package com.abiddarris.lanfileviewer.file;
 
-public class SecurityException extends RuntimeException {
+public class SecurityException extends FileOperationException {
     
     public SecurityException() {
     	super();

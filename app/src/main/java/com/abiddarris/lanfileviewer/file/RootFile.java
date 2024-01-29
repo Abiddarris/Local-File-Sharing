@@ -14,13 +14,9 @@ public class RootFile extends File {
     private List<File> roots = new ArrayList<>();
 
     public RootFile(FileSource source) {
-        super(source);
+        super(source, null, "");
     }
-    @Override
-    public void updateInternal() {
-    }
-    
-
+   
     @Override
     public boolean isDirectory() {
         return true;
@@ -32,20 +28,10 @@ public class RootFile extends File {
     }
     
     @Override
-    public String getName() {
-        return "";
-    }
-
-    @Override
     public File[] listFiles() {
         return roots.toArray(new File[0]);
     }
 
-    @Override
-    public String getPath() {
-        return "";
-    }
-    
     @Override
     public String getAbsolutePath() {
         return "";
@@ -70,12 +56,7 @@ public class RootFile extends File {
     public long lastModified() {
         return -1;
     }
-    
-    @Override
-    public boolean createNewFile() {
-        return false;
-    }
-    
+  
     @Override
     public boolean makeDirs() {
         return false;

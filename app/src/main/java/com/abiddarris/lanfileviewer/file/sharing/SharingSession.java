@@ -225,10 +225,6 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         File file = source.getFile(path);
         file.updateDataSync();
         
-        if(key.equalsIgnoreCase(REQUEST_GET_NAME)) {
-            response.put(KEY_NAME, file.getName());
-        }
-          
         if(key.equalsIgnoreCase(REQUEST_LIST_FILES)) {
             File[] subFiles = file.listFiles();
             if (subFiles == null) {
@@ -241,41 +237,21 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
                 
                 response.put(KEY_LIST_FILES, listFiles);
             }
-        }
-        
-        if(key.equalsIgnoreCase(REQUEST_IS_DIRECTORY)) {
+        } else if(key.equalsIgnoreCase(REQUEST_IS_DIRECTORY)) {
             response.put(KEY_IS_DIRECTORY, file.isDirectory());
-        }
-           
-        if(key.equalsIgnoreCase(REQUEST_IS_FILE)) {
+        } else if(key.equalsIgnoreCase(REQUEST_IS_FILE)) {
             response.put(KEY_IS_FILE, file.isFile());
-        }
-          
-        if(key.equalsIgnoreCase(REQUEST_GET_PARENT_FILE)) {
-            response.put(KEY_GET_PARENT_FILE, file.getParentFile().getPath());
-        }
-        
-        if(key.equalsIgnoreCase(REQUEST_GET_MIME_TYPE)) {
+        } else if(key.equalsIgnoreCase(REQUEST_GET_MIME_TYPE)) {
             response.put(KEY_MIME_TYPE, file.getMimeType());
-        }
-        
-        if(key.equalsIgnoreCase(REQUEST_GET_LENGTH)) {
+        } else if(key.equalsIgnoreCase(REQUEST_GET_LENGTH)) {
         	response.put(KEY_LENGTH, file.length());
-        }
-        
-        if(key.equalsIgnoreCase(REQUEST_GET_LAST_MODIFIED)) {
+        } else if(key.equalsIgnoreCase(REQUEST_GET_LAST_MODIFIED)) {
             response.put(KEY_LAST_MODIFIED, file.lastModified());
-        }
-        
-        if(key.equalsIgnoreCase(REQUEST_MAKE_DIRECTORIES)) {
+        } else if(key.equalsIgnoreCase(REQUEST_MAKE_DIRECTORIES)) {
             response.put(KEY_MAKE_DIRECTORIES_SUCCESS, file.makeDirs());
-        }
-        
-        if(key.equalsIgnoreCase(REQUEST_EXISTS)) {
+        } else if(key.equalsIgnoreCase(REQUEST_EXISTS)) {
             response.put(KEY_EXISTS, file.exists());
-        }
-        
-        if(key.equalsIgnoreCase(REQUEST_COPY)) {
+        } else if(key.equalsIgnoreCase(REQUEST_COPY)) {
             File dest = source.getFile(
                 request.getString(KEY_DEST));
             dest.updateDataSync();

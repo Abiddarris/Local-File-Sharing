@@ -1,40 +1,94 @@
 package com.abiddarris.lanfileviewer.file;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Future;
 import org.json.JSONObject;
 
-public abstract class File {
+public abstract class File implements Requests {
+    
+    private static SimpleDateFormat timeFormatter = new SimpleDateFormat("dd LLL YYYY HH.mm.ss");
     
     private File parentFile;
     private FileSource source;
-    private List<File> filesTree = new ArrayList<>();
+    private long validFrom = -1;
+    private Map<String, Value> values = new HashMap<>();
+    private String name;
     
-    protected File(FileSource source) {
-        this(source, null);
-    }
-    
-    protected File(FileSource source, File parentFile) {
+    protected File(FileSource source, File parentFile, String name) {
         this.source = source;
         this.parentFile = parentFile;
+        this.name = name;
+    }
+    
+    protected void put(String key, Object obj) {
+        values.put(key, new Value(System.currentTimeMillis(), obj));
+    }
+    
+    protected <T> T get(String key) {
+        return get(key, null);
+    }
+    
+    @SuppressLint("unchecked")
+    protected <T> T get(String key, String requestKey) {
+        Value value = values.get(key);
+        if(value == null && requestKey == null) {
+            throw new DataDoesNotExistsException(key + " value does not exist. Call updateData() or updateDataSync() before call this function!");
+        } else if(value == null){
+            updateDataSync(requestKey);
+            return get(key);
+        }
+        
+        if(validFrom != -1 && value.setTime < validFrom) {
+            if(requestKey == null) {
+                throw new InvalidDataException(
+                String.format("%s is last updated at %s [%s] but datas are valid only from %s [%s]",
+                    key, formatTime(value.setTime), value.setTime, formatTime(getValidFrom()), getValidFrom()));
+            }
+            updateDataSync(requestKey);
+            return get(key);
+        }
+        
+        return (T)value.data;
+    }
+    
+    private static String formatTime(long time) {
+        Date date = new Date(time);
+        return timeFormatter.format(date);
+    }
+    
+    public void setValidFrom(long time) {
+        validFrom = time;
+    }
+    
+    public long getValidFrom() {
+        return validFrom;
     }
     
     public final File getParentFile() {
         return parentFile;
     }
-
+    
     public final Future updateData(Callback callback) {
+        return updateData(createDefaultReqeustKeys(), callback);
+    }
+
+    public final Future updateData(String[] requests, Callback callback) {
         return getSource().runOnBackground(new BaseRunnable(c -> {
             Exception exception;
             try {
-                updateDataSync();
+                updateDataSync(requests);
                 
                 exception = null;        
             } catch (Exception e) {
@@ -45,10 +99,14 @@ public abstract class File {
                 .post(ctx -> callback.onDataUpdated(e1));
         }));
     }
-
+    
     public final void updateDataSync() {
+        updateDataSync(createDefaultReqeustKeys());
+    }
+    
+    public final void updateDataSync(String... requests) {
         try {
-            updateInternal();
+            updateInternal(requests);
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
@@ -56,35 +114,108 @@ public abstract class File {
         }
     }
     
-    protected abstract void updateInternal() throws Exception;
-
+    private String[] createDefaultReqeustKeys() {
+       return new String[] {
+             REQUEST_LIST_FILES, REQUEST_IS_DIRECTORY, REQUEST_IS_FILE,
+             REQUEST_GET_MIME_TYPE, REQUEST_GET_LENGTH, REQUEST_GET_LAST_MODIFIED,
+             REQUEST_EXISTS, REQUEST_ABSOLUTE_PATH
+       };
+    }
+    
+    private void checkReadPermission() {
+        getSource()
+            .getSecurityManager()
+            .checkRead(this);
+    }
+    
     public final FileSource getSource() {
         return source;
     }
 
-    public abstract boolean isDirectory();
+    protected void updateInternal(String[] requests) throws Exception {
+        for(String request : requests) {
+            if(REQUEST_GET_FILES_TREE.equalsIgnoreCase(request)) {
+                List<File> filesTree = new ArrayList<>();
+        
+                getFilesTree(filesTree, this);
+        
+                put(KEY_FILES_TREE, filesTree);
+            } else if(REQUEST_GET_FILES_TREE_SIZE.equalsIgnoreCase(request)) {
+                List<File> filesTree = get(KEY_FILES_TREE, REQUEST_GET_FILES_TREE);
+        
+                long size = 0;
+        
+                for(File file : filesTree) {
+                    if(file.isFile()) {
+                        size += file.length();
+                    }
+                }
+        
+                put(KEY_FILES_TREE_SIZE, size);
+            }
+        }
+    }
 
-    public abstract boolean isFile();
+    public boolean isDirectory() {
+        checkReadPermission();
+        
+        return get(KEY_IS_DIRECTORY);
+    }
 
-    public abstract String getName();
+    public boolean isFile() {
+        checkReadPermission();
+        
+        return get(KEY_IS_FILE);
+    }
 
-    public abstract File[] listFiles();
+    public File[] listFiles() {
+        checkReadPermission();
+        
+        return get(KEY_LIST_FILES);
+    }
 
-    public abstract String getAbsolutePath();
+    public String getAbsolutePath() {
+        checkReadPermission();
+        
+        return get(KEY_ABSOLUTE_PATH);
+    }
 
+    public String getMimeType() {
+        checkReadPermission();
+        
+        return get(KEY_MIME_TYPE);
+    }
+
+    public long length() {
+        checkReadPermission();
+        
+        return get(KEY_LENGTH);
+    }
+
+    public long lastModified() {
+        checkReadPermission();
+        
+        return get(KEY_LAST_MODIFIED);
+    }
+    
+    public boolean exists() {
+        checkReadPermission();
+        
+        return get(KEY_EXISTS);
+    }
+    
+    public final String getName() {
+        return name;
+    }
+
+    public final String getPath() {
+        return getParentFile() == null ? "" : getParentFile().getPath() + 
+            "/" + getName();
+    }
+    
     public abstract Uri toUri();
 
-    public abstract String getMimeType();
-
-    public abstract long length();
-
-    public abstract long lastModified();
-
-    public abstract boolean createNewFile() throws IOException;
-
     public abstract boolean makeDirs();
-
-    public abstract boolean exists();
 
     public abstract OutputStream newOutputStream() throws IOException;
 
@@ -98,21 +229,20 @@ public abstract class File {
     
     public abstract Progress move(File dest);
     
-    public abstract String getPath();
-    
     public abstract void createThumbnail(ThumbnailCallback callback);
     
-    public synchronized List<File> getFilesTree() {
-        filesTree = new ArrayList<>();
-        
-        getFilesTree(filesTree, this);
-        
-        return filesTree;
+    public List<File> getFilesTree() {
+        return get(KEY_FILES_TREE);
+    }
+    
+    public long getFilesTreeSize() {
+        return get(KEY_FILES_TREE_SIZE);
     }
     
     private void getFilesTree(List<File> files, File parent) {
         files.add(parent);
-        parent.updateDataSync();
+        
+        parent.updateDataSync(REQUEST_IS_FILE, REQUEST_LIST_FILES);
         if(parent.isFile()) {
             return;
         }
@@ -123,22 +253,6 @@ public abstract class File {
         for(File file : children) {
             getFilesTree(files,file);
         }
-    }
-    
-    public long getFilesTreeSize() {
-        if(filesTree == null) {
-            getFilesTree();
-        }
-        
-        long size = 0;
-        
-        for(File file : filesTree) {
-        	if(file.isFile()) {
-                size += file.length();
-            }
-        }
-        
-        return size;
     }
     
     public static interface Callback {
@@ -204,6 +318,17 @@ public abstract class File {
 
         public void setCancel(boolean cancel) {
             this.cancel = cancel;
+        }
+    }
+   
+    private class Value {
+        
+        private long setTime;
+        private Object data;
+        
+        private Value(long setTime, Object data) {
+            this.setTime = setTime;
+            this.data = data;
         }
     }
 }
