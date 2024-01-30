@@ -58,6 +58,14 @@ public class NetworkFile extends File {
                         .getFile(trees.getString(i)));
                 }
                 put(KEY_FILES_TREE,files);
+                continue;
+            } else if(REQUEST_GET_LENGTH.equalsIgnoreCase(key) || 
+                REQUEST_GET_LAST_MODIFIED.equalsIgnoreCase(key) || 
+                REQUEST_GET_FILES_TREE_SIZE.equalsIgnoreCase(key)) {
+                
+                key = Requests.requestToKey(key);
+                put(key, response.optLong(key));
+                continue;
             }
             
             key = Requests.requestToKey(key);
