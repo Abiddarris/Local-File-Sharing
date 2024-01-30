@@ -1,6 +1,12 @@
 package com.abiddarris.lanfileviewer.file;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public interface Requests {
+    
+    static Map<String,String> table = new HashMap<>();
+    
     public static final String REQUEST_LIST_FILES = "requestListFiles";
     public static final String REQUEST_IS_DIRECTORY = "requestIsDirectory";
     public static final String REQUEST_IS_FILE = "requestIsFile";
@@ -22,4 +28,19 @@ public interface Requests {
     public static final String KEY_FILES_TREE = "filesTree";
     public static final String KEY_FILES_TREE_SIZE = "filesTreeSize";
     
+    public static String requestToKey(String request) {
+        if(table.isEmpty()) {
+            table.put(REQUEST_ABSOLUTE_PATH, KEY_ABSOLUTE_PATH);
+            table.put(REQUEST_EXISTS, KEY_EXISTS);
+            table.put(REQUEST_GET_FILES_TREE, KEY_FILES_TREE);
+            table.put(REQUEST_GET_FILES_TREE_SIZE, KEY_FILES_TREE_SIZE);
+            table.put(REQUEST_GET_LAST_MODIFIED, KEY_LAST_MODIFIED);
+            table.put(REQUEST_GET_LENGTH, KEY_LENGTH);
+            table.put(REQUEST_GET_MIME_TYPE, KEY_MIME_TYPE);
+            table.put(REQUEST_IS_DIRECTORY, KEY_IS_DIRECTORY);
+            table.put(REQUEST_IS_FILE, KEY_IS_FILE);
+            table.put(REQUEST_LIST_FILES, KEY_LIST_FILES);
+        }
+        return table.get(request);
+    }
 }

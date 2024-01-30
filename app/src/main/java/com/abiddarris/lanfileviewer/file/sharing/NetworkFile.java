@@ -1,6 +1,7 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
 import com.abiddarris.lanfileviewer.file.FileOperationException;
+import com.abiddarris.lanfileviewer.file.Requests;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
 import android.net.Uri;
@@ -44,21 +45,22 @@ public class NetworkFile extends File {
         
         JSONObject response = source.sendRequest(request);
         for(String key : requests) {
-            if(key.equalsIgnoreCase(KEY_LIST_FILES)) {
+            if(REQUEST_LIST_FILES.equalsIgnoreCase(key)) {
                 JSONArray paths = response.optJSONArray(KEY_LIST_FILES);
                 File[] files = paths != null ? pathsToFiles(paths) : null;
-                put(key, files);
+                put(KEY_LIST_FILES, files);
                 continue;
-            } else if(KEY_FILES_TREE.equalsIgnoreCase(key)) {
+            } else if(REQUEST_GET_FILES_TREE.equalsIgnoreCase(key)) {
                 List<File> files = new ArrayList<>();
                 JSONArray trees = response.optJSONArray(KEY_FILES_TREE);
                 for(int i = 0; i < trees.length(); ++i) {
                     files.add(source
                         .getFile(trees.getString(i)));
                 }
-                put(key,files);
+                put(KEY_FILES_TREE,files);
             }
             
+            key = Requests.requestToKey(key);
             put(key, response.opt(key));
         }
     }
