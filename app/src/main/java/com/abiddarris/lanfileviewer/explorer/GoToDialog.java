@@ -38,12 +38,9 @@ public class GoToDialog extends DialogFragment {
                     explorer.open(file);  
                     return;        
                 }       
-                ApplicationCore.getMainHandler()
-                    .post((c) -> {
-                        Toast.makeText(context,
-                             String.format(context.getString(R.string.cannot_open_message), file.getPath()), Toast.LENGTH_SHORT)
-                            .show();
-                    });
+                Toast.makeText(context,
+                     String.format(context.getString(R.string.cannot_open_message), file.getPath()), Toast.LENGTH_SHORT)
+                    .show();
             });
               
             dismiss();
