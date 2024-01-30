@@ -24,23 +24,40 @@ public abstract class FileSource {
         this.context = context;
     }
     
-    public abstract RootFile getRoot();
+    private String[] splitParentAndName(String path) {
+        path = validatePath(path);
+        if(path.equalsIgnoreCase("")) return new String[] {"", ""};
+        int pathDivider = path.lastIndexOf("/");
+        String name = path.substring(pathDivider + 1);
+        String parent = path.substring(0,pathDivider);
+        return new String[] {parent,name};
+    }
+    
+    protected final String getName(String path) {
+        return splitParentAndName(path)[1];
+    }
+    
+    protected final String validatePath(String path) {
+        if(!path.startsWith("/")) path = "/" + path;
+        if(path.endsWith("/")) path = path.substring(0, path.length() - 1);
+        return path;
+    }
     
     protected abstract File newFile(File parent, String name);
     
+    public abstract RootFile getRoot();
+    
     public File getFile(String path) {
-        if(!path.startsWith("/")) path = "/" + path;
-        if(path.endsWith("/")) path = path.substring(0, path.length() - 1);
+        path = validatePath(path);
         
         File file = cache.get(path);
         if(file != null) return file;
         
-        int pathDivider = path.lastIndexOf("/");
-        String name = path.substring(pathDivider + 1);
+        String[] parentAndName = splitParentAndName(path);
         
-        File parent = getFile(path.substring(0,pathDivider));
+        File parent = getFile(parentAndName[0]);
         
-        file = newFile(parent, name);
+        file = newFile(parent, parentAndName[1]);
         
         registerToCache(file);
         

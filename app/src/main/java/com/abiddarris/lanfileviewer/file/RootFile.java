@@ -15,6 +15,7 @@ public class RootFile extends File {
 
     public RootFile(FileSource source) {
         super(source, null, "");
+        setPath("");
     }
    
     @Override

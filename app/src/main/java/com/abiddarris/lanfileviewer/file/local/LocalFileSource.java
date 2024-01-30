@@ -9,6 +9,7 @@ import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceManager;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.file.Requests;
 import com.abiddarris.lanfileviewer.file.RootFile;
 import com.gretta.util.log.Log;
 import java.util.Arrays;
@@ -29,7 +30,8 @@ public class LocalFileSource extends FileSource {
         
         for(java.io.File file : files) {
             File rootChild = new LocalFile(this, root, file);
-            
+            rootChild.updateDataSync(Requests.REQUEST_ABSOLUTE_PATH);
+            Log.debug.log(TAG, String.format("javaFile : %s, file path : %s, abs path: %s", file.getAbsolutePath(), rootChild.getPath(), rootChild.getAbsolutePath()));
             root.addRoots(rootChild);
             
             registerToCache(rootChild);

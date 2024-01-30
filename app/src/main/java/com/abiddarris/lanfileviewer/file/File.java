@@ -25,11 +25,16 @@ public abstract class File implements Requests {
     private long validFrom = -1;
     private Map<String, Value> values = new HashMap<>();
     private String name;
+    private String path;
     
     protected File(FileSource source, File parentFile, String name) {
         this.source = source;
         this.parentFile = parentFile;
         this.name = name;
+    }
+    
+    protected void setPath(String path) {
+        this.path = path;
     }
     
     protected void put(String key, Object obj) {
@@ -209,7 +214,7 @@ public abstract class File implements Requests {
     }
 
     public final String getPath() {
-        return getParentFile() == null ? "" : getParentFile().getPath() + 
+        return path != null ? path : getParentFile().getPath() + 
             "/" + getName();
     }
     
