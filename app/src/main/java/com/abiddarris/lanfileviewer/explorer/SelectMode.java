@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -306,7 +308,7 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
                 Context context = getExplorer().getContext();
                 DownloadManager.getDownloadManager(context)
                     .get(file, getExplorer(), (result) -> {
-                               
+                        result.updateDataSync(REQUEST_ABSOLUTE_PATH, REQUEST_GET_MIME_TYPE);   
                         Uri uri = FileProvider.getUriForFile(context, 
                             context.getPackageName() + ".provider",
                             new java.io.File(result.getAbsolutePath()));

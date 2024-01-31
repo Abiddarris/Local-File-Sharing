@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Network;
@@ -58,20 +60,28 @@ public class Explorer {
             Log.debug.log(TAG, "cannot open " + file + " reason : already loading something");
             return;
         }
-        if (file.isDirectory()) {
-            setParent(file);
+        file.updateData(e -> {
+            if(e != null){
+                showErrorDialog(e);
+                cancel();      
+                return;
+            }    
+            if (file.isDirectory()) {
+                    
+                setParent(file);
             
-            loading = true;
-            refresher.setRefreshing(true);
-            update();
-            return;
-        }
+                loading = true;
+                refresher.setRefreshing(true);
+                update();
+                return;
+            }
 
-        String mimeType = file.getMimeType();
+            String mimeType = file.getMimeType();
 
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(file.toUri(), mimeType == null ? "*" : mimeType);
-        getContext().startActivity(intent);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(file.toUri(), mimeType == null ? "*" : mimeType);
+            getContext().startActivity(intent);
+        }, REQUEST_IS_DIRECTORY, REQUEST_GET_MIME_TYPE);
     }
     
     public void refresh() {
@@ -96,7 +106,7 @@ public class Explorer {
                 return;
             }    
             load(parent.listFiles());
-        });
+        }, REQUEST_LIST_FILES);
     }
     
     private synchronized void showErrorDialog(Exception e) {

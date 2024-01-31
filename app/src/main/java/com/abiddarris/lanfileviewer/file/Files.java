@@ -1,4 +1,7 @@
 package com.abiddarris.lanfileviewer.file;
+
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import android.content.Context;
 import com.abiddarris.lanfileviewer.R;
 import java.text.SimpleDateFormat;
@@ -11,6 +14,7 @@ public class Files {
     private static final SimpleDateFormat currentYear = new SimpleDateFormat("dd LLL HH.mm");
     
     public static void getFilesTree(List<File> files, File parent) {
+        parent.updateDataSync(REQUEST_GET_FILES_TREE);
         files.addAll(parent.getFilesTree());
     }
     

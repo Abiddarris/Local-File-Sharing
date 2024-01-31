@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -62,7 +64,7 @@ public class FileNameInputValidator implements TextWatcher {
     }
 
     private void validateInput(final File folder) throws Exception {
-        folder.updateDataSync();
+        folder.updateDataSync(REQUEST_EXISTS);
 
         if (!folder.exists()) {
             handler.post((c) -> {

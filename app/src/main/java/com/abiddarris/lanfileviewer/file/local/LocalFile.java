@@ -123,7 +123,7 @@ public class LocalFile extends File {
     public InputStream newInputStream() throws IOException {
         source.getSecurityManager().checkRead(this);
 
-        return new FileInputStream(getAbsolutePath());
+        return new FileInputStream((String)get(KEY_ABSOLUTE_PATH, REQUEST_ABSOLUTE_PATH));
     }
 
     @Override
@@ -131,16 +131,13 @@ public class LocalFile extends File {
         source.getSecurityManager().checkWrite(this);
 
         if (file.getParentFile() != null & file.getParentFile().canWrite()) {
-            return new FileOutputStream(getAbsolutePath());
+            return new FileOutputStream((String)get(KEY_ABSOLUTE_PATH, REQUEST_ABSOLUTE_PATH));
         }
 
         DocumentFile parentDocumentFile = source.findDocumentFile(getParentFile());
         if (parentDocumentFile != null) {
             DocumentFile file = parentDocumentFile.findFile(getName());
-            file =
-                    file == null
-                            ? parentDocumentFile.createFile("application/notexist", getName())
-                            : file;
+            file = file == null ? parentDocumentFile.createFile("application/notexist", getName()) : file;
 
             return source.getContext().getContentResolver().openOutputStream(file.getUri());
         }
@@ -154,10 +151,9 @@ public class LocalFile extends File {
     }
 
     private Progress copyInternal(File dest, OnCopyDoneListener listener) {
-        Progress progress = new Progress(length());
+        Progress progress = new Progress((Long)get(KEY_LENGTH, REQUEST_GET_LENGTH));
 
-        service.submit(
-                () -> {
+        service.submit(() -> {
                     try {
                         BufferedInputStream inputStream = new BufferedInputStream(newInputStream());
                         BufferedOutputStream outputStream =
@@ -217,7 +213,9 @@ public class LocalFile extends File {
     @Override
     public Progress move(File dest) {
         source.getSecurityManager().checkRead(this);
-
+        
+        updateDataSync(REQUEST_ABSOLUTE_PATH);
+        
         java.io.File destFile = new java.io.File(dest.getAbsolutePath());
         if (file.canWrite()
                 && destFile.getParentFile() != null

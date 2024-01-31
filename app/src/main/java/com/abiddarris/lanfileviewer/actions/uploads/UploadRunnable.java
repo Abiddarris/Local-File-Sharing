@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.actions.uploads;
 
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -64,6 +66,7 @@ public class UploadRunnable extends ActionRunnable {
             }
             
             File originalFile = files.get(i);
+            originalFile.updateDataSync(REQUEST_GET_LENGTH, REQUEST_GET_MIME_TYPE);
             
             String localPath = originalFile.getPath()
                 .replace(parent.getPath(), "");

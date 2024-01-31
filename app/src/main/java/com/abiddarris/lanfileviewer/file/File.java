@@ -86,10 +86,10 @@ public abstract class File implements Requests {
     }
     
     public final Future updateData(Callback callback) {
-        return updateData(createDefaultReqeustKeys(), callback);
+        return updateData(callback, createDefaultReqeustKeys());
     }
 
-    public final Future updateData(String[] requests, Callback callback) {
+    public final Future updateData(Callback callback, String... requests) {
         return getSource().runOnBackground(new BaseRunnable(c -> {
             Exception exception;
             try {
@@ -232,7 +232,7 @@ public abstract class File implements Requests {
     
     public abstract boolean delete();
     
-    public abstract Progress move(File dest);
+    public abstract Progress move(File dest); 
     
     public abstract void createThumbnail(ThumbnailCallback callback);
     

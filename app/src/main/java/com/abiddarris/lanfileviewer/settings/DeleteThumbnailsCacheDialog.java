@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.settings;
 
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import android.app.Dialog;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
@@ -15,6 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.gretta.util.log.Log;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class DeleteThumbnailsCacheDialog extends DialogFragment {
     
@@ -29,6 +32,13 @@ public class DeleteThumbnailsCacheDialog extends DialogFragment {
         
         files = new ArrayList<>();
         Files.getFilesTree(files, cache);
+        
+        try {
+            cache.updateData((e) -> {}, REQUEST_GET_FILES_TREE_SIZE)
+                .get();    
+        } catch (Exception e) {
+            Log.err.log(TAG, e);
+        }
         
         long size = cache.getFilesTreeSize();
         

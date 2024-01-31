@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.actions;
 
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -87,7 +89,7 @@ public class ActionDialog extends DialogFragment {
     
     public File getFile(FileSource source, File src, String path) throws Exception {
         File file = source.getFile(path);
-        file.updateDataSync();
+        file.updateDataSync(REQUEST_EXISTS, REQUEST_IS_DIRECTORY);
         
         if(!file.exists()) return file;
         

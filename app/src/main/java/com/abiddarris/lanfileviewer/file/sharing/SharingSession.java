@@ -1,14 +1,16 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
-import android.graphics.Bitmap;
-import android.util.Base64;
+import static com.abiddarris.lanfileviewer.file.Requests.*;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdManager.RegistrationListener;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Build;
+import android.util.Base64;
 import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
@@ -19,9 +21,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.CustomTarget;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import android.graphics.drawable.Drawable;
 import com.bumptech.glide.request.transition.Transition;
 import com.gretta.util.log.Log;
 import fi.iki.elonen.NanoHTTPD;
@@ -36,7 +35,9 @@ import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -141,10 +142,8 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         
         Map<String,String> params = session.getParms();
         File dest = source.getFile(params.get("path"));
-        dest.updateDataSync();
         
         File tempFile = source.getFile(body.get("stream"));
-        tempFile.updateDataSync();
         
         BufferedInputStream is = new BufferedInputStream(tempFile.newInputStream());
         BufferedOutputStream os = new BufferedOutputStream(dest.newOutputStream());
@@ -186,7 +185,6 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         if(key.equals(REQUEST_GET_TOP_DIRECTORY_FILES)) {
         	JSONArray topDirectoryFiles = new JSONArray();
             File root = source.getRoot();
-            root.updateDataSync();
             for(File subroot : root.listFiles()) {
                 topDirectoryFiles.put(subroot.getPath());
             }
@@ -223,7 +221,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
 
     private void fetchFileRelated(JSONObject request, JSONObject response, String key, String path) throws Exception {
         File file = source.getFile(path);
-        file.updateDataSync();
+        file.updateDataSync(key);
         
         if(key.equalsIgnoreCase(REQUEST_LIST_FILES)) {
             File[] subFiles = file.listFiles();
@@ -293,7 +291,8 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
 
     private Response getFile(IHTTPSession session) throws Exception {
         File file = source.getFile(session.getUri());
-        file.updateDataSync();
+        file.updateDataSync(REQUEST_ABSOLUTE_PATH, 
+            REQUEST_GET_LENGTH,REQUEST_GET_MIME_TYPE);
         
         String type = session.getParms().get("type");
         if(type != null && type.equalsIgnoreCase("thumbnail")) {
@@ -307,7 +306,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
                 return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "not found");
             }
             file = source.getFile(f.getPath());
-            file.updateDataSync();
+            file.updateDataSync(REQUEST_GET_LENGTH, REQUEST_GET_MIME_TYPE);
         }
         
         if(session.getHeaders().get("range") != null) {

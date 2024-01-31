@@ -129,8 +129,7 @@ public class NetworkFile extends File {
     
     @Override
     public InputStream newInputStream() throws IOException {
-        updateDataSync(REQUEST_IS_DIRECTORY);
-        if(isDirectory()) {
+        if((Boolean)get(KEY_IS_DIRECTORY, REQUEST_IS_DIRECTORY)) {
             throw new IOException("cannot open a directory");
         }
         
@@ -143,7 +142,7 @@ public class NetworkFile extends File {
     @Override
     public NetworkOutputStream newOutputStream() throws IOException {
         updateDataSync(REQUEST_IS_DIRECTORY);
-        if(isDirectory()) {
+        if((Boolean)get(KEY_IS_DIRECTORY, REQUEST_IS_DIRECTORY)) {
             throw new IOException("cannot open a directory");
         }
         SharingDevice device = source.getDevice();

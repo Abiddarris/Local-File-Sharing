@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import android.content.Context;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
@@ -47,20 +49,20 @@ public class MoveRunnable extends ActionRunnable {
         File parent = items[0].getParentFile();
         for (int i = 0; i < files.size(); ++i) {
             if (Thread.currentThread().isInterrupted()) {
-                
                 Log.err.log(getTag(), "Moving interrupted");
                 return;
             }
 
             File originalFile = files.get(i);
+            originalFile.updateDataSync(REQUEST_IS_DIRECTORY);
 
             String localPath = originalFile.getPath().replace(parent.getPath(), "");
 
-            File destFile = getDialog().getFile(source, originalFile, dest.getPath() + localPath);
-            destFile.updateDataSync();
-
+            File destFile = getDialog()
+                .getFile(source, originalFile, dest.getPath() + localPath);
+            
             if (destFile == null) continue;
-
+            
             updateFileInfo(originalFile.getName(), i + 1, files.size());
 
             if (originalFile.isDirectory()) {

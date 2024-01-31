@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import android.content.Context;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
@@ -57,15 +59,16 @@ public class DownloadRunnable extends ActionRunnable {
             }
 
             File originalFile = files.get(i);
+            originalFile.updateDataSync(REQUEST_IS_DIRECTORY, REQUEST_GET_LENGTH);
             
             String localPath = originalFile.getPath()
                 .replace(parent.getPath(), "");
 
-            File destFile = getDialog().getFile(source, originalFile, dest.getPath() + localPath);
-            destFile.updateDataSync();
-
+            File destFile = getDialog()
+                .getFile(source, originalFile, dest.getPath() + localPath);
+            
             if (destFile == null) continue;
-
+            
             updateFileInfo(originalFile.getName(), i + 1, files.size());
 
             if (originalFile.isDirectory()) {
