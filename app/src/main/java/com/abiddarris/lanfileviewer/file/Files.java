@@ -22,6 +22,7 @@ public class Files {
     	long size = 0;
         
         for(File file : items) {
+            file.updateDataSync(REQUEST_GET_FILES_TREE_SIZE);
         	size += file.getFilesTreeSize();
         }
         
@@ -31,6 +32,7 @@ public class Files {
     public static int getFilesCount(List<File> files) {
     	int filesCount = 0;
         for(File file : files) {
+            file.updateDataSync(REQUEST_IS_FILE);
     		if(file.isFile()) filesCount++;
     	}
         return filesCount;
@@ -39,6 +41,7 @@ public class Files {
     public static int getDirectoriesCount(List<File> files) {
     	int foldersCount = 0;
         for(File file : files) {
+            file.updateDataSync(REQUEST_IS_DIRECTORY);
     		if(file.isDirectory()) foldersCount++;
     	}
         return foldersCount;
@@ -47,6 +50,7 @@ public class Files {
     public static int getFilesCount(File[] files) {
     	int filesCount = 0;
         for(File file : files) {
+            file.updateDataSync(REQUEST_IS_FILE);
     		if(file.isFile()) filesCount++;
     	}
         return filesCount;
@@ -55,6 +59,7 @@ public class Files {
     public static int getDirectoriesCount(File[] files) {
     	int foldersCount = 0;
         for(File file : files) {
+            file.updateDataSync(REQUEST_IS_DIRECTORY);
     		if(file.isDirectory()) foldersCount++;
     	}
         return foldersCount;
@@ -77,7 +82,6 @@ public class Files {
         
         return fileName.substring(extensionSeparator + 1);
     }
-    
     
     public static String formatToDate(long time) {
     	Calendar fileTime = Calendar.getInstance();

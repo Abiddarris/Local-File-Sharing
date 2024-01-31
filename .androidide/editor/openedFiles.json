@@ -1,50 +1,35 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/File.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/DetailDialog.java",
       "selection": {
         "end": {
-          "column": 28,
-          "index": 1775,
-          "line": 54
+          "column": 47,
+          "index": 598,
+          "line": 14
         },
         "start": {
-          "column": 28,
-          "index": 1775,
-          "line": 54
+          "column": 47,
+          "index": 598,
+          "line": 14
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/DataDoesNotExistsException.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/Files.java",
       "selection": {
         "end": {
-          "column": 0,
-          "index": 215,
-          "line": 9
+          "column": 61,
+          "index": 845,
+          "line": 24
         },
         "start": {
-          "column": 0,
-          "index": 215,
-          "line": 9
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/DeleteRunnable.java",
-      "selection": {
-        "end": {
-          "column": 48,
-          "index": 1750,
-          "line": 58
-        },
-        "start": {
-          "column": 48,
-          "index": 1750,
-          "line": 58
+          "column": 61,
+          "index": 845,
+          "line": 24
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/DeleteRunnable.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/Files.java"
 }
