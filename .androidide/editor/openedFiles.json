@@ -1,200 +1,50 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/SharingSession.java",
-      "selection": {
-        "end": {
-          "column": 13,
-          "index": 12471,
-          "line": 306
-        },
-        "start": {
-          "column": 13,
-          "index": 12471,
-          "line": 306
-        }
-      }
-    },
-    {
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/File.java",
       "selection": {
         "end": {
-          "column": 5,
-          "index": 5203,
-          "line": 167
+          "column": 28,
+          "index": 1775,
+          "line": 54
         },
         "start": {
-          "column": 4,
-          "index": 5202,
-          "line": 167
+          "column": 28,
+          "index": 1775,
+          "line": 54
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/local/LocalFile.java",
-      "selection": {
-        "end": {
-          "column": 46,
-          "index": 7977,
-          "line": 216
-        },
-        "start": {
-          "column": 46,
-          "index": 7977,
-          "line": 216
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/sharing/NetworkFile.java",
-      "selection": {
-        "end": {
-          "column": 63,
-          "index": 5094,
-          "line": 144
-        },
-        "start": {
-          "column": 63,
-          "index": 5094,
-          "line": 144
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/DownloadManager.java",
-      "selection": {
-        "end": {
-          "column": 68,
-          "index": 1525,
-          "line": 42
-        },
-        "start": {
-          "column": 51,
-          "index": 1508,
-          "line": 42
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/Explorer.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/DataDoesNotExistsException.java",
       "selection": {
         "end": {
           "column": 0,
-          "index": 0,
-          "line": 0
+          "index": 215,
+          "line": 9
         },
         "start": {
           "column": 0,
-          "index": 0,
-          "line": 0
+          "index": 215,
+          "line": 9
         }
       }
     },
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/SelectMode.java",
-      "selection": {
-        "end": {
-          "column": 92,
-          "index": 10794,
-          "line": 310
-        },
-        "start": {
-          "column": 92,
-          "index": 10794,
-          "line": 310
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/explorer/PathAdapter.java",
-      "selection": {
-        "end": {
-          "column": 73,
-          "index": 2055,
-          "line": 51
-        },
-        "start": {
-          "column": 64,
-          "index": 2046,
-          "line": 51
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/CopyRunnable.java",
-      "selection": {
-        "end": {
-          "column": 59,
-          "index": 116,
-          "line": 2
-        },
-        "start": {
-          "column": 0,
-          "index": 57,
-          "line": 2
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/FileSource.java",
-      "selection": {
-        "end": {
-          "column": 33,
-          "index": 2861,
-          "line": 93
-        },
-        "start": {
-          "column": 23,
-          "index": 2851,
-          "line": 93
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/DeleteThumbnailsCacheDialog.java",
-      "selection": {
-        "end": {
-          "column": 27,
-          "index": 1269,
-          "line": 36
-        },
-        "start": {
-          "column": 27,
-          "index": 1269,
-          "line": 36
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/settings/DeleteDownloadCacheDialog.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/DeleteRunnable.java",
       "selection": {
         "end": {
           "column": 48,
-          "index": 582,
-          "line": 16
+          "index": 1750,
+          "line": 58
         },
         "start": {
-          "column": 31,
-          "index": 565,
-          "line": 16
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/MoveRunnable.java",
-      "selection": {
-        "end": {
-          "column": 62,
-          "index": 1760,
-          "line": 56
-        },
-        "start": {
-          "column": 62,
-          "index": 1760,
-          "line": 56
+          "column": 48,
+          "index": 1750,
+          "line": 58
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/MoveRunnable.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/actions/runnables/DeleteRunnable.java"
 }

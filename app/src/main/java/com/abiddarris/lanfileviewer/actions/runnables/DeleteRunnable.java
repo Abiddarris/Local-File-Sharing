@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.File;
@@ -44,7 +46,7 @@ public class DeleteRunnable extends ActionRunnable {
                 Log.debug.log(TAG, "Canceling delete");
                 return;
             }
-            
+            file.updateDataSync(REQUEST_IS_DIRECTORY, REQUEST_IS_FILE);
         	if(file.isDirectory()) continue;
             
             updateFileInfo(file.getName(), index, files.size());
