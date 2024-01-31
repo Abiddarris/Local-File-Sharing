@@ -151,8 +151,8 @@ public abstract class File implements Requests {
                 long size = 0;
         
                 for(File file : filesTree) {
-                    if(file.isFile()) {
-                        size += file.length();
+                    if((Boolean)file.get(KEY_IS_FILE, REQUEST_IS_FILE)) {
+                        size += (Long)file.get(KEY_LENGTH, REQUEST_GET_LENGTH);
                     }
                 }
         
