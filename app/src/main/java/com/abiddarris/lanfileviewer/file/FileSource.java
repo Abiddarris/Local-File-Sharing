@@ -43,7 +43,7 @@ public abstract class FileSource {
         return path;
     }
     
-    protected abstract File newFile(File parent, String name);
+    protected abstract File newFile(String parent, String name);
     
     public abstract RootFile getRoot();
     
@@ -55,9 +55,7 @@ public abstract class FileSource {
         
         String[] parentAndName = splitParentAndName(path);
         
-        File parent = getFile(parentAndName[0]);
-        
-        file = newFile(parent, parentAndName[1]);
+        file = newFile(parentAndName[0], parentAndName[1]);
         
         registerToCache(file);
         

@@ -47,7 +47,7 @@ public class NetworkFileSource extends FileSource {
             
         for(int i = 0; i < jsonTopDirectoryFiles.length(); ++i) {
             String path = jsonTopDirectoryFiles.optString(i);
-            File child = new NetworkFile(this, root, path, getName(path));
+            File child = new NetworkFile(this, root.getPath(), path, getName(path));
          
             registerToCache(child); 
             root.addRoots(child);
@@ -137,7 +137,7 @@ public class NetworkFileSource extends FileSource {
     }
 
     @Override
-    protected File newFile(File parent, String name) {
+    protected File newFile(String parent, String name) {
         return new NetworkFile(this, parent, null, name);
     }
     

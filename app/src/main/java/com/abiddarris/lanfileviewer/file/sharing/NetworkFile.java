@@ -31,7 +31,7 @@ public class NetworkFile extends File {
     
     private static final String TAG = Log.getTag(NetworkFile.class);
 
-    protected NetworkFile(NetworkFileSource source, File parent, String path, String name) {
+    protected NetworkFile(NetworkFileSource source, String parent, String path, String name) {
         super(source, parent, name);
         
         setPath(path);

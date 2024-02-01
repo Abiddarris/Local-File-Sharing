@@ -87,6 +87,7 @@ public class LocalFileSource extends FileSource {
     
     protected DocumentFile findDocumentFile(File file) {
         String filePath = file.getAbsolutePath();
+        
     	if(sdCardStorage == null || !filePath.toLowerCase()
             .startsWith(sdCardStorage.getAbsolutePath().toLowerCase())) {
             Log.debug.log(TAG, "Returning from findDocumentFile(File)");
@@ -119,7 +120,7 @@ public class LocalFileSource extends FileSource {
     }
 
     @Override
-    protected File newFile(File parent, String name) {
+    protected File newFile(String parent, String name) {
         return new LocalFile(this, parent, name);
     }
     

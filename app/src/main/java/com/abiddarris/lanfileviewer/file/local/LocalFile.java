@@ -38,19 +38,20 @@ public class LocalFile extends File {
     public static final String TAG = Log.getTag(LocalFile.class);
 
     protected LocalFile(LocalFileSource source, File parent, java.io.File file) {
-        super(source, parent, file.getName());
+        super(source, parent.getPath(), file.getName());
         
         this.source = source;
         this.file = file;
     }
     
-    protected LocalFile(LocalFileSource source, File parent, String name) {
+    protected LocalFile(LocalFileSource source, String parent, String name) {
         super(source, parent, name);
         
-        parent.updateDataSync(REQUEST_ABSOLUTE_PATH);
+        File parentFile = getParentFile();
+        parentFile.updateDataSync(REQUEST_ABSOLUTE_PATH);
         
         this.source = source;
-        this.file = new java.io.File(parent.getAbsolutePath(), name);
+        this.file = new java.io.File(parentFile.getAbsolutePath(), name);
     }
 
     @Override

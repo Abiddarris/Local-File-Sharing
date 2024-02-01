@@ -20,16 +20,16 @@ public abstract class File implements Requests {
     
     private static SimpleDateFormat timeFormatter = new SimpleDateFormat("dd LLL YYYY HH.mm.ss");
     
-    private File parentFile;
+    private String parent;
     private FileSource source;
     private long validFrom = -1;
     private Map<String, Value> values = new HashMap<>();
     private String name;
     private String path;
     
-    protected File(FileSource source, File parentFile, String name) {
+    protected File(FileSource source, String parent, String name) {
         this.source = source;
-        this.parentFile = parentFile;
+        this.parent = parent;
         this.name = name;
     }
     
@@ -81,8 +81,12 @@ public abstract class File implements Requests {
         return validFrom;
     }
     
+    public final String getParent() {
+        return parent;
+    }
+    
     public final File getParentFile() {
-        return parentFile;
+        return source.getFile(parent);
     }
     
     public final Future updateData(Callback callback) {
