@@ -64,14 +64,14 @@
       "file": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/local/LocalFileSource.java",
       "selection": {
         "end": {
-          "column": 51,
-          "index": 3017,
-          "line": 90
+          "column": 59,
+          "index": 109,
+          "line": 2
         },
         "start": {
-          "column": 51,
-          "index": 3017,
-          "line": 90
+          "column": 59,
+          "index": 109,
+          "line": 2
         }
       }
     },
@@ -136,5 +136,5 @@
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/local/LocalFileSource.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LANFileViewer/app/src/main/java/com/abiddarris/lanfileviewer/file/FileSource.java"
 }

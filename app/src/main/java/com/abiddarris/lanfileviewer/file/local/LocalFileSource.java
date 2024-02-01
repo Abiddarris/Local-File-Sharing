@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.file.local;
 
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import android.R;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -86,6 +88,8 @@ public class LocalFileSource extends FileSource {
     }
     
     protected DocumentFile findDocumentFile(File file) {
+        file.updateDataSync(REQUEST_ABSOLUTE_PATH);
+        sdCardStorage.updateDataSync(REQUEST_ABSOLUTE_PATH);
         String filePath = file.getAbsolutePath();
         
     	if(sdCardStorage == null || !filePath.toLowerCase()
