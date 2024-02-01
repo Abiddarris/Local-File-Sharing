@@ -29,6 +29,7 @@ public class LocalFileSource extends FileSource {
         super(context);
         
         root = new RootFile(this);
+        registerToCache(root);
         
         for(java.io.File file : files) {
             File rootChild = new LocalFile(this, root, file);
@@ -40,8 +41,6 @@ public class LocalFileSource extends FileSource {
         }
         
         initSdCardSupport(context);
-        
-        registerToCache(root);
     }
     
     private void initSdCardSupport(Context context) {
@@ -66,6 +65,7 @@ public class LocalFileSource extends FileSource {
         super(context);
         
         root = new RootFile(this);
+        registerToCache(root);
         
         File internalStorage = new LocalFile(this, root,
             Environment.getExternalStorageDirectory());
@@ -78,7 +78,7 @@ public class LocalFileSource extends FileSource {
             registerToCache(sdCardStorage);
             root.addRoots(sdCardStorage);
         } 
-        registerToCache(root);
+        
         registerToCache(internalStorage);
     }
 

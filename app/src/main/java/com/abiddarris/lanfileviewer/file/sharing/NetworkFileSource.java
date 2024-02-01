@@ -44,7 +44,8 @@ public class NetworkFileSource extends FileSource {
         JSONObject response = sendRequest(request);
         JSONArray jsonTopDirectoryFiles = response.optJSONArray(KEY_TOP_DIRECTORY_FILES);
         root = new RootFile(this); 
-            
+        registerToCache(root);
+        
         for(int i = 0; i < jsonTopDirectoryFiles.length(); ++i) {
             String path = jsonTopDirectoryFiles.optString(i);
             File child = new NetworkFile(this, root.getPath(), path, getName(path));
@@ -52,8 +53,6 @@ public class NetworkFileSource extends FileSource {
             registerToCache(child); 
             root.addRoots(child);
         }
-            
-        registerToCache(root);
     }
     
     public JSONObject sendRequest(JSONObject json) throws RequestException {

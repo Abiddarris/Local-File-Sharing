@@ -86,7 +86,7 @@ public abstract class File implements Requests {
     }
     
     public final File getParentFile() {
-        return source.getFile(parent);
+        return getParent() == null ? null : source.getFile(getParent());
     }
     
     public final Future updateData(Callback callback) {

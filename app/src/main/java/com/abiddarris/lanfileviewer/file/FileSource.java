@@ -53,6 +53,10 @@ public abstract class FileSource {
         File file = cache.get(path);
         if(file != null) return file;
         
+        if(path.equals("")) {
+            throw new FileOperationException("Trapped in infinite loop! make sure to register root to cache!");
+        }
+        
         String[] parentAndName = splitParentAndName(path);
         
         file = newFile(parentAndName[0], parentAndName[1]);
