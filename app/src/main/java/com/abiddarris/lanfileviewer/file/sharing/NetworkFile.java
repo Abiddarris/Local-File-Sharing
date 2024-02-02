@@ -1,7 +1,7 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
 import com.abiddarris.lanfileviewer.file.FileOperationException;
-import com.abiddarris.lanfileviewer.file.Requests;
+import static com.abiddarris.lanfileviewer.file.Requests.*;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
 import android.net.Uri;
@@ -65,12 +65,12 @@ public class NetworkFile extends File {
                 REQUEST_GET_LAST_MODIFIED.equalsIgnoreCase(key) || 
                 REQUEST_GET_FILES_TREE_SIZE.equalsIgnoreCase(key)) {
                 
-                key = Requests.requestToKey(key);
+                key = requestToKey(key);
                 put(key, response.optLong(key));
                 continue;
             }
             
-            key = Requests.requestToKey(key);
+            key = requestToKey(key);
             put(key, response.opt(key));
         }
     }

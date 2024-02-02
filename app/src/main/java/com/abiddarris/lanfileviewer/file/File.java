@@ -218,7 +218,7 @@ public abstract class File implements Requests {
     }
 
     public final String getPath() {
-        return path != null ? path : getParentFile().getPath() + 
+        return path != null ? path : parent + 
             "/" + getName();
     }
     

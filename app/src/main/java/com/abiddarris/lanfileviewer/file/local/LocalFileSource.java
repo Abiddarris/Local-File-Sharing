@@ -19,7 +19,6 @@ import java.util.Arrays;
 public class LocalFileSource extends FileSource {
 
     private DocumentFile sdCardDocumentFile;
-    private RootFile root;
     private File sdCardStorage;
     
     public static final String SD_CARD_URI_KEY = "sdCardUriKey";
@@ -28,16 +27,12 @@ public class LocalFileSource extends FileSource {
     public LocalFileSource(Context context, java.io.File[] files) {
         super(context);
         
-        root = new RootFile(this);
-        registerToCache(root);
-        
         for(java.io.File file : files) {
-            File rootChild = new LocalFile(this, root, file);
+            File rootChild = new LocalFile(this, getRoot(), file);
             rootChild.updateDataSync(Requests.REQUEST_ABSOLUTE_PATH);
             Log.debug.log(TAG, String.format("javaFile : %s, file path : %s, abs path: %s", file.getAbsolutePath(), rootChild.getPath(), rootChild.getAbsolutePath()));
-            root.addRoots(rootChild);
             
-            registerToCache(rootChild);
+            registerToRoot(rootChild);
         }
         
         initSdCardSupport(context);
@@ -57,34 +52,23 @@ public class LocalFileSource extends FileSource {
                 sdCardDocumentFile = DocumentFile.fromTreeUri(context, uri);
             }
             
-            sdCardStorage = new LocalFile(this, root, file);
+            sdCardStorage = new LocalFile(this, getRoot(), file);
         }
     }
     
     public LocalFileSource(Context context) {
         super(context);
         
-        root = new RootFile(this);
-        registerToCache(root);
-        
-        File internalStorage = new LocalFile(this, root,
+        File internalStorage = new LocalFile(this, getRoot(),
             Environment.getExternalStorageDirectory());
-        
-        root.addRoots(internalStorage);
+        registerToRoot(internalStorage);
         
         initSdCardSupport(context);
         
         if(sdCardStorage != null) {
-            registerToCache(sdCardStorage);
-            root.addRoots(sdCardStorage);
+            registerToRoot(sdCardStorage);
         } 
         
-        registerToCache(internalStorage);
-    }
-
-    @Override
-    public RootFile getRoot() {
-        return root;
     }
     
     protected DocumentFile findDocumentFile(File file) {

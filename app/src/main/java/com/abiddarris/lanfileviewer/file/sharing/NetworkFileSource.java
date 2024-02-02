@@ -43,15 +43,12 @@ public class NetworkFileSource extends FileSource {
             .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_GET_TOP_DIRECTORY_FILES));
         JSONObject response = sendRequest(request);
         JSONArray jsonTopDirectoryFiles = response.optJSONArray(KEY_TOP_DIRECTORY_FILES);
-        root = new RootFile(this); 
-        registerToCache(root);
         
         for(int i = 0; i < jsonTopDirectoryFiles.length(); ++i) {
             String path = jsonTopDirectoryFiles.optString(i);
-            File child = new NetworkFile(this, root.getPath(), path, getName(path));
+            File child = new NetworkFile(this, getRoot().getPath(), path, getName(path));
          
-            registerToCache(child); 
-            root.addRoots(child);
+            registerToRoot(child);
         }
     }
     
@@ -128,11 +125,6 @@ public class NetworkFileSource extends FileSource {
         } catch (IOException | ClassNotFoundException e) {
             return e;
         }
-    }
-
-    @Override
-    public RootFile getRoot() {
-        return root;
     }
 
     @Override

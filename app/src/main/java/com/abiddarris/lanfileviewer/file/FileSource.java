@@ -3,25 +3,38 @@ package com.abiddarris.lanfileviewer.file;
 import android.content.Context;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
+import com.abiddarris.lanfileviewer.utils.PoolManager;
 import com.gretta.util.log.Log;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-public abstract class FileSource {
+public abstract class FileSource extends PoolManager<String, File>{
     
     private static LocalFileSource localFileSource;
     public static final String TAG = Log.getTag(FileSource.class);
      
     private ExecutorService executor = Executors.newFixedThreadPool(16);
     private Context context;
-    private Map<String,File> cache = new HashMap<>();
+    private RootFile root;
     private SecurityManager securityManager = new SecurityManager();
     
     public FileSource(Context context) {
         this.context = context;
+        
+        root = new RootFile(this); 
+        registerToCache(root);
+        
+        setOneValueOnly("");
+       // setSaveStackTrace(true);
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        executor.scheduleAtFixedRate(new BaseRunnable((c) -> {
+            Log.debug.log(TAG, toString() + " has " + getActiveObjects(new File[0]).length + " active objects");
+        }), 0, 1, TimeUnit.MINUTES);
     }
     
     private String[] splitParentAndName(String path) {
@@ -45,29 +58,35 @@ public abstract class FileSource {
     
     protected abstract File newFile(String parent, String name);
     
-    public abstract RootFile getRoot();
+    public final RootFile getRoot() {
+        return root;
+    }
     
     public File getFile(String path) {
         path = validatePath(path);
-        
-        File file = cache.get(path);
-        if(file != null) return file;
-        
+        return get(path);
+    }
+    
+    @Override
+    protected File create(String path) {
         if(path.equals("")) {
             throw new FileOperationException("Trapped in infinite loop! make sure to register root to cache!");
         }
         
         String[] parentAndName = splitParentAndName(path);
         
-        file = newFile(parentAndName[0], parentAndName[1]);
-        
-        registerToCache(file);
-        
-        return file;
+        return newFile(parentAndName[0], parentAndName[1]);
     }
     
-    public void registerToCache(File file) {
-        cache.put(file.getPath(),file);
+    protected void registerToCache(File file) {
+        registerToCache(file.getPath(), file);
+    }
+    
+    protected void registerToRoot(File file) {
+        getRoot()
+            .addRoots(file);
+        setOneValueOnly(file.getPath());
+        registerToCache(file);
     }
     
     public Future runOnBackground(BaseRunnable runnable) {
