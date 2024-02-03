@@ -106,13 +106,13 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
 
     private void setItem(TextView textView, final File file) {
         if(file.isDirectory()) {
-            File[] files = file.listFiles();
+            String[] files = file.list();
             if(files == null) {
                 textView.setText("ERROR");
                 return;
             }
             
-            int item = file.listFiles().length;
+            int item = files.length;
             textView.setText(item + " item");
             return;
         }

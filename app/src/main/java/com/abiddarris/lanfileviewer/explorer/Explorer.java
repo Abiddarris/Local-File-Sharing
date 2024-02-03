@@ -67,7 +67,6 @@ public class Explorer {
                 return;
             }    
             if (file.isDirectory()) {
-                    
                 setParent(file);
             
                 loading = true;
@@ -120,7 +119,7 @@ public class Explorer {
     }
 
     private void load(File[] files) {
-        cache.clear();
+        clearCache();
         targetCount = files.length;
         if (targetCount == 0) {
             onLoaded();
@@ -136,6 +135,14 @@ public class Explorer {
                 onFileLoaded(file);
             });
         }
+    }
+    
+    private void clearCache() {
+        for(File file : cache) {
+            file.getSource()
+                .free(file);
+        }
+        cache.clear();
     }
 
     public boolean navigateUp() {
@@ -175,11 +182,15 @@ public class Explorer {
     }
     
     private void cancel() {
-        cache.clear();
+        clearCache();
         onLoaded();
     }
     
     private void setParent(File parent) {
+        if(this.parent != null) {
+            this.parent.getSource()
+                .free(this.parent);
+        }
         this.parent = parent;
         
         getMode().onParentChanged(this.parent);
