@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.net.Uri;
 import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
+import com.abiddarris.lanfileviewer.utils.TaskResult;
+import com.gretta.util.log.Log;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,6 +21,7 @@ import org.json.JSONObject;
 public abstract class File implements Requests {
     
     private static SimpleDateFormat timeFormatter = new SimpleDateFormat("dd LLL YYYY HH.mm.ss");
+    private static final String TAG = Log.getTag(File.class);
     
     private String parent;
     private FileSource source;
@@ -89,12 +92,20 @@ public abstract class File implements Requests {
         return getParent() == null ? null : source.getFile(getParent());
     }
     
-    public final Future updateData(Callback callback) {
+    public final TaskResult updateData() {
+        return updateData((e) -> handleDefaultResult(e));
+    }
+    
+    public final TaskResult updateData(Callback callback) {
         return updateData(callback, createDefaultReqeustKeys());
     }
+    
+    public final TaskResult updateData(String... requests) {
+        return updateData(e -> handleDefaultResult(e), requests);
+    }
 
-    public final Future updateData(Callback callback, String... requests) {
-        return getSource().runOnBackground(new BaseRunnable(c -> {
+    public final TaskResult updateData(Callback callback, String... requests) {
+        return new TaskResult(getSource().runOnBackground(new BaseRunnable(c -> {
             Exception exception;
             try {
                 updateDataSync(requests);
@@ -106,7 +117,7 @@ public abstract class File implements Requests {
             final Exception e1 = exception;        
             ApplicationCore.getMainHandler()
                 .post(ctx -> callback.onDataUpdated(e1));
-        }));
+        })));
     }
     
     public final void updateDataSync() {
@@ -129,6 +140,12 @@ public abstract class File implements Requests {
              REQUEST_GET_MIME_TYPE, REQUEST_GET_LENGTH, REQUEST_GET_LAST_MODIFIED,
              REQUEST_EXISTS, REQUEST_ABSOLUTE_PATH
        };
+    }
+    
+    private void handleDefaultResult(Exception e) {
+        if(e != null) {
+            Log.err.log(TAG, e);
+        }
     }
     
     private void checkReadPermission() {
