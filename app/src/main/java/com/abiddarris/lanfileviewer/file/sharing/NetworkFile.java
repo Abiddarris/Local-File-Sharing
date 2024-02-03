@@ -47,10 +47,10 @@ public class NetworkFile extends File {
         
         JSONObject response = source.sendRequest(request);
         for(String key : requests) {
-            if(REQUEST_LIST_FILES.equalsIgnoreCase(key)) {
-                JSONArray paths = response.optJSONArray(KEY_LIST_FILES);
-                File[] files = paths != null ? pathsToFiles(paths) : null;
-                put(KEY_LIST_FILES, files);
+            if(REQUEST_LIST.equalsIgnoreCase(key)) {
+                JSONArray paths = response.optJSONArray(KEY_LIST);
+                String[] files = paths != null ? parseName(paths) : null;
+                put(KEY_LIST, files);
                 continue;
             } else if(REQUEST_GET_FILES_TREE.equalsIgnoreCase(key)) {
                 List<File> files = new ArrayList<>();
@@ -75,14 +75,12 @@ public class NetworkFile extends File {
         }
     }
     
-    private File[] pathsToFiles(JSONArray paths) {
-        File[] files = new NetworkFile[paths.length()];
+    private String[] parseName(JSONArray paths) {
+        String[] names = new String[paths.length()];
         for(int i = 0; i < paths.length(); i++) {
-            String path = paths.optString(i);
-            files[i] = getSource()
-                        .getFile(path);
+            names[i] = paths.optString(i);
         }
-        return files;
+        return names;
     }
 
     @Override

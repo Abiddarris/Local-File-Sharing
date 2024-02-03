@@ -62,18 +62,10 @@ public class LocalFile extends File {
         super.updateInternal(requests);
         
         for(String request : requests) {
-            if(REQUEST_LIST_FILES.equalsIgnoreCase(request)) {
-                java.io.File[] javaFiles = file.listFiles();
-                if (javaFiles == null) {
-                    put(KEY_LIST_FILES, null);
-                    continue;
-                }
+            if(REQUEST_LIST.equalsIgnoreCase(request)) {
+                String[] names = file.list();
 
-                File[] files = new File[javaFiles.length];
-                for (int i = 0; i < files.length; ++i) {
-                    files[i] = source.getFile(getPath() + "/" + javaFiles[i].getName());
-                }
-                put(KEY_LIST_FILES, files);
+                put(KEY_LIST, names);
             } else if(REQUEST_IS_DIRECTORY.equalsIgnoreCase(request)) {
                 put(KEY_IS_DIRECTORY, file.isDirectory());
             } else if(REQUEST_IS_FILE.equalsIgnoreCase(request)) {

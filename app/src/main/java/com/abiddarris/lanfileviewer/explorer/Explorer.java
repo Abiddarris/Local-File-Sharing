@@ -106,7 +106,7 @@ public class Explorer {
                 return;
             }    
             load(parent.listFiles());
-        }, REQUEST_LIST_FILES);
+        }, REQUEST_LIST);
     }
     
     private synchronized void showErrorDialog(Exception e) {

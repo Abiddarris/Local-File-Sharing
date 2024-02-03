@@ -223,17 +223,17 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         File file = source.getFile(path);
         file.updateDataSync(key);
         
-        if(key.equalsIgnoreCase(REQUEST_LIST_FILES)) {
-            File[] subFiles = file.listFiles();
-            if (subFiles == null) {
-                response.put(KEY_LIST_FILES, JSONObject.NULL);
+        if(key.equalsIgnoreCase(REQUEST_LIST)) {
+            String[] names = file.list();
+            if (names == null) {
+                response.put(KEY_LIST, JSONObject.NULL);
             } else {
                 JSONArray listFiles = new JSONArray();
-                for (File subFile : subFiles) {
-                    listFiles.put(subFile.getPath());
+                for (String name : names) {
+                    listFiles.put(name);
                 }
                 
-                response.put(KEY_LIST_FILES, listFiles);
+                response.put(KEY_LIST, listFiles);
             }
         } else if(key.equalsIgnoreCase(REQUEST_IS_DIRECTORY)) {
             response.put(KEY_IS_DIRECTORY, file.isDirectory());

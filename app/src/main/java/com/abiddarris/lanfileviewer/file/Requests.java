@@ -7,7 +7,7 @@ public interface Requests {
     
     static Map<String,String> table = new HashMap<>();
     
-    public static final String REQUEST_LIST_FILES = "requestListFiles";
+    public static final String REQUEST_LIST = "requestList";
     public static final String REQUEST_IS_DIRECTORY = "requestIsDirectory";
     public static final String REQUEST_IS_FILE = "requestIsFile";
     public static final String REQUEST_GET_MIME_TYPE = "requestGetMimeType";
@@ -20,7 +20,7 @@ public interface Requests {
     public static final String KEY_IS_DIRECTORY = "isDirectory";
     public static final String KEY_IS_FILE = "isFile";
     public static final String KEY_MIME_TYPE = "mimeType";
-    public static final String KEY_LIST_FILES = "listFiles";
+    public static final String KEY_LIST = "list";
     public static final String KEY_LENGTH = "length";
     public static final String KEY_LAST_MODIFIED = "lastModified";
     public static final String KEY_EXISTS = "exists";
@@ -39,7 +39,7 @@ public interface Requests {
             table.put(REQUEST_GET_MIME_TYPE, KEY_MIME_TYPE);
             table.put(REQUEST_IS_DIRECTORY, KEY_IS_DIRECTORY);
             table.put(REQUEST_IS_FILE, KEY_IS_FILE);
-            table.put(REQUEST_LIST_FILES, KEY_LIST_FILES);
+            table.put(REQUEST_LIST, KEY_LIST);
         }
         return table.get(request);
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.utils.PoolManager;
+import com.gretta.util.log.FilesLog;
 import com.gretta.util.log.Log;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,10 +31,21 @@ public abstract class FileSource extends PoolManager<String, File>{
         registerToCache(root);
         
         setOneValueOnly("");
-       // setSaveStackTrace(true);
+        setSaveStackTrace(true);
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleAtFixedRate(new BaseRunnable((c) -> {
-            Log.debug.log(TAG, toString() + " has " + getActiveObjects(new File[0]).length + " active objects");
+            java.io.File file = new java.io.File(context.getExternalFilesDir(null), toString());
+            file.delete();
+            FilesLog log = new FilesLog(file);
+            log.open();      
+            log.log(TAG, toString() + " has " + getActiveObjects(new File[0]).length + " active objects");
+            for(File o : getActiveObjects(new File[0])) {
+                log.log(TAG, o.getPath());
+                log.log(TAG, " hold by : ");
+                for(StackTraceElement element  : getStackTraces(o)) {
+                    log.log(TAG, "  " + element);
+                }          
+            }        
         }), 0, 1, TimeUnit.MINUTES);
     }
     
@@ -65,6 +77,10 @@ public abstract class FileSource extends PoolManager<String, File>{
     public File getFile(String path) {
         path = validatePath(path);
         return get(path);
+    }
+    
+    public File getFile(File parent, String name) {
+        return getFile(parent.getPath() + "/" + name);
     }
     
     @Override

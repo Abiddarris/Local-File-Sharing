@@ -125,7 +125,7 @@ public abstract class File implements Requests {
     
     private String[] createDefaultReqeustKeys() {
        return new String[] {
-             REQUEST_LIST_FILES, REQUEST_IS_DIRECTORY, REQUEST_IS_FILE,
+             REQUEST_LIST, REQUEST_IS_DIRECTORY, REQUEST_IS_FILE,
              REQUEST_GET_MIME_TYPE, REQUEST_GET_LENGTH, REQUEST_GET_LAST_MODIFIED,
              REQUEST_EXISTS, REQUEST_ABSOLUTE_PATH
        };
@@ -176,11 +176,22 @@ public abstract class File implements Requests {
         
         return get(KEY_IS_FILE);
     }
-
-    public File[] listFiles() {
+    
+    public String[] list() {
         checkReadPermission();
         
-        return get(KEY_LIST_FILES);
+        return get(KEY_LIST);
+    }
+
+    public File[] listFiles() {
+        String[] names = list();
+        if(names == null) return null;
+        
+        File[] files = new File[names.length];
+        for(int i = 0; i < files.length; i++) {
+            files[i] = source.getFile(this, names[i]);
+        }
+        return files;
     }
 
     public String getAbsolutePath() {
@@ -251,7 +262,7 @@ public abstract class File implements Requests {
     private void getFilesTree(List<File> files, File parent) {
         files.add(parent);
         
-        parent.updateDataSync(REQUEST_IS_FILE, REQUEST_LIST_FILES);
+        parent.updateDataSync(REQUEST_IS_FILE, REQUEST_LIST);
         if(parent.isFile()) {
             return;
         }
