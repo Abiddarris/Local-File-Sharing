@@ -143,8 +143,10 @@ public abstract class FileSource extends PoolManager<String, File>{
             .getFile(context.getCacheDir().getPath());
     }
     
-    public static void freeFile(File file) {
-        file.getSource()
+    public static void freeFiles(File... files) {
+        for(File file : files) {
+             file.getSource()
             .free(file);
+        }
     }
 }

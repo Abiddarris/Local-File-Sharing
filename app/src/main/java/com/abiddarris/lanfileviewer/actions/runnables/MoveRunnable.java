@@ -71,7 +71,7 @@ public class MoveRunnable extends ActionRunnable {
                 moveFile(originalFile, destFile);
             }
             
-            FileSource.freeFile(destFile);
+            FileSource.freeFiles(destFile);
         }
         
         for (int i = files.size() - 1; i >= 0; i--) {
@@ -79,7 +79,7 @@ public class MoveRunnable extends ActionRunnable {
             if(originalFile.isDirectory()) {
                 originalFile.delete();
             }
-            FileSource.freeFile(originalFile);
+            FileSource.freeFiles(originalFile);
         }
     }
     

@@ -76,6 +76,8 @@ public class DownloadRunnable extends ActionRunnable {
             } else {
                 downloadFile(originalFile, destFile);
             }
+            
+            FileSource.freeFiles(originalFile, destFile);
         }
     }
     
