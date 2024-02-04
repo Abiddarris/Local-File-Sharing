@@ -50,7 +50,7 @@ public class CopyRunnable extends ActionRunnable {
 
         start();
 
-        File parent = items[0].getParentFile();
+        String parent = items[0].getParent();
         for (int i = 0; i < files.size(); ++i) {
             if(Thread.currentThread().isInterrupted()) {
                 Log.debug.log(TAG, "Canceling copy...");
@@ -61,7 +61,7 @@ public class CopyRunnable extends ActionRunnable {
             originalFile.updateDataSync(REQUEST_GET_LENGTH, REQUEST_IS_DIRECTORY);
             
             String localPath = originalFile.getPath()
-                .replace(parent.getPath(), "");
+                .replace(parent, "");
             
             File destFile = getDialog()
                 .getFile(source, originalFile, dest.getPath() + localPath);

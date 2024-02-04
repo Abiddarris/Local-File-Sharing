@@ -58,7 +58,7 @@ public class UploadRunnable extends ActionRunnable {
 
         start();
 
-        File parent = items[0].getParentFile();
+        String parent = items[0].getParent();
         for (int i = 0; i < files.size(); ++i) {
             if(Thread.currentThread().isInterrupted()) {
                 Log.debug.log(TAG, "Canceling upload...");
@@ -69,7 +69,7 @@ public class UploadRunnable extends ActionRunnable {
             originalFile.updateDataSync(REQUEST_GET_LENGTH, REQUEST_GET_MIME_TYPE);
             
             String localPath = originalFile.getPath()
-                .replace(parent.getPath(), "");
+                .replace(parent, "");
             
             File destFile = getDialog()
                 .getFile(destSource, originalFile, dest.getPath() + localPath);

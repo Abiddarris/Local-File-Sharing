@@ -46,7 +46,7 @@ public class MoveRunnable extends ActionRunnable {
 
         start();
 
-        File parent = items[0].getParentFile();
+        String parent = items[0].getParent();
         for (int i = 0; i < files.size(); ++i) {
             if (Thread.currentThread().isInterrupted()) {
                 Log.err.log(getTag(), "Moving interrupted");
@@ -56,7 +56,8 @@ public class MoveRunnable extends ActionRunnable {
             File originalFile = files.get(i);
             originalFile.updateDataSync(REQUEST_IS_DIRECTORY);
 
-            String localPath = originalFile.getPath().replace(parent.getPath(), "");
+            String localPath = originalFile.getPath()
+                .replace(parent, "");
 
             File destFile = getDialog()
                 .getFile(source, originalFile, dest.getPath() + localPath);

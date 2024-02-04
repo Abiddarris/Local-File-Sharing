@@ -51,7 +51,7 @@ public class DownloadRunnable extends ActionRunnable {
 
         start();
 
-        File parent = items[0].getParentFile();
+        String parent = items[0].getParent();
         for (int i = 0; i < files.size(); ++i) {
             if (Thread.currentThread().isInterrupted()) {
                 Log.debug.log(TAG, "Canceling downloading...");
@@ -62,7 +62,7 @@ public class DownloadRunnable extends ActionRunnable {
             originalFile.updateDataSync(REQUEST_IS_DIRECTORY, REQUEST_GET_LENGTH);
             
             String localPath = originalFile.getPath()
-                .replace(parent.getPath(), "");
+                .replace(parent, "");
 
             File destFile = getDialog()
                 .getFile(source, originalFile, dest.getPath() + localPath);
@@ -79,7 +79,7 @@ public class DownloadRunnable extends ActionRunnable {
             
             FileSource.freeFiles(originalFile, destFile);
         }
-        FileSource.freeFiles(dest, parent);
+        FileSource.freeFiles(dest);
     }
     
     public void downloadDirectory(File file) {

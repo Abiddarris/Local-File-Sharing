@@ -100,19 +100,27 @@ public class LocalFile extends File {
     @Override
     public boolean makeDirs() {
         source.getSecurityManager().checkWrite(this);
-
+        
         if (file.getParentFile() != null & file.getParentFile().canWrite()) {
             return file.mkdirs();
         }
 
-        if (!getParentFile().exists()) getParentFile().makeDirs();
+        File parent = null;
+        try {
+            parent = getParentFile();
+            parent.updateDataSync(REQUEST_EXISTS);
+            if (!parent.exists()) parent.makeDirs();
+            
+            DocumentFile documentFile = source.findDocumentFile(parent);
+            if (documentFile != null) {
+                return documentFile.createDirectory(getName()) != null;
+            }
 
-        DocumentFile documentFile = source.findDocumentFile(getParentFile());
-        if (documentFile != null) {
-            return documentFile.createDirectory(getName()) != null;
+            return false;
+        } finally {
+            if(parent != null) 
+                FileSource.freeFiles(parent);
         }
-
-        return false;
     }
 
     @Override
@@ -130,15 +138,22 @@ public class LocalFile extends File {
             return new FileOutputStream((String)get(KEY_ABSOLUTE_PATH, REQUEST_ABSOLUTE_PATH));
         }
 
-        DocumentFile parentDocumentFile = source.findDocumentFile(getParentFile());
-        if (parentDocumentFile != null) {
-            DocumentFile file = parentDocumentFile.findFile(getName());
-            file = file == null ? parentDocumentFile.createFile("application/notexist", getName()) : file;
+        File parent = null;
+        try {
+            parent = getParentFile();
+            DocumentFile parentDocumentFile = source.findDocumentFile(parent);
+            if (parentDocumentFile != null) {
+                DocumentFile file = parentDocumentFile.findFile(getName());
+                file = file == null ? parentDocumentFile.createFile("application/notexist", getName()) : file;
 
-            return source.getContext().getContentResolver().openOutputStream(file.getUri());
+                return source.getContext().getContentResolver().openOutputStream(file.getUri());
+            }
+
+            throw new IOException("Cannot open " + file.getPath() +" an outputstream");
+        } finally {
+            if(parent != null)
+                FileSource.freeFiles(parent);
         }
-
-        throw new IOException("Cannot open " + file.getPath() +" an outputstream");
     }
 
     @Override
