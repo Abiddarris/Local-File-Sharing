@@ -79,6 +79,7 @@ public class DownloadRunnable extends ActionRunnable {
             
             FileSource.freeFiles(originalFile, destFile);
         }
+        FileSource.freeFiles(dest, parent);
     }
     
     public void downloadDirectory(File file) {
