@@ -141,22 +141,32 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         session.parseBody(body);
         
         Map<String,String> params = session.getParms();
-        File dest = source.getFile(params.get("path"));
+        File dest = null;
+        File tempFile = null;
         
-        File tempFile = source.getFile(body.get("stream"));
+        try {
+            dest = source.getFile(params.get("path"));
+            tempFile = source.getFile(body.get("stream"));
+            
+            BufferedInputStream is = new BufferedInputStream(tempFile.newInputStream());
+            BufferedOutputStream os = new BufferedOutputStream(dest.newOutputStream());
+            byte[] buf = new byte[8 * 1024];
+            int len;
+            while((len = is.read(buf)) != -1) {
+                os.write(buf,0,len);
+            }
+            os.flush();
+            os.close();
+            is.close();
         
-        BufferedInputStream is = new BufferedInputStream(tempFile.newInputStream());
-        BufferedOutputStream os = new BufferedOutputStream(dest.newOutputStream());
-        byte[] buf = new byte[8 * 1024];
-        int len;
-        while((len = is.read(buf)) != -1) {
-            os.write(buf,0,len);
+            return newFixedLengthResponse("success");
+        } finally {
+            if(dest != null)
+                FileSource.freeFiles(dest);
+            if(tempFile != null) {
+                FileSource.freeFiles(tempFile);
+            }
         }
-        os.flush();
-        os.close();
-        is.close();
-        
-        return newFixedLengthResponse("success");
     }
 
     private Response handleFetch(IHTTPSession session) throws Exception {
@@ -218,9 +228,21 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
            progresses.remove(id);
         }
     }
-
+    
     private void fetchFileRelated(JSONObject request, JSONObject response, String key, String path) throws Exception {
-        File file = source.getFile(path);
+        File file = null;
+        try {
+            file = source.getFile(path);
+            fetchFileRelated(request,response,key,file);
+        } finally {
+            if(file != null) {
+                FileSource.freeFiles(file);
+            }
+        }
+        
+    }
+
+    private void fetchFileRelated(JSONObject request, JSONObject response, String key, File file) throws Exception {
         file.updateDataSync(key);
         
         if(key.equalsIgnoreCase(REQUEST_LIST)) {
@@ -250,14 +272,20 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         } else if(key.equalsIgnoreCase(REQUEST_EXISTS)) {
             response.put(KEY_EXISTS, file.exists());
         } else if(key.equalsIgnoreCase(REQUEST_COPY)) {
-            File dest = source.getFile(
-                request.getString(KEY_DEST));
-            dest.updateDataSync();
+            File dest = null;
+            try {
+                dest = source.getFile(
+                    request.getString(KEY_DEST));
+                dest.updateDataSync();
             
-            File.Progress progress = file.copy(dest);
-            progresses.put(progress.hashCode(), progress);
+                File.Progress progress = file.copy(dest);
+                progresses.put(progress.hashCode(), progress);
             
-            response.put(KEY_PROGRESS_ID, progress.hashCode());
+                response.put(KEY_PROGRESS_ID, progress.hashCode());
+            } finally {
+                if(dest != null)
+                    FileSource.freeFiles(dest);
+            } 
         } else if(key.equalsIgnoreCase(REQUEST_RENAME)) {
             String newName = request.getString(KEY_NEW_NAME);
             boolean sucess = file.rename(newName);
@@ -266,14 +294,21 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             boolean success = file.delete();
             response.put(KEY_SUCESS, success);
         } else if(key.equalsIgnoreCase(REQUEST_MOVE)) {
-            File dest = source.getFile(
-                request.getString(KEY_DEST));
-            dest.updateDataSync();
+            File dest = null;
+            try {
+                source.getFile(
+                    request.getString(KEY_DEST));
+                dest.updateDataSync();
             
-            File.Progress progress = file.move(dest);
-            progresses.put(progress.hashCode(), progress);
+                File.Progress progress = file.move(dest);
+                progresses.put(progress.hashCode(), progress);
             
-            response.put(KEY_PROGRESS_ID, progress.hashCode());
+                response.put(KEY_PROGRESS_ID, progress.hashCode());
+            } finally {
+                if(dest != null) {
+                    FileSource.freeFiles(dest);
+                }
+            }
         } else if(key.equalsIgnoreCase(REQUEST_ABSOLUTE_PATH)) {
             response.put(KEY_ABSOLUTE_PATH, file.getAbsolutePath());
         } else if(key.equalsIgnoreCase(REQUEST_GET_FILES_TREE)) {
@@ -290,34 +325,44 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     }
 
     private Response getFile(IHTTPSession session) throws Exception {
-        File file = source.getFile(session.getUri());
-        file.updateDataSync(REQUEST_ABSOLUTE_PATH, 
-            REQUEST_GET_LENGTH,REQUEST_GET_MIME_TYPE);
+        File file = null;
+        try {
+            file = source.getFile(session.getUri());
+            file.updateDataSync(REQUEST_ABSOLUTE_PATH, 
+                REQUEST_GET_LENGTH,REQUEST_GET_MIME_TYPE);
         
-        String type = session.getParms().get("type");
-        if(type != null && type.equalsIgnoreCase("thumbnail")) {
-            Timer timer = new Timer();
-           
-            java.io.File f = Thumbnails.getThumbnail(getContext(), new java.io.File(file.getAbsolutePath()));
+            String type = session.getParms().get("type");
+            if(type != null && type.equalsIgnoreCase("thumbnail")) {
+                Timer timer = new Timer();
             
-            Log.debug.log(TAG, "file : " + file.getPath() + ", originalSize : " + file.length() + ", time : " + timer.reset() + " ms, thumb : " + f + ", size :" + (f != null ? f.length() : 0));
+                java.io.File f = Thumbnails.getThumbnail(getContext(), new java.io.File(file.getAbsolutePath()));
+            
+                Log.debug.log(TAG, "file : " + file.getPath() + ", originalSize : " + file.length() + ", time : " + timer.reset() + " ms, thumb : " + f + ", size :" + (f != null ? f.length() : 0));
      
-            if(f == null) {
-                return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "not found");
+                if(f == null) {
+                    return newFixedLengthResponse(Response.Status.NOT_FOUND, "text/plain", "not found");
+                }
+                
+                FileSource.freeFiles(file);
+                
+                file = source.getFile(f.getPath());
+                file.updateDataSync(REQUEST_GET_LENGTH, REQUEST_GET_MIME_TYPE);
             }
-            file = source.getFile(f.getPath());
-            file.updateDataSync(REQUEST_GET_LENGTH, REQUEST_GET_MIME_TYPE);
+        
+            if(session.getHeaders().get("range") != null) {
+                return getPartialContent(file,session);
+            }
+        
+            Response response = newFixedLengthResponse(Response.Status.OK,
+                file.getMimeType(), file.newInputStream(), file.length());
+            response.addHeader("Accept-Ranges","bytes");
+        
+            return response;
+        } finally {
+            if(file != null) {
+                FileSource.freeFiles(file);
+            }
         }
-        
-        if(session.getHeaders().get("range") != null) {
-            return getPartialContent(file,session);
-        }
-        
-        Response response = newFixedLengthResponse(Response.Status.OK,
-             file.getMimeType(), file.newInputStream(), file.length());
-        response.addHeader("Accept-Ranges","bytes");
-        
-        return response;
     }
 
     private Response getPartialContent(File file, IHTTPSession session) throws IOException {
