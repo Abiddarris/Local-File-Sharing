@@ -142,4 +142,9 @@ public abstract class FileSource extends PoolManager<String, File>{
         return getDefaultLocalSource(context)
             .getFile(context.getCacheDir().getPath());
     }
+    
+    public static void freeFile(File file) {
+        file.getSource()
+            .free(file);
+    }
 }
