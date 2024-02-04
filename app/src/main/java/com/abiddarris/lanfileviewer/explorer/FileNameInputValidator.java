@@ -78,6 +78,7 @@ public class FileNameInputValidator implements TextWatcher {
                         context.getString(R.string.file_already_exists));
             });
         }
+        FileSource.freeFiles(folder);
     }
     
     public File createFileFromInput() {
