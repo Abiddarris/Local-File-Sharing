@@ -53,7 +53,8 @@ public class CreateFolderDialog extends DialogFragment {
                 if(!sucess) {
                     showFailedToast();
                 } 
-            });    
+                FileSource.freeFiles(folder);   
+            });
         });
         binding.cancel.setOnClickListener(v -> dismiss());
         
