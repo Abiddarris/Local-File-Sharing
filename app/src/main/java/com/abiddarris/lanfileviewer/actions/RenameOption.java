@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.actions;
 
+import com.abiddarris.lanfileviewer.file.FileSource;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import com.abiddarris.lanfileviewer.file.File;
@@ -14,7 +15,7 @@ public class RenameOption extends OperationOption {
     
     public static final String TAG = Log.getTag(RenameOption.class);
     
-    private Map<File, File> renamedFolders = new HashMap<>();
+    private Map<String, String> renamedFolderPaths = new HashMap<>();
     
     public RenameOption(OperationContext context) {
         super(context);
@@ -23,16 +24,19 @@ public class RenameOption extends OperationOption {
     @Override
     public File transform(File file) {
         int index = 0;
-        File renamedFile;
+        File renamedFile = null;
         
     	do {
+            if(renamedFile != null) {
+                FileSource.freeFiles(renamedFile);
+            }
             index++;
             String nameWithoutExtension = Files.getNameWithoutExtension(file) + " (" + index + ")";
             String extension = Files.getExtension(file);
             String name = extension.isEmpty() ? nameWithoutExtension : nameWithoutExtension + "." + extension;
             
             renamedFile = file.getSource()
-                    .getFile(file.getParentFile().getPath() + "/" + name);
+                    .getFile(file.getParent() + "/" + name);
             try {
                 renamedFile.updateDataSync(REQUEST_EXISTS);
             } catch(Exception err) {
@@ -41,7 +45,7 @@ public class RenameOption extends OperationOption {
         } while (renamedFile.exists());
         
         if(file.isDirectory()) {
-            renamedFolders.put(file,renamedFile);
+            renamedFolderPaths.put(file.getPath(),renamedFile.getPath());
         }
         
         return renamedFile;
@@ -49,11 +53,11 @@ public class RenameOption extends OperationOption {
     
     @Override
     protected File onGlobalTransform(File file) throws OperationException {
-        for(File originalFolder : renamedFolders.keySet()) {
-        	String originalFolderPath = originalFolder.getPath();
+        for(String originalFolderPath : renamedFolderPaths.keySet()) {
             if(file.getPath().startsWith(originalFolderPath)) {
-                File renamedFolder = renamedFolders.get(originalFolder);
-                String newPath = file.getPath().replace(originalFolderPath, renamedFolder.getPath());
+                String renamedFolderPath = renamedFolderPaths.get(originalFolderPath);
+                String newPath = file.getPath()
+                    .replace(originalFolderPath, renamedFolderPath);
                 
                 return file.getSource().getFile(newPath);
             }

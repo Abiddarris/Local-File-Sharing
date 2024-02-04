@@ -94,14 +94,23 @@ public class ActionDialog extends DialogFragment {
         if(!file.exists()) return file;
         
         try {
-        	return context.runGlobalTransform(file);
+        	File globalTransform = context.runGlobalTransform(file);
+            if(globalTransform != file) {
+                FileSource.freeFiles(file);
+            }
+            return globalTransform;
         } catch(OperationException err) {
             Log.debug.log(TAG, "showing dialog");
         }
         
         OperationOption options = optionsDialog.getDefaultResult();
-        if(options != null) return options.transform(file);
-        
+        if(options != null) {
+            File defaultTransform = options.transform(file);
+            if(defaultTransform != file) {
+                FileSource.freeFiles(file);
+            }
+            return defaultTransform;
+        } 
         CountDownLatch lock = new CountDownLatch(1);
         
         handler.post((c) -> {
@@ -110,15 +119,20 @@ public class ActionDialog extends DialogFragment {
             optionsDialog.show(getParentFragmentManager(), lock, file.getName(), src.getPath().equalsIgnoreCase(path));
         });
         
+        File transform = null;
         try {
         	lock.await();
             options = optionsDialog.getResult();
             
-            return options.transform(file);
+            transform = options.transform(file);
         } catch(InterruptedException err) {
         	err.printStackTrace();
+        } finally {
+            if(transform != file) {
+                FileSource.freeFiles(file);
+            }
         }
-        return null;
+        return transform;
     }
 
     public DialogActionProgressBinding getViewBinding() {

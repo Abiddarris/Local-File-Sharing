@@ -9,20 +9,20 @@ public class SkipOption extends OperationOption {
         super(context);
     }
     
-    private List<File> skippedDirectories = new ArrayList<>();
+    private List<String> skippedDirectoryPaths = new ArrayList<>();
     
     @Override
     public File transform(File file) {
         if(file.isDirectory()) {
-            skippedDirectories.add(file);
+            skippedDirectoryPaths.add(file.getPath());
         }
     	return null;
     }
   
     @Override
     protected File onGlobalTransform(File file) throws OperationException {
-        for(File skippedDirectory : skippedDirectories) {
-        	if(file.getPath().startsWith(skippedDirectory.getPath()))
+        for(String skippedDirectoryPath : skippedDirectoryPaths) {
+        	if(file.getPath().startsWith(skippedDirectoryPath))
                 return null;
         }
         return super.onGlobalTransform(file);
