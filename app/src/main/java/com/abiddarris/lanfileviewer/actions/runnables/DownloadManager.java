@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+// TODO: Refactor this class
 public class DownloadManager extends CacheManager<File, File>{
     
     private static DownloadManager downloadManager;

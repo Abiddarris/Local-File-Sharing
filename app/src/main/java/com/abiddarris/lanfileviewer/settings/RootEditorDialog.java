@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.settings;
 
+import com.abiddarris.lanfileviewer.file.FileSource;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.app.Dialog;
@@ -99,6 +100,8 @@ public class RootEditorDialog extends DialogFragment {
             for(File file : files){
                 file.updateDataSync(REQUEST_ABSOLUTE_PATH);
                 adapter.addRoot(new java.io.File(file.getAbsolutePath()));
+                
+                FileSource.freeFiles(file);
             }
             adapter.notifyDataSetChanged();
             

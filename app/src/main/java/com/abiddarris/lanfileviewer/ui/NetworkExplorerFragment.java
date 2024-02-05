@@ -49,6 +49,8 @@ public class NetworkExplorerFragment extends ExplorerFragment implements SharedP
                 public void onActivityResult(File[] files) {
                     if(files == null) return;
                     
+                    // TODO: fix this memory leak
+                    
                     ActionRunnable runnable = new UploadRunnable(getSource(), getExplorer().getParent(), files);
                     new ActionDialog(getExplorer(), runnable)
                         .show(getChildFragmentManager(), null);
