@@ -83,6 +83,8 @@ public class UploadRunnable extends ActionRunnable {
             } else {
                 uploadFile(originalFile, destFile);
             }
+            
+            FileSource.freeFiles(originalFile, destFile);
         }
     }
 

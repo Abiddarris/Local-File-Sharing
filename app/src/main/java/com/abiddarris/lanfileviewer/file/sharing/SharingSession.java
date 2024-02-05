@@ -316,6 +316,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             JSONArray files = new JSONArray();
             for(File tree : trees) {
                 files.put(tree.getPath());
+                FileSource.freeFiles(tree);
             }
             
             response.put(KEY_FILES_TREE, files);

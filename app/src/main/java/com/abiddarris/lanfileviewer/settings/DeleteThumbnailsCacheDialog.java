@@ -67,6 +67,8 @@ public class DeleteThumbnailsCacheDialog extends DialogFragment {
             Files.formatFromItems(getContext(), files.toArray(new File[0])));
         new ActionDialog(null, runnable)
             .show(getParentFragmentManager(),null);
+        
+        FileSource.freeFiles(files);
     }
     
 }

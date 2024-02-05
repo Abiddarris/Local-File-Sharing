@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.DialogDetailBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -71,13 +72,18 @@ public class DetailDialog extends DialogFragment {
         executor.submit(new BaseRunnable((c) -> {
             List<File> files = new ArrayList<>();
             for(File item : items) {
-                if(Thread.currentThread().isInterrupted()) return;   
+                if(Thread.currentThread().isInterrupted()) {
+                    FileSource.freeFiles(files);   
+                    return;   
+                } 
             	Files.getFilesTree(files, item);
             }
                 
             int filesCount = Files.getFilesCount(files);
             int directoriesCount = Files.getDirectoriesCount(files);
                
+            FileSource.freeFiles(files);     
+                    
             if(Thread.currentThread().isInterrupted()) return;   
                 
             String fileFormat = getString(filesCount > 1 ? R.string.plural_files_format : R.string.one_file_format);
@@ -105,6 +111,7 @@ public class DetailDialog extends DialogFragment {
             if(Thread.currentThread().isInterrupted()) return;   
                 
             updateSizeUI(formattedSize);
+              
         }));
     }
     

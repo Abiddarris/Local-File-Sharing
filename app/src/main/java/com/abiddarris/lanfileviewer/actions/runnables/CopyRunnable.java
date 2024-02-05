@@ -76,6 +76,8 @@ public class CopyRunnable extends ActionRunnable {
             } else {
                 copyFile(originalFile, destFile);
             }
+            
+            FileSource.freeFiles(originalFile, destFile);   
         }
     }
 

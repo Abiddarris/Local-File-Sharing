@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
+import com.abiddarris.lanfileviewer.file.FileSource;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import com.abiddarris.lanfileviewer.R;
@@ -61,6 +62,8 @@ public class DeleteRunnable extends ActionRunnable {
             }
             
             updateProgress(1);
+            
+            FileSource.freeFiles(file);
         }
         
         for(int i = files.size() - 1; i >= 0; i--) {
@@ -85,6 +88,8 @@ public class DeleteRunnable extends ActionRunnable {
             }
             
             updateProgress(1);
+            
+            FileSource.freeFiles(file);
         }
     }
 }

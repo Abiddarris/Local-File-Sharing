@@ -7,6 +7,7 @@ import com.abiddarris.lanfileviewer.utils.PoolManager;
 import com.gretta.util.log.FilesLog;
 import com.gretta.util.log.Log;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -147,6 +148,14 @@ public abstract class FileSource extends PoolManager<String, File>{
         for(File file : files) {
              file.getSource()
             .free(file);
+        }
+    }
+    
+    public static void freeFiles(List<File> files) {
+        for(File file : files) {
+            if(file == null) continue;
+            file.getSource()
+                .free(file);
         }
     }
 }
