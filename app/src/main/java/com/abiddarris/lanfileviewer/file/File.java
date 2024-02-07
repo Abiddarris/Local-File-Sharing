@@ -6,6 +6,7 @@ import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.utils.TaskResult;
 import com.gretta.util.log.Log;
+import com.gretta.util.recycler.Poolable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,7 +19,7 @@ import java.util.Map;
 import java.util.concurrent.Future;
 import org.json.JSONObject;
 
-public abstract class File implements Requests {
+public abstract class File extends Poolable implements Requests {
     
     private static SimpleDateFormat timeFormatter = new SimpleDateFormat("dd LLL YYYY HH.mm.ss");
     private static final String TAG = Log.getTag(File.class);
@@ -41,6 +42,7 @@ public abstract class File implements Requests {
     }
     
     protected void put(String key, Object obj) {
+        checkNotFreed();
         values.put(key, new Value(System.currentTimeMillis(), obj));
     }
     
@@ -50,6 +52,7 @@ public abstract class File implements Requests {
     
     @SuppressLint("unchecked")
     protected <T> T get(String key, String requestKey) {
+        checkNotFreed();
         Value value = values.get(key);
         if(value == null && requestKey == null) {
             throw new DataDoesNotExistsException(key + " value does not exist. Call updateData() or updateDataSync() before call this function!");
@@ -77,10 +80,13 @@ public abstract class File implements Requests {
     }
     
     public void setValidFrom(long time) {
+        checkNotFreed();
         validFrom = time;
     }
     
     public long getValidFrom() {
+        checkNotFreed();
+        
         return validFrom;
     }
     
@@ -105,6 +111,7 @@ public abstract class File implements Requests {
     }
 
     public final TaskResult updateData(Callback callback, String... requests) {
+        checkNotFreed();
         return new TaskResult(getSource().runOnBackground(new BaseRunnable(c -> {
             Exception exception;
             try {
@@ -125,6 +132,7 @@ public abstract class File implements Requests {
     }
     
     public final void updateDataSync(String... requests) {
+        checkNotFreed();
         try {
             updateInternal(requests);
         } catch (RuntimeException e) {
@@ -149,6 +157,8 @@ public abstract class File implements Requests {
     }
     
     private void checkReadPermission() {
+        checkNotFreed();
+        
         getSource()
             .getSecurityManager()
             .checkRead(this);
@@ -201,6 +211,7 @@ public abstract class File implements Requests {
     }
 
     public File[] listFiles() {
+        checkNotFreed();
         String[] names = list();
         if(names == null) return null;
         
@@ -241,6 +252,14 @@ public abstract class File implements Requests {
         return get(KEY_EXISTS);
     }
     
+    public List<File> getFilesTree() {
+        return get(KEY_FILES_TREE);
+    }
+    
+    public long getFilesTreeSize() {
+        return get(KEY_FILES_TREE_SIZE);
+    }
+    
     public final String getName() {
         return name;
     }
@@ -267,14 +286,6 @@ public abstract class File implements Requests {
     public abstract Progress move(File dest); 
     
     public abstract void createThumbnail(ThumbnailCallback callback);
-    
-    public List<File> getFilesTree() {
-        return get(KEY_FILES_TREE);
-    }
-    
-    public long getFilesTreeSize() {
-        return get(KEY_FILES_TREE_SIZE);
-    }
     
     private void getFilesTree(List<File> files, File parent) {
         files.add(parent);

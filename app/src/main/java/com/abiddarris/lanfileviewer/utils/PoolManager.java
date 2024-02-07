@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public abstract class PoolManager<K,V> {
+public abstract class PoolManager<K,V extends Poolable> {
+    
+    public static enum Policy {
+        MULTIPLE_REFERENCE, SINGLE_REFERENCE
+    }
 
     private boolean saveStackTrace;
-    private Map<K, List<V>> pools = new HashMap<>();
+    private Map<K, KeyInfo> pools = new HashMap<>();
     private List<V> activeObjects = new ArrayList<>();
-    private List<K> oneValueOnlyKeys = new ArrayList<>();
     private Map<V, StackTraceElement[]> stackTraces = new HashMap<>();
 
     public void setSaveStackTrace(boolean saveStackTrace) {
@@ -24,17 +27,17 @@ public abstract class PoolManager<K,V> {
     }
 
     protected V get(K key) {
-        List<V> cachedObjects = getCaches(key);
+        KeyInfo info = getKeyInfo(key);
 
         synchronized(this) { 
-            V candidate = findCandidate(cachedObjects, key);
+            V candidate = findCandidate(info.values, key);
 
             if(candidate == null) {
                 candidate = create(key);
-                cachedObjects.add(candidate);
+                info.values.add(candidate);
             }
 
-            if(!isOneOnlyValue(key))
+            if(!isMultipleReference(key))
                 addToActiveCache(key, candidate);
 
             return candidate;
@@ -43,12 +46,14 @@ public abstract class PoolManager<K,V> {
 
     public synchronized void free(V value) {
         activeObjects.remove(value);
+             
         stackTraces.remove(value);
+        value.onFreed();
     }
 
     protected synchronized void registerToCache(K key, V value) {
-        List<V> cachedObjects = getCaches(key);
-        cachedObjects.add(value);
+        getKeyInfo(key).values
+            .add(value);
     }
 
     public V[] getActiveObjects(V[] array) {
@@ -62,30 +67,39 @@ public abstract class PoolManager<K,V> {
     public synchronized void release() {
         pools.clear();
         activeObjects.clear();
-        stackTraces.clear();
-        oneValueOnlyKeys.clear();
+        stackTraces.clear();       
     }
 
-    public void setOneValueOnly(K key) {
-        oneValueOnlyKeys.add(key);
+    public void setPolicies(K key, Policy... policies) {
+        getKeyInfo(key)
+            .setPolicies(policies);
     }
-
-    public boolean isOneOnlyValue(K key) {
-        return oneValueOnlyKeys.contains(key);
-    }
-
-    private synchronized List<V> getCaches(K key) {
-        List<V> cachedObjects = pools.get(key);
-        if(cachedObjects == null) {
-            cachedObjects = new ArrayList<>();
-            pools.put(key,cachedObjects);
+    
+    public int getCacheSize() {
+        int size = 0;
+        for(KeyInfo info : pools.values()) {
+            size += info.values.size();
         }
-        return cachedObjects;
+        return size;
+    }
+
+    private boolean isMultipleReference(K key) {
+        return getKeyInfo(key)
+            .hasPolicy(Policy.MULTIPLE_REFERENCE);
+    }
+
+    private synchronized KeyInfo getKeyInfo(K key) {
+        KeyInfo info = pools.get(key);
+        if(info == null) {
+            info = new KeyInfo();
+            pools.put(key, info);
+        }
+        return info;
     }
 
     private V findCandidate(List<V> cachedObjects, K key) {
         for (V value : cachedObjects) {
-            V candidate = isOneOnlyValue(key) ?  value : (activeObjects.contains(value) ? null : value); 
+            V candidate = isMultipleReference(key) ?  value : (activeObjects.contains(value) ? null : value); 
             if (candidate != null) return candidate;
         }   
         return null;
@@ -93,7 +107,8 @@ public abstract class PoolManager<K,V> {
 
     private void addToActiveCache(K key, V value) {      
         activeObjects.add(value);
-        if(!saveStackTrace || isOneOnlyValue(key)) {
+        value.onPooled();
+        if(!saveStackTrace || isMultipleReference(key)) {
             return;
         }
 
@@ -102,8 +117,22 @@ public abstract class PoolManager<K,V> {
         stackTraces.put(value, Arrays.copyOfRange(stackTrace, 2, stackTrace.length));
     }
 
-
     protected abstract V create(K key);
 
-    
+    private class KeyInfo {
+        private List<V> values = new ArrayList<>();             
+        private Policy[] policies = {Policy.SINGLE_REFERENCE};     
+        
+        private void setPolicies(Policy... policies) {
+            this.policies = policies;
+        }
+        
+        private boolean hasPolicy(Policy policy) {
+            for(Policy _policy : policies) {
+                if(_policy == policy) 
+                    return true;
+            }
+            return false;
+        }
+    }
 }

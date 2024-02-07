@@ -3,9 +3,11 @@ package com.abiddarris.lanfileviewer.file;
 import android.content.Context;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
-import com.abiddarris.lanfileviewer.utils.PoolManager;
 import com.gretta.util.log.FilesLog;
 import com.gretta.util.log.Log;
+import com.gretta.util.recycler.ObjectRecycler;
+import com.gretta.util.recycler.ReferencePolicy;
+import com.gretta.util.recycler.SavePolicy;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +17,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public abstract class FileSource extends PoolManager<String, File>{
+public abstract class FileSource extends ObjectRecycler<String, File>{
     
     private static LocalFileSource localFileSource;
     public static final String TAG = Log.getTag(FileSource.class);
@@ -28,22 +30,23 @@ public abstract class FileSource extends PoolManager<String, File>{
     public FileSource(Context context) {
         this.context = context;
         
+        addPolicies("", ReferencePolicy.MULTIPLE_REFERENCE);
+        
         root = new RootFile(this); 
         registerToCache(root);
         
-        setOneValueOnly("");
-        setSaveStackTrace(true);
+        addPolicies(SavePolicy.SAVE_STACK_TRACE);
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(new BaseRunnable((c) -> {
+        executor.scheduleWithFixedDelay(new BaseRunnable((c) -> {
             java.io.File file = new java.io.File(context.getExternalFilesDir(null), toString());
             file.delete();
             FilesLog log = new FilesLog(file);
             log.open();      
-            log.log(TAG, toString() + " has " + getActiveObjects(new File[0]).length + " active objects");
+            log.log(TAG, toString() + " has " + getActiveObjects(new File[0]).length + " active objects, " + getCacheSize() + " total cache size");
             for(File o : getActiveObjects(new File[0])) {
                 log.log(TAG, o.getPath());
                 log.log(TAG, " hold by : ");
-                for(StackTraceElement element  : getStackTraces(o)) {
+                for(StackTraceElement element  : getStackTrace(o)) {
                     log.log(TAG, "  " + element);
                 }          
             }        
@@ -102,11 +105,11 @@ public abstract class FileSource extends PoolManager<String, File>{
     protected void registerToRoot(File file) {
         getRoot()
             .addRoots(file);
-        setOneValueOnly(file.getPath());
+        addPolicies(file.getPath(), ReferencePolicy.MULTIPLE_REFERENCE);
         registerToCache(file);
     }
     
-    public Future runOnBackground(BaseRunnable runnable) {
+    public Future<?> runOnBackground(BaseRunnable runnable) {
         return executor.submit(runnable);
     }
 

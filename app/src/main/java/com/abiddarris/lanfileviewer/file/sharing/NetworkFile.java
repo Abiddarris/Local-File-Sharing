@@ -85,6 +85,8 @@ public class NetworkFile extends File {
 
     @Override
     public Uri toUri() {
+        checkNotFreed();
+        
         SharingDevice device = source.getDevice();
         String uri = String.format("http://%s:%s%s", 
             device.getHost().getHostAddress(), device.getPort(),
@@ -111,6 +113,8 @@ public class NetworkFile extends File {
     
     @Override
     public boolean makeDirs() {
+        checkNotFreed();
+        
         try {
             JSONObject request = new JSONObject()
                 .putOpt(KEY_PATH, getPath())
@@ -127,6 +131,8 @@ public class NetworkFile extends File {
     
     @Override
     public InputStream newInputStream() throws IOException {
+        checkNotFreed();
+        
         if((Boolean)get(KEY_IS_DIRECTORY, REQUEST_IS_DIRECTORY)) {
             throw new IOException("cannot open a directory");
         }
@@ -139,6 +145,7 @@ public class NetworkFile extends File {
     
     @Override
     public NetworkOutputStream newOutputStream() throws IOException {
+        checkNotFreed();
         updateDataSync(REQUEST_IS_DIRECTORY);
         if((Boolean)get(KEY_IS_DIRECTORY, REQUEST_IS_DIRECTORY)) {
             throw new IOException("cannot open a directory");
@@ -157,6 +164,8 @@ public class NetworkFile extends File {
     
     @Override
     public Progress copy(File dest) {
+        checkNotFreed();
+        
         Progress progress = new Progress();
         executor.submit(() -> {
             try {
@@ -179,6 +188,7 @@ public class NetworkFile extends File {
     
     @Override
     public boolean rename(String newName) {
+        checkNotFreed();
         try {
         	JSONObject request = new JSONObject()
                 .put(KEY_REQUEST, createRequest(REQUEST_RENAME))
@@ -230,6 +240,7 @@ public class NetworkFile extends File {
     
     @Override
     public boolean delete() {
+        checkNotFreed();
         try {
             JSONObject request = new JSONObject()
                 .put(KEY_REQUEST, createRequest(REQUEST_DELETE))
@@ -245,6 +256,7 @@ public class NetworkFile extends File {
     
     @Override
     public Progress move(File dest) {
+        checkNotFreed();
         Progress progress = new Progress();
         executor.submit(() -> {
             try {
@@ -267,6 +279,8 @@ public class NetworkFile extends File {
     
     @Override
     public void createThumbnail(ThumbnailCallback callback) {
+        checkNotFreed();
+        
         SharingDevice device = source.getDevice();
         String host = device.getHost().getHostAddress();
         int port = device.getPort();

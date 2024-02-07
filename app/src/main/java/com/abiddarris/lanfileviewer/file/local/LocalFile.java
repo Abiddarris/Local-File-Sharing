@@ -91,6 +91,7 @@ public class LocalFile extends File {
 
     @Override
     public Uri toUri() {
+        checkNotFreed();
         source.getSecurityManager()
             .checkRead(this);
 
@@ -99,6 +100,7 @@ public class LocalFile extends File {
 
     @Override
     public boolean makeDirs() {
+        checkNotFreed();
         source.getSecurityManager().checkWrite(this);
         
         if (file.getParentFile() != null & file.getParentFile().canWrite()) {
@@ -125,6 +127,7 @@ public class LocalFile extends File {
 
     @Override
     public InputStream newInputStream() throws IOException {
+        checkNotFreed();
         source.getSecurityManager().checkRead(this);
 
         return new FileInputStream((String)get(KEY_ABSOLUTE_PATH, REQUEST_ABSOLUTE_PATH));
@@ -132,6 +135,7 @@ public class LocalFile extends File {
 
     @Override
     public OutputStream newOutputStream() throws IOException {
+        checkNotFreed();
         source.getSecurityManager().checkWrite(this);
 
         if (file.getParentFile() != null & file.getParentFile().canWrite()) {
@@ -158,6 +162,7 @@ public class LocalFile extends File {
 
     @Override
     public Progress copy(File dest) {
+        checkNotFreed();
         return copyInternal(dest, null);
     }
 
@@ -194,6 +199,7 @@ public class LocalFile extends File {
 
     @Override
     public boolean rename(String newName) {
+        checkNotFreed();
         if (file.canWrite()) {
             java.io.File dest = new java.io.File(file.getParentFile(), newName);
             return file.renameTo(dest);
@@ -208,6 +214,7 @@ public class LocalFile extends File {
 
     @Override
     public boolean delete() {
+        checkNotFreed();
         source.getSecurityManager().checkDelete(this);
 
         if (file.canWrite()) {
@@ -223,6 +230,7 @@ public class LocalFile extends File {
 
     @Override
     public Progress move(File dest) {
+        checkNotFreed();
         source.getSecurityManager().checkRead(this);
         
         updateDataSync(REQUEST_ABSOLUTE_PATH);
@@ -253,6 +261,7 @@ public class LocalFile extends File {
 
     @Override
     public void createThumbnail(ThumbnailCallback callback) {
+        checkNotFreed();
         service.submit(() -> {
             java.io.File thumb = Thumbnails.getThumbnail(getSource().getContext(), file);
             handler.post((c) -> {
