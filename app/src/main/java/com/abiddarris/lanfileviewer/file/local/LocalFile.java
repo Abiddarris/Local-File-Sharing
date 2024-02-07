@@ -50,11 +50,11 @@ public class LocalFile extends File {
         File parentFile = getParentFile();
         parentFile.updateDataSync(REQUEST_ABSOLUTE_PATH);
         
-        getSource()
-            .free(parentFile);
-        
         this.source = source;
         this.file = new java.io.File(parentFile.getAbsolutePath(), name);
+        
+        getSource()
+            .free(parentFile);
     }
 
     @Override
