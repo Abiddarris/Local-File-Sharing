@@ -44,15 +44,31 @@ public abstract class FileSource extends ObjectRecycler<String, File>{
             file.delete();
             FilesLog log = new FilesLog(file);
             log.open();      
-            log.log(TAG, toString() + " has " + getActiveObjects(new File[0]).length + " active objects, " + getCacheSize() + " total cache size");
+            log.log(TAG, toString() + " has " + getActiveObjects(new File[0]).length + " active objects, " +
+                         getCacheSize() + " total cache size, pointer size : " + pointerSource.getCacheSize() + " activePtr : " + 
+                        pointerSource.getActiveObjects(new FilePointer[0]).length);
             for(File o : getActiveObjects(new File[0])) {
                 log.log(TAG, o.getPath());
                 log.log(TAG, " hold by : ");
-                for(StackTraceElement element  : getStackTrace(o)) {
+                StackTraceElement[] elements = getStackTrace(o);
+                if(elements == null) continue;
+                        
+                for(StackTraceElement element  : elements) {
                     log.log(TAG, "  " + element);
                 }          
             }        
         }), 0, 1, TimeUnit.MINUTES);
+    }
+    
+    @Override
+    protected File create(String path) {
+        if(path.equals("")) {
+            throw new FileOperationException("Trapped in infinite loop! make sure to register root to cache!");
+        }
+        
+        String[] parentAndName = splitParentAndName(path);
+        
+        return newFile(parentAndName[0], parentAndName[1]);
     }
     
     private String[] splitParentAndName(String path) {
@@ -102,17 +118,6 @@ public abstract class FileSource extends ObjectRecycler<String, File>{
     
     public FilePointer getFilePointer(String path) {
         return pointerSource.get(path);
-    }
-    
-    @Override
-    protected File create(String path) {
-        if(path.equals("")) {
-            throw new FileOperationException("Trapped in infinite loop! make sure to register root to cache!");
-        }
-        
-        String[] parentAndName = splitParentAndName(path);
-        
-        return newFile(parentAndName[0], parentAndName[1]);
     }
     
     public Future<?> runOnBackground(BaseRunnable runnable) {
