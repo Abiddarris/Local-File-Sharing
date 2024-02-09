@@ -11,7 +11,7 @@ import java.util.List;
 public class RootFile extends File {
 
     private FileSource source;
-    private List<File> roots = new ArrayList<>();
+    private List<FilePointer> roots = new ArrayList<>();
 
     public RootFile(FileSource source) {
         super(source, null, "");
@@ -30,7 +30,12 @@ public class RootFile extends File {
     
     @Override
     public File[] listFiles() {
-        return roots.toArray(new File[0]);
+        File[] files = new File[roots.size()];
+        for(int i = 0; i < files.length; i++) {
+            files[i] = roots.get(i)
+                .get();
+        }
+        return files;
     }
 
     @Override
@@ -92,10 +97,6 @@ public class RootFile extends File {
         return false;
     }
     
-    public void addRoots(File rootFile) {
-        roots.add(rootFile);
-    }
-    
     @Override
     public boolean delete() {
         return false;
@@ -115,5 +116,7 @@ public class RootFile extends File {
         callback.onThumbnailCreated(null);
     }
     
-    
+    void addRoots(FilePointer pointer) {
+        roots.add(pointer);
+    }
 }

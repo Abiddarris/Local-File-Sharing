@@ -21,9 +21,11 @@ public abstract class FileSource extends ObjectRecycler<String, File>{
     
     private static LocalFileSource localFileSource;
     public static final String TAG = Log.getTag(FileSource.class);
-     
-    private ExecutorService executor = Executors.newFixedThreadPool(16);
+   
+    private final FilePointerSource pointerSource = new FilePointerSource(this);
+    
     private Context context;
+    private ExecutorService executor = Executors.newFixedThreadPool(16);
     private RootFile root;
     private SecurityManager securityManager = new SecurityManager();
     
@@ -72,6 +74,17 @@ public abstract class FileSource extends ObjectRecycler<String, File>{
         return path;
     }
     
+    protected void registerToCache(File file) {
+        registerToCache(file.getPath(), file);
+    }
+    
+    protected void registerToRoot(File file) {
+        getRoot()
+            .addRoots(file.getFilePointer());
+        addPolicies(file.getPath(), ReferencePolicy.MULTIPLE_REFERENCE);
+        registerToCache(file);
+    }
+    
     protected abstract File newFile(String parent, String name);
     
     public final RootFile getRoot() {
@@ -87,6 +100,10 @@ public abstract class FileSource extends ObjectRecycler<String, File>{
         return getFile(parent.getPath() + "/" + name);
     }
     
+    public FilePointer getFilePointer(String path) {
+        return pointerSource.get(path);
+    }
+    
     @Override
     protected File create(String path) {
         if(path.equals("")) {
@@ -96,17 +113,6 @@ public abstract class FileSource extends ObjectRecycler<String, File>{
         String[] parentAndName = splitParentAndName(path);
         
         return newFile(parentAndName[0], parentAndName[1]);
-    }
-    
-    protected void registerToCache(File file) {
-        registerToCache(file.getPath(), file);
-    }
-    
-    protected void registerToRoot(File file) {
-        getRoot()
-            .addRoots(file);
-        addPolicies(file.getPath(), ReferencePolicy.MULTIPLE_REFERENCE);
-        registerToCache(file);
     }
     
     public Future<?> runOnBackground(BaseRunnable runnable) {
@@ -160,5 +166,11 @@ public abstract class FileSource extends ObjectRecycler<String, File>{
             file.getSource()
                 .free(file);
         }
+    }
+
+    @Override
+    public boolean free(File file) {
+        if(file == root) return false;
+        return super.free(file);
     }
 }

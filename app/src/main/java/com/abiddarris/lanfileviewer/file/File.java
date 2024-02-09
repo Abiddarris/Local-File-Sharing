@@ -119,7 +119,8 @@ public abstract class File extends Poolable implements Requests {
                 
                 exception = null;        
             } catch (Exception e) {
-                exception = e;        
+                exception = e;     
+                Log.err.log(TAG, e);            
             } 
             final Exception e1 = exception;        
             ApplicationCore.getMainHandler()
@@ -190,6 +191,10 @@ public abstract class File extends Poolable implements Requests {
                 put(KEY_FILES_TREE_SIZE, size);
             }
         }
+    }
+    
+    public final FilePointer getFilePointer() {
+        return source.getFilePointer(getPath());
     }
 
     public boolean isDirectory() {
