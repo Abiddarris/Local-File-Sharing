@@ -22,6 +22,7 @@ import com.abiddarris.lanfileviewer.FileExplorerActivity;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.FragmentFileExplorerBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFile;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
@@ -54,10 +55,10 @@ public abstract class ExplorerFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceBundle) {
         super.onViewCreated(view, savedInstanceBundle);
         
-        File root =
+        FilePointer root =
                 (savedInstanceBundle == null
-                        ? getSource().getRoot()
-                        : getSource().getFile(savedInstanceBundle.getString(PARENT)));
+                        ? getSource().getRoot().getFilePointer()
+                        : getSource().getFilePointer(savedInstanceBundle.getString(PARENT)));
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 

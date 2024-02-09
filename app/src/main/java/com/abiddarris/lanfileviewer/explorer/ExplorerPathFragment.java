@@ -40,7 +40,7 @@ public class ExplorerPathFragment extends Fragment {
            
             File file = currentFile.getSource()
                 .getRoot();
-            explorer.open(file);
+            explorer.open(file.getFilePointer());
         });
         
         return binding.getRoot();

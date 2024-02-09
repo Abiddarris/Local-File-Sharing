@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.animation.Animator;
@@ -77,22 +78,7 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
         
         launcher = explorer.getFragment()
             .registerForActivityResult(new LocalFolderSelectorActivity.FileContract(source),
-            new ActivityResultCallback<File>() {
-                @Override
-                public void onActivityResult(File file) {
-                    if(file == null) return;
-                    Log.debug.log(TAG, file.getPath());
-                    
-                    File[] items = checked.toArray(new File[0]);
-                    
-                    new ActionDialog(getExplorer(), 
-                        new DownloadRunnable(items, file))
-                    .show(getExplorer().getFragment().getParentFragmentManager(), null);
-                    
-                    getExplorer().setMode(getExplorer().navigateMode);
-                }
-            });
-        
+            new DownloadCallback());
         this.copyMode = new CopyMode(getExplorer());
         this.moveMode = new MoveMode(getExplorer());
     }
@@ -334,5 +320,26 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
         mode.setItems(checked.toArray(new File[0]));
         getExplorer().setMode(mode);
     }
+    
+    private class DownloadCallback implements ActivityResultCallback<FilePointer> {
+        
+        @Override
+        public void onActivityResult(FilePointer pointer) {
+            if(pointer == null) return;
+            
+            File file = pointer.get();
+            
+            Log.debug.log(TAG, file.getPath());
+                    
+            File[] items = checked.toArray(new File[0]);
+                    
+            new ActionDialog(getExplorer(), 
+                new DownloadRunnable(items, file))
+                    .show(getExplorer().getFragment().getParentFragmentManager(), null);
+                    
+            getExplorer().setMode(getExplorer().navigateMode);
+        }
+    }
+        
 }
     

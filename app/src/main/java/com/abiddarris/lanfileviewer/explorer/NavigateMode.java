@@ -13,7 +13,7 @@ public class NavigateMode extends Mode {
     @Override
     public void onItemClickListener(ViewHolder holder, int pos) {
         getExplorer().open(getExplorer()
-            .getAdapter().get(pos));
+            .getAdapter().get(pos).getFilePointer());
     }
     
     @Override

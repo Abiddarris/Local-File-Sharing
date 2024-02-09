@@ -1,12 +1,12 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
-import com.abiddarris.lanfileviewer.file.FileOperationException;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
 import android.net.Uri;
 import android.util.Base64;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FileOperationException;
 import com.gretta.util.log.Log;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;

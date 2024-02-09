@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.actions.uploads;
 
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.content.Context;
@@ -31,10 +32,14 @@ public class UploadRunnable extends ActionRunnable {
     
     public static final String TAG = Log.getTag(UploadRunnable.class);
     
-    public UploadRunnable(FileSource destSource, File dest, File[] items) {
+    public UploadRunnable(FileSource destSource, File dest, FilePointer[] items) {
         this.destSource = destSource;
-        this.items = items;
         this.dest = dest;
+        
+        this.items = new File[items.length];
+        for(int i = 0; i < items.length; i++) {
+            this.items[i] = items[i].get();
+        }
     }
     
     @Override

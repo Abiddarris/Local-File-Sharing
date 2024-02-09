@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import com.abiddarris.lanfileviewer.file.FileSource;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.content.Context;
@@ -10,6 +11,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.databinding.FragmentFileExplorerBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -55,11 +57,12 @@ public class Explorer {
         setMode(navigateMode);
     }
 
-    public void open(File file) {
+    public void open(FilePointer pointer) {
         if(loading) {
-            Log.debug.log(TAG, "cannot open " + file + " reason : already loading something");
+            Log.debug.log(TAG, "cannot open " + pointer + " reason : already loading something");
             return;
         }
+        File file = pointer.get();
         file.updateData(e -> {
             if(e != null){
                 showErrorDialog(e);
@@ -152,7 +155,11 @@ public class Explorer {
         File grandParent = parent.getParentFile();
         if (grandParent == null) return false;
 
-        open(grandParent);
+        FilePointer pointer = grandParent.getFilePointer();
+        FileSource.freeFiles(grandParent);
+        
+        open(pointer);
+        
         return true;
     }
 

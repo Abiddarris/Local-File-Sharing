@@ -25,6 +25,7 @@ import com.abiddarris.lanfileviewer.explorer.FilesSelectorFragment;
 import com.abiddarris.lanfileviewer.explorer.LocalFilesSelectorActivity;
 import com.abiddarris.lanfileviewer.explorer.SortByDialog;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 
@@ -44,19 +45,7 @@ public class NetworkExplorerFragment extends ExplorerFragment implements SharedP
     @CallSuper
     public void onCreate(Bundle bundle) {
         uploadLauncher = registerForActivityResult(
-            new LocalFilesSelectorActivity.FileContract(getContext()), new ActivityResultCallback<File[]>(){
-                @Override
-                public void onActivityResult(File[] files) {
-                    if(files == null) return;
-                    
-                    // TODO: fix this memory leak
-                    
-                    ActionRunnable runnable = new UploadRunnable(getSource(), getExplorer().getParent(), files);
-                    new ActionDialog(getExplorer(), runnable)
-                        .show(getChildFragmentManager(), null);
-                }
-        });
-        
+            new LocalFilesSelectorActivity.FileContract(getContext()), new FilesCallback());
         int sortType = PreferenceManager.getDefaultSharedPreferences(getContext())
                 .getInt(SortByDialog.SORT_TYPE, FileSorter.NAME | FileSorter.ASCENDING);
             setSorter(FileSorter.createSorter(sortType));
@@ -116,5 +105,19 @@ public class NetworkExplorerFragment extends ExplorerFragment implements SharedP
         PreferenceManager.getDefaultSharedPreferences(getContext())
             .unregisterOnSharedPreferenceChangeListener(this);
     }
+    
+    private class FilesCallback implements ActivityResultCallback<FilePointer[]>{
+        
+        @Override
+        public void onActivityResult(FilePointer[] pointers) {
+            if(pointers == null) return;
+        
+            ActionRunnable runnable = new UploadRunnable(getSource(), getExplorer().getParent(), pointers);
+            new ActionDialog(getExplorer(), runnable)
+                .show(getChildFragmentManager(), null);
+        }
+        
+    }
+        
     
 }

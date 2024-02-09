@@ -12,6 +12,7 @@ import androidx.annotation.MainThread;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentFactory;
 import com.abiddarris.lanfileviewer.R;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
 import androidx.preference.PreferenceManager;
@@ -115,7 +116,7 @@ public class LocalFilesSelectorActivity extends AppCompatActivity implements Sha
             .unregisterOnSharedPreferenceChangeListener(this);
     }
     
-    public static class FileContract extends ActivityResultContract<Bundle, File[]> {
+    public static class FileContract extends ActivityResultContract<Bundle, FilePointer[]> {
         
         public static final String RESULT = "result";
     
@@ -133,7 +134,7 @@ public class LocalFilesSelectorActivity extends AppCompatActivity implements Sha
         }
         
         @Override
-        public File[] parseResult(int resultCode, Intent intent) {
+        public FilePointer[] parseResult(int resultCode, Intent intent) {
             Log.debug.log(TAG, "result code : " + resultCode);
             
             if(intent == null) return null;
@@ -143,9 +144,9 @@ public class LocalFilesSelectorActivity extends AppCompatActivity implements Sha
             
             FileSource source = FileSource.getDefaultLocalSource(context);
             
-            File[] files = new File[paths.length];
+            FilePointer[] files = new FilePointer[paths.length];
             for(int i = 0; i < files.length; ++i) {
-            	files[i] = source.getFile(paths[i]);
+            	files[i] = source.getFilePointer(paths[i]);
             }
             
             return files;

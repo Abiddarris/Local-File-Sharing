@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.settings;
 
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
@@ -91,13 +92,15 @@ public class RootEditorDialog extends DialogFragment {
         Settings.setRoots(getContext(), adapter.getRoots());
     }
     
-    private class ResultCallback implements ActivityResultCallback<File[]> {
+    private class ResultCallback implements ActivityResultCallback<FilePointer[]> {
         
         @Override
-        public void onActivityResult(File[] files) {
+        public void onActivityResult(FilePointer[] files) {
             if(files == null) return;
             
-            for(File file : files){
+            for(FilePointer pointer : files){
+                File file = pointer.get();
+                
                 file.updateDataSync(REQUEST_ABSOLUTE_PATH);
                 adapter.addRoot(new java.io.File(file.getAbsolutePath()));
                 

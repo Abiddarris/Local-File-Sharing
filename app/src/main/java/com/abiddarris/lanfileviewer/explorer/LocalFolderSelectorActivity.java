@@ -15,6 +15,7 @@ import androidx.preference.PreferenceManager;
 
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
@@ -108,7 +109,7 @@ public class LocalFolderSelectorActivity extends AppCompatActivity implements Sh
             .unregisterOnSharedPreferenceChangeListener(this);
     }
     
-    public static class FileContract extends ActivityResultContract<Void, File> {
+    public static class FileContract extends ActivityResultContract<Void, FilePointer> {
         
         private FileSource source;
         
@@ -126,13 +127,13 @@ public class LocalFolderSelectorActivity extends AppCompatActivity implements Sh
         }
         
         @Override
-        public File parseResult(int resultCode, Intent intent) {
+        public FilePointer parseResult(int resultCode, Intent intent) {
             if(intent == null) return null;
             
             String path = intent.getStringExtra(RESULT);
             if(path == null) return null;
             
-            return source.getFile(path);
+            return source.getFilePointer(path);
         }
         
     }

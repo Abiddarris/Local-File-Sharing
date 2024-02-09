@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.LayoutPathButtonBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import java.util.List;
 import java.util.ArrayList;
@@ -49,8 +50,9 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
                         path.append(paths[i]);
                         if (i != index) path.append("/");
                     }
-                    File file = explorer.getParent().getSource().getFile(path.toString());
-                    explorer.open(file);
+                    FilePointer pointer = explorer.getParent()
+                        .getSource().getFilePointer(path.toString());
+                    explorer.open(pointer);
                 });
     }
 
