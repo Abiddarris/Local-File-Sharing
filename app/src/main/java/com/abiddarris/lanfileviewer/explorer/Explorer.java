@@ -83,6 +83,8 @@ public class Explorer {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(file.toUri(), mimeType == null ? "*" : mimeType);
             getContext().startActivity(intent);
+                
+            FileSource.freeFiles(file);  
         }, REQUEST_IS_DIRECTORY, REQUEST_GET_MIME_TYPE);
     }
     
