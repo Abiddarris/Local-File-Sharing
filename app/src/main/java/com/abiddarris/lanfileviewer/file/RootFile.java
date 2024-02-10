@@ -105,10 +105,12 @@ public class RootFile extends File {
     }
     
     @Override
-    public Progress move(File dest) {
+    public Progress move(File dest, OnOperationDoneListener listener) {
         Progress progress = new Progress(0);
         progress.setCompleted(true);
         progress.setException(new IOException("Cannot move this file."));
+        
+        listener.onOperationDone(progress);
         
         return progress;
     }

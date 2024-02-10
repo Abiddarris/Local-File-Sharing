@@ -278,6 +278,10 @@ public abstract class File extends Poolable implements Requests {
         return copy(dest, (progress) -> {});
     }
     
+    public final Progress move(File dest) {
+        return move(dest, (progress) -> {});
+    }
+    
     public abstract Uri toUri();
 
     public abstract boolean makeDirs();
@@ -292,7 +296,7 @@ public abstract class File extends Poolable implements Requests {
     
     public abstract boolean delete();
     
-    public abstract Progress move(File dest); 
+    public abstract Progress move(File dest, OnOperationDoneListener listener); 
     
     public abstract void createThumbnail(ThumbnailCallback callback);
     

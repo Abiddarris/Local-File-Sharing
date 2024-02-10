@@ -259,7 +259,7 @@ public class NetworkFile extends File {
     }
     
     @Override
-    public Progress move(File dest) {
+    public Progress move(File dest, OnOperationDoneListener listener) {
         checkNotFreed();
         Progress progress = new Progress();
         executor.submit(() -> {
@@ -272,7 +272,7 @@ public class NetworkFile extends File {
                 JSONObject response = source.sendRequest(request);
                 int progressId = response.optInt(KEY_PROGRESS_ID);
                   
-                updateProgress(progressId, progress, (p) -> {});
+                updateProgress(progressId, progress, listener);
             } catch (Exception e) {
                 progress.setException(e);
                 progress.setCompleted(true);        

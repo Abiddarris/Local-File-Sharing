@@ -227,7 +227,7 @@ public class LocalFile extends File {
     }
 
     @Override
-    public Progress move(File dest) {
+    public Progress move(File dest, OnOperationDoneListener listener) {
         checkNotFreed();
         source.getSecurityManager().checkRead(this);
         
@@ -242,6 +242,9 @@ public class LocalFile extends File {
                 Progress progress = new Progress(1);
                 progress.setCompleted(true);
                 progress.setCurrentProgress(1);
+                
+                listener.onOperationDone(progress);
+                
                 return progress;
             }
         }
@@ -252,6 +255,7 @@ public class LocalFile extends File {
                     return;
                 }
                 delete();
+                listener.onOperationDone(p);
             });
 
         return progress;

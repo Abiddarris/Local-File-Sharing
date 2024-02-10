@@ -235,7 +235,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             file = source.getFile(path);
             fetchFileRelated(request,response,key,file);
         } finally {
-            if(file != null && !key.equalsIgnoreCase(REQUEST_COPY)) {
+            if(file != null && !(key.equalsIgnoreCase(REQUEST_COPY) || key.equalsIgnoreCase(REQUEST_MOVE))) {
                 FileSource.freeFiles(file);
             }
         }
@@ -290,21 +290,16 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             boolean success = file.delete();
             response.put(KEY_SUCESS, success);
         } else if(key.equalsIgnoreCase(REQUEST_MOVE)) {
-            File dest = null;
-            try {
-                source.getFile(
+            File dest = source.getFile(
                     request.getString(KEY_DEST));
-                dest.updateDataSync();
+            dest.updateDataSync();
             
-                File.Progress progress = file.move(dest);
-                progresses.put(progress.hashCode(), progress);
+            File.Progress progress = file.move(dest, (p) -> {
+                FileSource.freeFiles(file, dest);
+            });
+            progresses.put(progress.hashCode(), progress);
             
-                response.put(KEY_PROGRESS_ID, progress.hashCode());
-            } finally {
-                if(dest != null) {
-                    FileSource.freeFiles(dest);
-                }
-            }
+            response.put(KEY_PROGRESS_ID, progress.hashCode());
         } else if(key.equalsIgnoreCase(REQUEST_ABSOLUTE_PATH)) {
             response.put(KEY_ABSOLUTE_PATH, file.getAbsolutePath());
         } else if(key.equalsIgnoreCase(REQUEST_GET_FILES_TREE)) {
