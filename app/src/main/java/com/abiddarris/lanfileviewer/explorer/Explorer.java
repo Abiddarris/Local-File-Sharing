@@ -124,7 +124,6 @@ public class Explorer {
     }
 
     private void load(File[] files) {
-        clearCache();
         targetCount = files.length;
         if (targetCount == 0) {
             onLoaded();
@@ -142,29 +141,7 @@ public class Explorer {
         }
     }
     
-    private void clearCache() {
-        for(File file : cache) {
-            file.getSource()
-                .free(file);
-        }
-        cache.clear();
-    }
-
-    public boolean navigateUp() {
-        if (refresher.isRefreshing()) return true;
-        if (parent == null) return false;
-
-        File grandParent = parent.getParentFile();
-        if (grandParent == null) return false;
-
-        FilePointer pointer = grandParent.getFilePointer();
-        FileSource.freeFiles(grandParent);
-        
-        open(pointer);
-        
-        return true;
-    }
-
+    
     private synchronized void onFileLoaded(File file) {
         cache.add(file);
         if (cache.size() == targetCount) {
@@ -174,6 +151,8 @@ public class Explorer {
 
     private void onLoaded() {
         File[] files = cache.toArray(new File[0]);
+        cache.clear();
+        
         Arrays.sort(files, sorter);
         adapter.setFiles(files);
 
@@ -191,7 +170,9 @@ public class Explorer {
     }
     
     private void cancel() {
-        clearCache();
+        FileSource.freeFiles(cache);
+        cache.clear();
+        
         onLoaded();
     }
     
@@ -203,6 +184,21 @@ public class Explorer {
         this.parent = parent;
         
         getMode().onParentChanged(this.parent);
+    }
+    
+    public boolean navigateUp() {
+        if (refresher.isRefreshing()) return true;
+        if (parent == null) return false;
+
+        File grandParent = parent.getParentFile();
+        if (grandParent == null) return false;
+
+        FilePointer pointer = grandParent.getFilePointer();
+        FileSource.freeFiles(grandParent);
+        
+        open(pointer);
+        
+        return true;
     }
 
     public FilePointer getParent() {

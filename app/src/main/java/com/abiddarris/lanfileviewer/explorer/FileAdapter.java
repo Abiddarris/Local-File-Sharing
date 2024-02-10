@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.LayoutFileCardBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.DrawableTinter;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
@@ -46,7 +47,9 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
     
     public void setFiles(File[] files) {
         handler.post((c)-> {
+            FileSource.freeFiles(this.files);
             this.files = files;
+                
             notifyDataSetChanged();
         });
         handler.post((c) -> recyclerView.smoothScrollToPosition(0));
