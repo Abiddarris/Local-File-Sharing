@@ -106,7 +106,12 @@ public abstract class ExplorerFragment extends Fragment {
     public void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
 
-        bundle.putString(PARENT, explorer.getParent().getPath());
+        File parent = explorer.getParent()
+            .get();
+        
+        bundle.putString(PARENT, parent.getPath());
+        
+        FileSource.freeFiles(parent);
     }
 
     @Override

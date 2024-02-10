@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.content.Context;
@@ -19,9 +20,9 @@ public class MoveRunnable extends ActionRunnable {
     private FileSource source;
     private File dest;
 
-    public MoveRunnable(File[] items, File dest) {
+    public MoveRunnable(File[] items, FilePointer pointer) {
         this.items = items;
-        this.dest = dest;
+        this.dest = pointer.get();
         this.source = dest.getSource();
     }
     
@@ -82,6 +83,7 @@ public class MoveRunnable extends ActionRunnable {
             }
             FileSource.freeFiles(originalFile);
         }
+        FileSource.freeFiles(dest);
     }
     
     private void moveFile(File originalFile, File destFile) {

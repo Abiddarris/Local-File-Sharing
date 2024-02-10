@@ -78,7 +78,7 @@ public class PathAdapter extends RecyclerView.Adapter<PathAdapter.ViewHolder> {
     public void setExplorer(Explorer explorer) {
         this.explorer = explorer;
         explorer.addOnUpdatedListener((v) -> {
-            File file = explorer.getParent();
+            FilePointer file = explorer.getParent();
          
             String filePath = file.getPath();
             if(filePath.startsWith("/")) filePath = filePath.substring(1);

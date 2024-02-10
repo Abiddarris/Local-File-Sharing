@@ -3,6 +3,7 @@ import android.os.Bundle;
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 
 public class SelectorFragment extends ExplorerFragment{
@@ -14,7 +15,7 @@ public class SelectorFragment extends ExplorerFragment{
     }
     
     public static interface OnSelectedListener {
-        void onSelected(File... files);
+        void onSelected(FilePointer... pointers);
     }
 
     public OnSelectedListener getOnSelectedListener() {

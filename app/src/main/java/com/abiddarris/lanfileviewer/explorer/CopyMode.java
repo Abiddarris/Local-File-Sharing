@@ -9,6 +9,7 @@ import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.actions.runnables.CopyRunnable;
 import com.abiddarris.lanfileviewer.databinding.LayoutCopyMoveBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.Files;
 import java.util.HashSet;
 import java.util.Set;
@@ -68,7 +69,7 @@ public class CopyMode extends BottomToolbarMode {
         }
     }
     
-    protected ActionRunnable getRunnable(File[] items, File dest) {
+    protected ActionRunnable getRunnable(File[] items, FilePointer dest) {
         return new CopyRunnable(dest, items); 
     }
     

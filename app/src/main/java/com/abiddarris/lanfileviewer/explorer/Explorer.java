@@ -205,8 +205,8 @@ public class Explorer {
         getMode().onParentChanged(this.parent);
     }
 
-    public File getParent() {
-        return parent;
+    public FilePointer getParent() {
+        return parent.getFilePointer();
     }
 
     public boolean onBackPressed() {

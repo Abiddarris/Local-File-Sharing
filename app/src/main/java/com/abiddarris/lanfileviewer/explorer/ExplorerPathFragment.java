@@ -35,11 +35,15 @@ public class ExplorerPathFragment extends Fragment {
             Explorer explorer = adapter.getExplorer();
             if(explorer == null) return;
                 
-            File currentFile = explorer.getParent();
+            File currentFile = explorer.getParent()
+                .get();
             if(currentFile == null) return;
            
             File file = currentFile.getSource()
                 .getRoot();
+                
+            FileSource.freeFiles(currentFile);     
+                
             explorer.open(file.getFilePointer());
         });
         

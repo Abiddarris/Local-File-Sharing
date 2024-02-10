@@ -44,7 +44,7 @@ public class FilesSelectorFragment extends SelectorFragment {
     
     private void onSelected(File... files) {
         getOnSelectedListener()
-            .onSelected(files);
+            .onSelected(FileSource.toPointers(files));
     }
     
     private class MainMode extends NavigateMode {

@@ -1,28 +1,22 @@
 package com.abiddarris.lanfileviewer.actions.uploads;
 
-import com.abiddarris.lanfileviewer.file.FilePointer;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import com.abiddarris.lanfileviewer.R;
-import com.abiddarris.lanfileviewer.actions.ActionDialog;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkOutputStream;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.gretta.util.log.Log;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
-import com.abiddarris.lanfileviewer.file.Files;
-import android.view.View;
-import com.abiddarris.lanfileviewer.databinding.DialogActionProgressBinding;
+import java.util.List;
 
 public class UploadRunnable extends ActionRunnable {
 
@@ -32,9 +26,9 @@ public class UploadRunnable extends ActionRunnable {
     
     public static final String TAG = Log.getTag(UploadRunnable.class);
     
-    public UploadRunnable(FileSource destSource, File dest, FilePointer[] items) {
+    public UploadRunnable(FileSource destSource, FilePointer dest, FilePointer[] items) {
         this.destSource = destSource;
-        this.dest = dest;
+        this.dest = dest.get();
         
         this.items = new File[items.length];
         for(int i = 0; i < items.length; i++) {

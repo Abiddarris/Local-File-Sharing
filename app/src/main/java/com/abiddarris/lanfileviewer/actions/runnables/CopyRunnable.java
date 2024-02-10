@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.content.Context;
@@ -22,9 +23,9 @@ public class CopyRunnable extends ActionRunnable {
     
     public static final String TAG = Log.getTag(CopyRunnable.class);
 
-    public CopyRunnable(File dest, File[] items) {
+    public CopyRunnable(FilePointer pointer, File[] items) {
+        this.dest = pointer.get();
         this.source = dest.getSource();
-        this.dest = dest;
         this.items = items;
     }
     
@@ -79,6 +80,7 @@ public class CopyRunnable extends ActionRunnable {
             
             FileSource.freeFiles(originalFile, destFile);   
         }
+        FileSource.freeFiles(dest);
     }
 
     private void copyFile(File originalFile, File destFile) {

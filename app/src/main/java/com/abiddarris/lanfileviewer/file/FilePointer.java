@@ -2,7 +2,7 @@ package com.abiddarris.lanfileviewer.file;
 
 import com.gretta.util.recycler.Poolable;
 
-public class FilePointer extends Poolable {
+public final class FilePointer extends Poolable {
     
     private FileSource source;
     private String path;
@@ -14,6 +14,14 @@ public class FilePointer extends Poolable {
     
     public File get() {
         return source.getFile(path);
+    }
+    
+    public FileSource getSource() {
+        return source;
+    }
+    
+    public String getPath() {
+        return path;
     }
     
 }

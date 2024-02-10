@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.content.Context;
@@ -32,7 +33,7 @@ public class FileNameInputValidator implements TextWatcher {
         this.binding = binding;
         this.context = explorer.getContext();
         
-        File parent = explorer.getParent();
+        FilePointer parent = explorer.getParent();
        
         parentPath = parent.getPath();
         source = parent.getSource();
