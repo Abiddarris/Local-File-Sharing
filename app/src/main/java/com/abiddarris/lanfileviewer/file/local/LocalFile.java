@@ -9,6 +9,7 @@ import androidx.documentfile.provider.DocumentFile;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.Files;
+import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.abiddarris.lanfileviewer.utils.Thumbnails;
 import com.bumptech.glide.Glide;
@@ -161,39 +162,36 @@ public class LocalFile extends File {
     }
 
     @Override
-    public Progress copy(File dest) {
+    public Progress copy(File dest, OnOperationDoneListener listener) {
         checkNotFreed();
-        return copyInternal(dest, null);
-    }
-
-    private Progress copyInternal(File dest, OnCopyDoneListener listener) {
+        
         Progress progress = new Progress((Long)get(KEY_LENGTH, REQUEST_GET_LENGTH));
 
-        service.submit(() -> {
-                    try {
-                        BufferedInputStream inputStream = new BufferedInputStream(newInputStream());
-                        BufferedOutputStream outputStream =
-                                new BufferedOutputStream(dest.newOutputStream());
-                        byte[] buf = new byte[1024 * 4];
-                        int len;
-                        while ((len = inputStream.read(buf)) != -1) {
-                            if (progress.isCancel()) {
-                                break;
-                            }
-                            outputStream.write(buf, 0, len);
-                            progress.setCurrentProgress(progress.getCurrentProgress() + len);
-                        }
-                        outputStream.flush();
-                        outputStream.close();
-                        inputStream.close();
-                    } catch (IOException e) {
-                        Log.err.log(TAG, e);
-                        progress.setException(e);
-                    } finally {
-                        progress.setCompleted(true);
-                        if (listener != null) listener.onCopyDone(progress);
+        service.submit(new BaseRunnable((c) -> {
+            try {
+                BufferedInputStream inputStream = new BufferedInputStream(newInputStream());
+                BufferedOutputStream outputStream =
+                    new BufferedOutputStream(dest.newOutputStream());
+                byte[] buf = new byte[1024 * 4];
+                int len;
+                while ((len = inputStream.read(buf)) != -1) {
+                    if (progress.isCancel()) {
+                        break;
                     }
-                });
+                    outputStream.write(buf, 0, len);
+                    progress.setCurrentProgress(progress.getCurrentProgress() + len);
+                }
+                outputStream.flush();
+                outputStream.close();
+                inputStream.close();
+            } catch (IOException e) {
+                Log.err.log(TAG, e);
+                progress.setException(e);
+            } finally {
+                progress.setCompleted(true);
+                listener.onOperationDone(progress);
+            }
+        }));
         return progress;
     }
 
@@ -248,7 +246,7 @@ public class LocalFile extends File {
             }
         }
 
-        Progress progress = copyInternal(dest, (p) -> {
+        Progress progress = copy(dest, (p) -> {
                 if (p.isCancel() || p.getException() != null) {
                     dest.delete();
                     return;
@@ -270,7 +268,5 @@ public class LocalFile extends File {
         });
     }
 
-    private static interface OnCopyDoneListener {
-        void onCopyDone(Progress progress);
-    }
+    
 }

@@ -274,6 +274,10 @@ public abstract class File extends Poolable implements Requests {
             "/" + getName();
     }
     
+    public final Progress copy(File dest) {
+        return copy(dest, (progress) -> {});
+    }
+    
     public abstract Uri toUri();
 
     public abstract boolean makeDirs();
@@ -282,7 +286,7 @@ public abstract class File extends Poolable implements Requests {
 
     public abstract InputStream newInputStream() throws IOException;
 
-    public abstract Progress copy(File dest);
+    public abstract Progress copy(File dest, OnOperationDoneListener listener);
 
     public abstract boolean rename(String newName);
     
@@ -373,6 +377,10 @@ public abstract class File extends Poolable implements Requests {
             this.cancel = cancel;
         }
     }
+    
+    public static interface OnOperationDoneListener {
+        void onOperationDone(Progress progress);
+    }
    
     private class Value {
         
@@ -384,4 +392,6 @@ public abstract class File extends Poolable implements Requests {
             this.data = data;
         }
     }
+    
+    
 }

@@ -235,14 +235,14 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             file = source.getFile(path);
             fetchFileRelated(request,response,key,file);
         } finally {
-            if(file != null) {
+            if(file != null && !key.equalsIgnoreCase(REQUEST_COPY)) {
                 FileSource.freeFiles(file);
             }
         }
         
     }
 
-    private void fetchFileRelated(JSONObject request, JSONObject response, String key, File file) throws Exception {
+    private void fetchFileRelated(JSONObject request, JSONObject response, String key, final File file) throws Exception {
         file.updateDataSync(key);
         
         if(key.equalsIgnoreCase(REQUEST_LIST)) {
@@ -272,20 +272,16 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         } else if(key.equalsIgnoreCase(REQUEST_EXISTS)) {
             response.put(KEY_EXISTS, file.exists());
         } else if(key.equalsIgnoreCase(REQUEST_COPY)) {
-            File dest = null;
-            try {
-                dest = source.getFile(
-                    request.getString(KEY_DEST));
-                dest.updateDataSync();
+            final File dest = source.getFile(
+                request.getString(KEY_DEST));
+            dest.updateDataSync();
             
-                File.Progress progress = file.copy(dest);
-                progresses.put(progress.hashCode(), progress);
+            File.Progress progress = file.copy(dest, (p) -> {
+                FileSource.freeFiles(file, dest);
+            });
+            progresses.put(progress.hashCode(), progress);
             
-                response.put(KEY_PROGRESS_ID, progress.hashCode());
-            } finally {
-                if(dest != null)
-                    FileSource.freeFiles(dest);
-            } 
+            response.put(KEY_PROGRESS_ID, progress.hashCode());
         } else if(key.equalsIgnoreCase(REQUEST_RENAME)) {
             String newName = request.getString(KEY_NEW_NAME);
             boolean sucess = file.rename(newName);

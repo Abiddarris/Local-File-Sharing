@@ -84,10 +84,12 @@ public class RootFile extends File {
     }
     
     @Override
-    public Progress copy(File dest) {
+    public Progress copy(File dest, OnOperationDoneListener listener) {
         Progress progress = new Progress(0);
         progress.setCompleted(true);
         progress.setException(new IOException("Cannot copy this file."));
+        
+        listener.onOperationDone(progress);
         
         return progress;
     }

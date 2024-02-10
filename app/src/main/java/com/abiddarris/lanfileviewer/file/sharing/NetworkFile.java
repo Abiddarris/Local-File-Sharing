@@ -163,7 +163,7 @@ public class NetworkFile extends File {
     }
     
     @Override
-    public Progress copy(File dest) {
+    public Progress copy(File dest, OnOperationDoneListener listener) {
         checkNotFreed();
         
         Progress progress = new Progress();
@@ -177,7 +177,7 @@ public class NetworkFile extends File {
                 JSONObject response = source.sendRequest(request);
                 int progressId = response.optInt(KEY_PROGRESS_ID);
                   
-                updateProgress(progressId, progress);
+                updateProgress(progressId, progress, listener);
             } catch (Exception e) {
                 progress.setException(e);
                 progress.setCompleted(true);        
@@ -203,7 +203,7 @@ public class NetworkFile extends File {
         }
     }
     
-    private void updateProgress(int progressId, Progress progress) throws Exception{
+    private void updateProgress(int progressId, Progress progress, OnOperationDoneListener listener) throws Exception{
         JSONObject request = new JSONObject()
                     .putOpt(KEY_REQUEST, createRequest(REQUEST_PROGRESS))
                     .putOpt(KEY_PROGRESS_ID, progressId);
@@ -229,13 +229,17 @@ public class NetworkFile extends File {
         source.sendRequest(removeRequest);   
                     
         String base64Exception = response.optString(KEY_EXCEPTION);
-        if(base64Exception == null) return;
-                    
+        if(base64Exception == null) {
+            listener.onOperationDone(progress);
+            return;
+        }           
         byte[] datas = Base64.decode(base64Exception, Base64.DEFAULT);
         ObjectInputStream reader = new ObjectInputStream(
             new BufferedInputStream(new ByteArrayInputStream(datas)));
         Exception e = (Exception) reader.readObject();  
         progress.setException(e);
+        
+        listener.onOperationDone(progress);
     }
     
     @Override
@@ -268,7 +272,7 @@ public class NetworkFile extends File {
                 JSONObject response = source.sendRequest(request);
                 int progressId = response.optInt(KEY_PROGRESS_ID);
                   
-                updateProgress(progressId, progress);
+                updateProgress(progressId, progress, (p) -> {});
             } catch (Exception e) {
                 progress.setException(e);
                 progress.setCompleted(true);        
