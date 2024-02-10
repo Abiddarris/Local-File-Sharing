@@ -6,14 +6,15 @@ import android.content.Context;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.gretta.util.log.Log;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import com.abiddarris.lanfileviewer.file.Files;
 import java.util.List;
 
 public class DownloadRunnable extends ActionRunnable {
@@ -23,9 +24,9 @@ public class DownloadRunnable extends ActionRunnable {
     
     public static final String TAG = Log.getTag(DownloadRunnable.class);
     
-    public DownloadRunnable(File[] items, File dest) {
-        this.items = items;
-        this.dest = dest;
+    public DownloadRunnable(FilePointer[] items, FilePointer dest) {
+        this.items = FileSource.toFiles(items);
+        this.dest = dest.get();
     }
     
     @Override

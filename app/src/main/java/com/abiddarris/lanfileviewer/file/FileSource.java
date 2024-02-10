@@ -182,6 +182,14 @@ public abstract class FileSource extends ObjectRecycler<String, File>{
         return pointers;
     }
     
+    public static File[] toFiles(FilePointer[] pointers) {
+        File[] files = new File[pointers.length];
+        for(int i = 0; i < pointers.length; ++i) {
+        	files[i] = pointers[i].get();
+        }
+        return files;
+    }
+    
     @Override
     public boolean free(File file) {
         if(file == root) return false;

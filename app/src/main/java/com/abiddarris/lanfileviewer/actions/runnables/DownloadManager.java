@@ -5,6 +5,7 @@ import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.actions.ActionDialog;
 import com.abiddarris.lanfileviewer.explorer.Explorer;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.utils.CacheManager;
 import com.gretta.util.Randoms;
@@ -49,7 +50,8 @@ public class DownloadManager extends CacheManager<File, File>{
         
         ApplicationCore.getMainHandler()
             .post(c -> {
-                new ActionDialog(explorer,  new DownloadAndOpenRunnable(new File[]{item}, dest, done))
+                new ActionDialog(explorer,  new DownloadAndOpenRunnable(
+                    new FilePointer[]{item.getFilePointer()}, dest.getFilePointer(), done))
                     .show(explorer.getFragment().getParentFragmentManager(), null);
             });
         
@@ -80,11 +82,11 @@ public class DownloadManager extends CacheManager<File, File>{
         private File item;
         private File dest;
     
-        DownloadAndOpenRunnable(File[] item, File dest, AtomicBoolean done) {
+        DownloadAndOpenRunnable(FilePointer[] item, FilePointer dest, AtomicBoolean done) {
             super(item, dest);
         
-            this.item = item[0];
-            this.dest = dest;
+            this.item = item[0].get();
+            this.dest = dest.get();
             this.done = done;
         }
     

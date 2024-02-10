@@ -332,9 +332,9 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
             Log.debug.log(TAG, file.getPath());
                     
             File[] items = checked.toArray(new File[0]);
-                    
+            
             new ActionDialog(getExplorer(), 
-                new DownloadRunnable(items, file))
+                new DownloadRunnable(FileSource.toPointers(items), file.getFilePointer()))
                     .show(getExplorer().getFragment().getParentFragmentManager(), null);
                     
             getExplorer().setMode(getExplorer().navigateMode);
