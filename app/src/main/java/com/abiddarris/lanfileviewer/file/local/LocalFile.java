@@ -250,13 +250,17 @@ public class LocalFile extends File {
         }
 
         Progress progress = copy(dest, (p) -> {
+            try {
                 if (p.isCancel() || p.getException() != null) {
                     dest.delete();
+                    
                     return;
                 }
                 delete();
+            } finally {
                 listener.onOperationDone(p);
-            });
+            }
+        });
 
         return progress;
     }
