@@ -1,12 +1,12 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
-import com.abiddarris.lanfileviewer.file.FilePointer;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.content.Context;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
@@ -20,8 +20,8 @@ public class MoveRunnable extends ActionRunnable {
     private FileSource source;
     private File dest;
 
-    public MoveRunnable(File[] items, FilePointer pointer) {
-        this.items = items;
+    public MoveRunnable(FilePointer[] items, FilePointer pointer) {
+        this.items = FileSource.toFiles(items);
         this.dest = pointer.get();
         this.source = dest.getSource();
     }

@@ -23,10 +23,10 @@ public class CopyRunnable extends ActionRunnable {
     
     public static final String TAG = Log.getTag(CopyRunnable.class);
 
-    public CopyRunnable(FilePointer pointer, File[] items) {
+    public CopyRunnable(FilePointer pointer, FilePointer[] items) {
         this.dest = pointer.get();
         this.source = dest.getSource();
-        this.items = items;
+        this.items = FileSource.toFiles(items);
     }
     
     @Override
@@ -39,7 +39,6 @@ public class CopyRunnable extends ActionRunnable {
         return String.format("%s %s", copy, formattedItems);
     }
     
-
     @Override
     public void onExecute(BaseRunnable context) throws Exception {
         prepare();

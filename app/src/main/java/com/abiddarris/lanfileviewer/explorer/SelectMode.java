@@ -1,12 +1,12 @@
 package com.abiddarris.lanfileviewer.explorer;
 
-import com.abiddarris.lanfileviewer.file.FilePointer;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,10 +25,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import com.abiddarris.lanfileviewer.ApplicationCore;
-import android.content.Intent;
-import com.abiddarris.lanfileviewer.ApplicationCore;
-import android.content.Intent;
-import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionDialog;
 import com.abiddarris.lanfileviewer.actions.runnables.DownloadManager;
@@ -37,6 +33,7 @@ import com.abiddarris.lanfileviewer.databinding.LayoutSelectBinding;
 import com.abiddarris.lanfileviewer.databinding.LayoutSelectModeBinding;
 import com.abiddarris.lanfileviewer.explorer.FileAdapter.ViewHolder;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.gretta.util.log.Log;
@@ -317,7 +314,8 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
     private void setCopyMode(CopyMode mode) {
         hide = false;
             
-        mode.setItems(checked.toArray(new File[0]));
+        mode.setItems(
+            checked.toArray(new File[0]));
         getExplorer().setMode(mode);
     }
     

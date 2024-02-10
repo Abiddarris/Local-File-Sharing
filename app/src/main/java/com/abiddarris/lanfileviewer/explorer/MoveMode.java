@@ -19,7 +19,7 @@ public class MoveMode extends CopyMode {
     }
     
     @Override
-    protected ActionRunnable getRunnable(File[] items, FilePointer dest) {
+    protected ActionRunnable getRunnable(FilePointer[] items, FilePointer dest) {
         return new MoveRunnable(items, dest);
     }
     

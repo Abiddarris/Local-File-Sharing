@@ -2,7 +2,6 @@ package com.abiddarris.lanfileviewer.explorer;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionDialog;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
@@ -10,9 +9,8 @@ import com.abiddarris.lanfileviewer.actions.runnables.CopyRunnable;
 import com.abiddarris.lanfileviewer.databinding.LayoutCopyMoveBinding;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FilePointer;
+import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.Files;
-import java.util.HashSet;
-import java.util.Set;
 
 public class CopyMode extends BottomToolbarMode {
 
@@ -44,7 +42,7 @@ public class CopyMode extends BottomToolbarMode {
         binding.action.setText(
             getExplorer().getContext().getString(getActionText()));
         binding.action.setOnClickListener((v) -> {
-            ActionRunnable runnable = getRunnable(items, getExplorer().getParent());
+            ActionRunnable runnable = getRunnable(FileSource.toPointers(items), getExplorer().getParent());
             new ActionDialog(getExplorer(), runnable)
                 .show(getExplorer().getFragment().getParentFragmentManager(), null);
                 
@@ -69,7 +67,7 @@ public class CopyMode extends BottomToolbarMode {
         }
     }
     
-    protected ActionRunnable getRunnable(File[] items, FilePointer dest) {
+    protected ActionRunnable getRunnable(FilePointer[] items, FilePointer dest) {
         return new CopyRunnable(dest, items); 
     }
     

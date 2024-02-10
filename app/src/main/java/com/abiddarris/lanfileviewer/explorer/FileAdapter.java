@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.LayoutFileCardBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.DrawableTinter;
