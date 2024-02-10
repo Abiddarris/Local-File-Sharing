@@ -65,7 +65,7 @@ public class UploadRunnable extends ActionRunnable {
             }
             
             File originalFile = files.get(i);
-            originalFile.updateDataSync(REQUEST_GET_LENGTH, REQUEST_GET_MIME_TYPE);
+            originalFile.updateDataSync(REQUEST_IS_DIRECTORY, REQUEST_GET_LENGTH, REQUEST_GET_MIME_TYPE);
             
             String localPath = originalFile.getPath()
                 .replace(parent, "");
