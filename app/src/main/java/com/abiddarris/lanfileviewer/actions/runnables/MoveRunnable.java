@@ -19,6 +19,7 @@ public class MoveRunnable extends ActionRunnable {
     private File[] items;
     private FileSource source;
     private File dest;
+    private List<File> files;
 
     public MoveRunnable(FilePointer[] items, FilePointer pointer) {
         this.items = FileSource.toFiles(items);
@@ -39,8 +40,8 @@ public class MoveRunnable extends ActionRunnable {
     @Override
     public void onExecute(BaseRunnable context) throws Exception {
         prepare();
-
-        List<File> files = new ArrayList<>();
+        files = new ArrayList<>();
+        
         for (File item : items) {
             Files.getFilesTree(files, item);
         }
@@ -81,9 +82,8 @@ public class MoveRunnable extends ActionRunnable {
             if(originalFile.isDirectory()) {
                 originalFile.delete();
             }
-            FileSource.freeFiles(originalFile);
         }
-        FileSource.freeFiles(dest);
+        
     }
     
     private void moveFile(File originalFile, File destFile) {
@@ -113,6 +113,13 @@ public class MoveRunnable extends ActionRunnable {
         boolean success = file.makeDirs();
         
         updateProgress(1);
+    }
+    
+    @Override
+    public void onFinalization() {
+        FileSource.freeFiles(dest);
+        FileSource.freeFiles(files);
+        FileSource.freeFiles(items);
     }
     
 }

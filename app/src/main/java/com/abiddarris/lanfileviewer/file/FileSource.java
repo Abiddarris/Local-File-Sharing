@@ -160,16 +160,17 @@ public abstract class FileSource extends ObjectRecycler<String, File>{
     
     public static void freeFiles(File... files) {
         for(File file : files) {
-             file.getSource()
-            .free(file);
+            if(file != null)
+                file.getSource()
+                    .free(file);
         }
     }
     
     public static void freeFiles(List<File> files) {
         for(File file : files) {
-            if(file == null) continue;
-            file.getSource()
-                .free(file);
+            if(file != null) 
+                file.getSource()
+                    .free(file);
         }
     }
 
