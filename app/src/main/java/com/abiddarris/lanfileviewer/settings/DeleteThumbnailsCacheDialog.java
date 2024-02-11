@@ -63,7 +63,7 @@ public class DeleteThumbnailsCacheDialog extends DialogFragment {
     }
 
     private void delete() {
-        DeleteRunnable runnable = new DeleteRunnable(new File[]{cache},
+        DeleteRunnable runnable = new DeleteRunnable(FileSource.toPointers(cache),
             Files.formatFromItems(getContext(), files.toArray(new File[0])));
         new ActionDialog(null, runnable)
             .show(getParentFragmentManager(),null);

@@ -174,7 +174,7 @@ public abstract class FileSource extends ObjectRecycler<String, File>{
         }
     }
 
-    public static FilePointer[] toPointers(File[] files) {
+    public static FilePointer[] toPointers(File... files) {
     	FilePointer[] pointers = new FilePointer[files.length];
         for(int i = 0; i < pointers.length; ++i) {
         	pointers[i] = files[i]

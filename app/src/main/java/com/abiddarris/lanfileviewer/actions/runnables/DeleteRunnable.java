@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
@@ -15,12 +16,13 @@ import java.util.List;
 public class DeleteRunnable extends ActionRunnable {
 
     private File[] items;
+    private List<File> files;
     private String title;
     
     public static final String TAG = Log.getTag(DeleteRunnable.class);
 
-    public DeleteRunnable(File[] items, String title) {
-        this.items = items;
+    public DeleteRunnable(FilePointer[] items, String title) {
+        this.items = FileSource.toFiles(items);
         this.title = title;
     }
     
@@ -29,12 +31,11 @@ public class DeleteRunnable extends ActionRunnable {
         return getDialog().getString(R.string.deleting) + " " + title;
     }
     
-
     @Override
     public void onExecute(BaseRunnable context) throws Exception {
         prepare();
 
-        List<File> files = new ArrayList<>();
+        files = new ArrayList<>();
         for(File item : items) {
         	Files.getFilesTree(files, item);
         }
@@ -62,8 +63,6 @@ public class DeleteRunnable extends ActionRunnable {
             }
             
             updateProgress(1);
-            
-            FileSource.freeFiles(file);
         }
         
         for(int i = files.size() - 1; i >= 0; i--) {
@@ -88,8 +87,15 @@ public class DeleteRunnable extends ActionRunnable {
             }
             
             updateProgress(1);
-            
-            FileSource.freeFiles(file);
         }
     }
+    
+    @Override
+    public void onFinalization() {
+        super.onFinalization();
+        
+        FileSource.freeFiles(files);
+        FileSource.freeFiles(items);
+    }
+    
 }
