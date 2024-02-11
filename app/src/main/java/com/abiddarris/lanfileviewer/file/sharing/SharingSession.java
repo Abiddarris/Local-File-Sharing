@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
@@ -291,11 +292,10 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         } else if(key.equalsIgnoreCase(REQUEST_ABSOLUTE_PATH)) {
             response.put(KEY_ABSOLUTE_PATH, file.getAbsolutePath());
         } else if(key.equalsIgnoreCase(REQUEST_GET_FILES_TREE)) {
-            List<File> trees = file.getFilesTree();
+            List<FilePointer> trees = file.getFilesTree();
             JSONArray files = new JSONArray();
-            for(File tree : trees) {
+            for(FilePointer tree : trees) {
                 files.put(tree.getPath());
-                FileSource.freeFiles(tree);
             }
             
             response.put(KEY_FILES_TREE, files);

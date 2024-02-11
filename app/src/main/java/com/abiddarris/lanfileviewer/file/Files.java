@@ -15,7 +15,9 @@ public class Files {
     
     public static void getFilesTree(List<File> files, File parent) {
         parent.updateDataSync(REQUEST_GET_FILES_TREE);
-        files.addAll(parent.getFilesTree());
+        for(FilePointer pointer : parent.getFilesTree()) {
+            files.add(pointer.get());
+        }
     }
     
     public static long getFilesTreeSize(File[] items) {

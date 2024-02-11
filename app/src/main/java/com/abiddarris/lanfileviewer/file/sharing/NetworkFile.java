@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
@@ -53,11 +54,11 @@ public class NetworkFile extends File {
                 put(KEY_LIST, files);
                 continue;
             } else if(REQUEST_GET_FILES_TREE.equalsIgnoreCase(key)) {
-                List<File> files = new ArrayList<>();
+                List<FilePointer> files = new ArrayList<>();
                 JSONArray trees = response.optJSONArray(KEY_FILES_TREE);
                 for(int i = 0; i < trees.length(); ++i) {
                     files.add(source
-                        .getFile(trees.getString(i)));
+                        .getFilePointer(trees.getString(i)));
                 }
                 put(KEY_FILES_TREE,files);
                 continue;

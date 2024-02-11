@@ -172,25 +172,34 @@ public abstract class File extends Poolable implements Requests {
     protected void updateInternal(String[] requests) throws Exception {
         for(String request : requests) {
             if(REQUEST_GET_FILES_TREE.equalsIgnoreCase(request)) {
-                List<File> filesTree = new ArrayList<>();
+                List<FilePointer> filesTree = new ArrayList<>();
         
-                getFilesTree(filesTree, this);
+                getFilesTree(filesTree, getFilePointer());
         
                 put(KEY_FILES_TREE, filesTree);
             } else if(REQUEST_GET_FILES_TREE_SIZE.equalsIgnoreCase(request)) {
-                List<File> filesTree = get(KEY_FILES_TREE, REQUEST_GET_FILES_TREE);
-        
-                long size = 0;
-        
-                for(File file : filesTree) {
-                    if((Boolean)file.get(KEY_IS_FILE, REQUEST_IS_FILE)) {
-                        size += (Long)file.get(KEY_LENGTH, REQUEST_GET_LENGTH);
-                    }
-                }
-        
-                put(KEY_FILES_TREE_SIZE, size);
+                updateFilesTreeSize();
             }
         }
+    }
+    
+    private void updateFilesTreeSize() {
+        List<FilePointer> filesTree = get(KEY_FILES_TREE, REQUEST_GET_FILES_TREE);
+        
+        long size = 0;
+        
+        for(FilePointer pointer : filesTree) {
+            File file = null;
+            try {
+                file = pointer.get();
+                if((Boolean)file.get(KEY_IS_FILE, REQUEST_IS_FILE)) {
+                    size += (Long)file.get(KEY_LENGTH, REQUEST_GET_LENGTH);
+                }
+            } finally {
+                FileSource.freeFiles(file);
+            }                    
+        }
+        put(KEY_FILES_TREE_SIZE, size);
     }
     
     public final FilePointer getFilePointer() {
@@ -257,7 +266,7 @@ public abstract class File extends Poolable implements Requests {
         return get(KEY_EXISTS);
     }
     
-    public List<File> getFilesTree() {
+    public List<FilePointer> getFilesTree() {
         return get(KEY_FILES_TREE);
     }
     
@@ -300,19 +309,28 @@ public abstract class File extends Poolable implements Requests {
     
     public abstract void createThumbnail(ThumbnailCallback callback);
     
-    private void getFilesTree(List<File> files, File parent) {
-        files.add(parent);
+    private void getFilesTree(List<FilePointer> files, FilePointer pointer) {
+        File parent = null;
+        try {
+            parent = pointer.get();
+            files.add(pointer);
         
-        parent.updateDataSync(REQUEST_IS_FILE, REQUEST_LIST);
-        if(parent.isFile()) {
-            return;
-        }
+            parent.updateDataSync(REQUEST_IS_FILE, REQUEST_LIST);
+            if(parent.isFile()) {
+                return;
+            }    
         
-        File[] children = parent.listFiles();
-        if(children == null) return;
-        
-        for(File file : children) {
-            getFilesTree(files,file);
+            File[] children = parent.listFiles();
+            if(children == null) return;
+            
+            for(File file : children) {
+                FilePointer filePointer = file.getFilePointer();
+                FileSource.freeFiles(file);
+                
+                getFilesTree(files, filePointer);
+            }    
+        } finally {
+            FileSource.freeFiles(parent);
         }
     }
     
