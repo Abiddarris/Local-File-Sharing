@@ -1,25 +1,25 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
-import com.abiddarris.lanfileviewer.file.FilePointer;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.content.Context;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
+import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.gretta.util.log.Log;
-import java.util.List;
 import java.util.ArrayList;
-import com.abiddarris.lanfileviewer.file.Files;
-import java.util.Set;
-import com.abiddarris.lanfileviewer.file.File;
+import java.util.List;
 
 public class CopyRunnable extends ActionRunnable {
 
     private File dest;
     private File[] items;
     private FileSource source;
+    private List<File> files;
     
     public static final String TAG = Log.getTag(CopyRunnable.class);
 
@@ -43,7 +43,7 @@ public class CopyRunnable extends ActionRunnable {
     public void onExecute(BaseRunnable context) throws Exception {
         prepare();
         
-        List<File> files = new ArrayList<>();
+        files = new ArrayList<>();
         for (File file : items) {
             Files.getFilesTree(files, file);
         }
@@ -66,7 +66,6 @@ public class CopyRunnable extends ActionRunnable {
             File destFile = getDialog()
                 .getFile(source, originalFile, dest.getPath() + localPath);
             
-
             if(destFile == null) continue;
             
             updateFileInfo(originalFile.getName(), i + 1, files.size());
@@ -77,9 +76,8 @@ public class CopyRunnable extends ActionRunnable {
                 copyFile(originalFile, destFile);
             }
             
-            FileSource.freeFiles(originalFile, destFile);   
+            FileSource.freeFiles(destFile);   
         }
-        FileSource.freeFiles(dest);
     }
 
     private void copyFile(File originalFile, File destFile) {
@@ -112,4 +110,14 @@ public class CopyRunnable extends ActionRunnable {
         
         updateProgress(1);
     }
+    
+    @Override
+    public void onFinalization() {
+        super.onFinalization();
+        
+        FileSource.freeFiles(dest);
+        FileSource.freeFiles(items);
+        FileSource.freeFiles(files);
+    }
+    
 }
