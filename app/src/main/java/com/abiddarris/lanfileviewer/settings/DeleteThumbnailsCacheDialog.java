@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.settings;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.MainThread;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.app.Dialog;
@@ -47,6 +49,7 @@ public class DeleteThumbnailsCacheDialog extends DialogFragment {
         
         AlertDialog dialog = new MaterialAlertDialogBuilder(getContext())
             .setMessage(message)
+            .setCancelable(false)
             .setNeutralButton(R.string.cancel, (p1,p2) -> {})
             .setPositiveButton(R.string.ok, (p1,p2) -> delete())
             .create();
@@ -67,8 +70,16 @@ public class DeleteThumbnailsCacheDialog extends DialogFragment {
             Files.formatFromItems(getContext(), files.toArray(new File[0])));
         new ActionDialog(null, runnable)
             .show(getParentFragmentManager(),null);
+    }
+    
+    @Override
+    @MainThread
+    @CallSuper
+    public void onDestroy() {
+        super.onDestroy();
         
         FileSource.freeFiles(files);
+        FileSource.freeFiles(cache);
     }
     
 }
