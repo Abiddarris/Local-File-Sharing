@@ -23,6 +23,7 @@ public class UploadRunnable extends ActionRunnable {
     private File dest;
     private File[] items;
     private FileSource destSource;
+    private List<File> files;
     
     public static final String TAG = Log.getTag(UploadRunnable.class);
     
@@ -50,7 +51,7 @@ public class UploadRunnable extends ActionRunnable {
     public void onExecute(BaseRunnable context) throws Exception {
         prepare();
 
-        List<File> files = new ArrayList<>();
+        files = new ArrayList<>();
         for (File file : items) {
             Files.getFilesTree(files, file);
         }
@@ -83,7 +84,7 @@ public class UploadRunnable extends ActionRunnable {
                 uploadFile(originalFile, destFile);
             }
             
-            FileSource.freeFiles(originalFile, destFile);
+            FileSource.freeFiles(destFile);
         }
     }
 
@@ -128,5 +129,13 @@ public class UploadRunnable extends ActionRunnable {
         updateProgress(1);
     }
     
+    @Override
+    public void onFinalization() {
+        super.onFinalization();
+        
+        FileSource.freeFiles(items);
+        FileSource.freeFiles(dest);
+        FileSource.freeFiles(files);
+    }
     
 }
