@@ -6,17 +6,16 @@ import com.abiddarris.lanfileviewer.actions.ActionDialog;
 import com.abiddarris.lanfileviewer.explorer.Explorer;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FilePointer;
+import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.utils.CacheManager;
 import com.gretta.util.Randoms;
-import com.abiddarris.lanfileviewer.file.FileSource;
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-// TODO: Refactor this class
-public class DownloadManager extends CacheManager<File, File>{
+public class DownloadManager extends CacheManager<FilePointer, FilePointer>{
     
     private static DownloadManager downloadManager;
     
@@ -28,21 +27,25 @@ public class DownloadManager extends CacheManager<File, File>{
         this.context = context;
     }
     
-    public void get(File item, Explorer explorer, OnDownloadedListener listener) {
+    public void get(FilePointer item, Explorer explorer, OnDownloadedListener listener) {
         executor.submit(new BaseRunnable(c -> {
             this.explorer = explorer;        
                     
-            File file = get(item);
+            FilePointer file = get(item);
             listener.onDownloaded(file);
         }));
     }
     
     @Override
-    protected File create(File item) {
+    protected FilePointer create(FilePointer itemPointer) {
         String folderName = Randoms.getRandomString()
             .get(12);
         
-        File dest = FileSource.createFile(context, getDownloadFolder(context), folderName);
+        File downloadFolder = getDownloadFolder(context);
+        File dest = FileSource.createFile(context, downloadFolder, folderName);
+       
+        FileSource.freeFiles(downloadFolder);
+        
         dest.makeDirs();
         
         Log.debug.log(TAG, "download dest : " + dest.getPath());
@@ -51,27 +54,30 @@ public class DownloadManager extends CacheManager<File, File>{
         ApplicationCore.getMainHandler()
             .post(c -> {
                 new ActionDialog(explorer,  new DownloadAndOpenRunnable(
-                    new FilePointer[]{item.getFilePointer()}, dest.getFilePointer(), done))
+                    new FilePointer[]{itemPointer}, dest.getFilePointer(), done))
                     .show(explorer.getFragment().getParentFragmentManager(), null);
             });
         
         while(!done.get()) {
         }
         
-        File file = FileSource.getDefaultLocalSource(context)
-            .getFile(dest.getPath() + "/" + item.getName());
+        File item = itemPointer.get();
+        FilePointer file = FileSource.getFilePointer(
+            context, dest, item.getName());
         Log.debug.log(TAG, "downloaded file : " + file);
+        
+        FileSource.freeFiles(item, dest);
         
         return file;
     }
     
     @Override
-    protected boolean validate(File key, File value) {
+    protected boolean validate(FilePointer key, FilePointer value) {
         return true;
     }
     
     public static interface OnDownloadedListener {
-        void onDownloaded(File item);
+        void onDownloaded(FilePointer item);
     }
     
     private class DownloadAndOpenRunnable extends DownloadRunnable {
@@ -79,14 +85,10 @@ public class DownloadManager extends CacheManager<File, File>{
         private final String TAG = Log.getTag(DownloadAndOpenRunnable.class);
         
         private AtomicBoolean done;
-        private File item;
-        private File dest;
-    
+        
         DownloadAndOpenRunnable(FilePointer[] item, FilePointer dest, AtomicBoolean done) {
             super(item, dest);
         
-            this.item = item[0].get();
-            this.dest = dest.get();
             this.done = done;
         }
     
@@ -99,7 +101,12 @@ public class DownloadManager extends CacheManager<File, File>{
     }
     
     public static File getDownloadFolder(Context context) {
-        return FileSource.createFile(context, FileSource.getCacheDirectory(context), "download");
+        File cache = FileSource.getCacheDirectory(context);
+        File downloadFolder = FileSource.createFile(context, cache , "download");
+        
+        FileSource.freeFiles(cache);
+        
+        return downloadFolder;
     }
     
     public static DownloadManager getDownloadManager(Context context) {

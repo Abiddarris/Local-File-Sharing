@@ -290,7 +290,8 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
                 File file = checked.toArray(new File[0])[0];
                 Context context = getExplorer().getContext();
                 DownloadManager.getDownloadManager(context)
-                    .get(file, getExplorer(), (result) -> {
+                    .get(file.getFilePointer(), getExplorer(), (resultPointer) -> {
+                        File result = resultPointer.get();
                         result.updateDataSync(REQUEST_ABSOLUTE_PATH, REQUEST_GET_MIME_TYPE);   
                         Uri uri = FileProvider.getUriForFile(context, 
                             context.getPackageName() + ".provider",
@@ -300,6 +301,9 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
                             .post((c) -> {
                                 Intent intent = new Intent(Intent.ACTION_VIEW);
                                 intent.setDataAndType(uri, result.getMimeType());
+                            
+                                FileSource.freeFiles(result);
+                            
                                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                                     context.startActivity(intent);
                             });

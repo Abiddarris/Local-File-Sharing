@@ -153,6 +153,11 @@ public abstract class FileSource extends ObjectRecycler<String, File>{
             .getFile(parent.getPath() + "/" + name);
     }
     
+    public static FilePointer getFilePointer(Context context, File parent, String name) {
+        return getDefaultLocalSource(context)
+            .getFilePointer(parent.getPath() + "/" + name);
+    }
+    
     public static File getCacheDirectory(Context context) {
         return getDefaultLocalSource(context)
             .getFile(context.getCacheDir().getPath());
