@@ -1,4 +1,4 @@
-package com.abiddarris.lanfileviewer.actions.uploads;
+package com.abiddarris.lanfileviewer.actions.runnables;
 
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 

@@ -1,33 +1,25 @@
 package com.abiddarris.lanfileviewer.ui;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
-import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.ActionDialog;
 import com.abiddarris.lanfileviewer.actions.ActionRunnable;
-import com.abiddarris.lanfileviewer.actions.uploads.UploadRunnable;
+import com.abiddarris.lanfileviewer.actions.runnables.UploadRunnable;
 import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
 import com.abiddarris.lanfileviewer.explorer.FilesSelectorFragment;
 import com.abiddarris.lanfileviewer.explorer.LocalFilesSelectorActivity;
 import com.abiddarris.lanfileviewer.explorer.SortByDialog;
-import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
-import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
 
