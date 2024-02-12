@@ -21,6 +21,7 @@ public class DownloadRunnable extends ActionRunnable {
 
     private File[] items;
     private File dest;
+    private List<File> files;
     
     public static final String TAG = Log.getTag(DownloadRunnable.class);
     
@@ -45,7 +46,7 @@ public class DownloadRunnable extends ActionRunnable {
         
         FileSource source = dest.getSource();
 
-        List<File> files = new ArrayList<>();
+        files = new ArrayList<>();
         for (File file : items) {
             Files.getFilesTree(files, file);
         }
@@ -78,9 +79,8 @@ public class DownloadRunnable extends ActionRunnable {
                 downloadFile(originalFile, destFile);
             }
             
-            FileSource.freeFiles(originalFile, destFile);
+            FileSource.freeFiles(destFile);
         }
-        FileSource.freeFiles(dest);
     }
     
     public void downloadDirectory(File file) {
@@ -115,4 +115,14 @@ public class DownloadRunnable extends ActionRunnable {
         os.close();
         is.close();
     }
+    
+    @Override
+    public void onFinalization() {
+        super.onFinalization();
+        
+        FileSource.freeFiles(files);
+        FileSource.freeFiles(items);
+        FileSource.freeFiles(dest);
+    }
+    
 }
