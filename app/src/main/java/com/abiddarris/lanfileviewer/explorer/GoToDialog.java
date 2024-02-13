@@ -38,13 +38,14 @@ public class GoToDialog extends DialogFragment {
                 
             file.updateData((e) -> {
                 if(file.isDirectory()) {
-                    explorer.open(file.getFilePointer());  
+                    explorer.open(file.getFilePointer()); 
+                    FileSource.freeFiles(file); 
                     return;        
                 }       
                 Toast.makeText(context,
                      String.format(context.getString(R.string.cannot_open_message), file.getPath()), Toast.LENGTH_SHORT)
                     .show();
-                FileSource.freeFiles(file);      
+                FileSource.freeFiles(file); 
             }, REQUEST_IS_DIRECTORY);
               
             dismiss();
