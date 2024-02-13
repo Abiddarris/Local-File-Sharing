@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.DialogTextInputBinding;
 import com.abiddarris.lanfileviewer.file.File;
+import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.gretta.util.log.Log;
@@ -71,6 +72,8 @@ public class RenameDialog extends DialogFragment {
             explorer.refresh((e) -> {
                 scrollExplorer(file);
             });
+                
+            FileSource.freeFiles(file);  
             
             if(!success) {
                 Context context = explorer.getContext();         
