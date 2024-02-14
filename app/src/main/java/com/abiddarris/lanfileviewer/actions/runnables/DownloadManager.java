@@ -12,6 +12,7 @@ import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.utils.CacheManager;
+import com.abiddarris.lanfileviewer.utils.Timer;
 import com.gretta.util.Randoms;
 import com.gretta.util.log.Log;
 import java.io.BufferedReader;
@@ -26,8 +27,10 @@ public class DownloadManager extends CacheManager<FilePointer, FilePointer>{
     
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Explorer explorer;
+    private int savedCount;
     private Context context;
     private NetworkFileSource source;
+    
     
     public DownloadManager(Context context, NetworkFileSource source) {
         this.context = context;
@@ -121,6 +124,13 @@ public class DownloadManager extends CacheManager<FilePointer, FilePointer>{
     protected void onSave(Map<FilePointer, FilePointer> caches) throws Exception {
         super.onSave(caches);
         
+        Timer timer = new Timer();
+        
+        if(savedCount == caches.size()) {
+            Log.debug.log(TAG, "Skipping save");
+            return;
+        }
+        
         File downloadFolder = getDownloadFolder(context);
         File downloadData = FileSource.createFile(context, downloadFolder, source.getServerId() + "-data");
         
@@ -129,6 +139,8 @@ public class DownloadManager extends CacheManager<FilePointer, FilePointer>{
         BufferedWriter writer = new BufferedWriter(downloadData.newWriter());
         
         FileSource.freeFiles(downloadData);
+        
+        savedCount = caches.size();
         
         for(FilePointer key : caches.keySet()) {
             FilePointer value = caches.get(key);
@@ -140,6 +152,8 @@ public class DownloadManager extends CacheManager<FilePointer, FilePointer>{
         }
         writer.flush();
         writer.close();
+        
+        Log.debug.log(TAG, "Saving download ( " + toString() + ")caches take " + timer.reset() + " ms");
     }
 
     @Override
@@ -167,6 +181,8 @@ public class DownloadManager extends CacheManager<FilePointer, FilePointer>{
             caches.put(key, value);
         }
         reader.close();
+        
+        savedCount = caches.size();
         
         return caches;
     }
