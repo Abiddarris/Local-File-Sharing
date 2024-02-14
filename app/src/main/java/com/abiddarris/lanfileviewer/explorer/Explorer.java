@@ -1,28 +1,25 @@
 package com.abiddarris.lanfileviewer.explorer;
 
-import com.abiddarris.lanfileviewer.actions.runnables.DownloadManager;
-import com.abiddarris.lanfileviewer.file.FileSource;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Network;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import com.abiddarris.lanfileviewer.ApplicationCore;
+import com.abiddarris.lanfileviewer.actions.runnables.DownloadManager;
 import com.abiddarris.lanfileviewer.databinding.FragmentFileExplorerBinding;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FilePointer;
+import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gretta.util.log.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Future;
 
-public class Explorer {
+public class Explorer implements DefaultLifecycleObserver {
 
     public static final String TAG = Log.getTag(Explorer.class);
     
@@ -254,6 +251,13 @@ public class Explorer {
     
     public void addOnUpdatedListener(OnExplorerUpdatedListener listener) {
     	updatedListeners.add(listener);
+    }
+    
+    @Override
+    public void onDestroy(LifecycleOwner owner) {
+        getAdapter()
+            .setFiles(new File[0]);
+        FileSource.freeFiles(parent);
     }
     
     public static interface OnExplorerUpdatedListener {

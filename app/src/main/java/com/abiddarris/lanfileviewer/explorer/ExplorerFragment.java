@@ -74,6 +74,8 @@ public abstract class ExplorerFragment extends Fragment {
         }
         
         explorer = new Explorer(this, binding, binding.refreshlayout);
+        getLifecycle().addObserver(explorer);
+        
         for(OnExplorerCreatedListener listener : explorerCreatedListener) {
             listener.onExplorerCreated(this, explorer);
         }
