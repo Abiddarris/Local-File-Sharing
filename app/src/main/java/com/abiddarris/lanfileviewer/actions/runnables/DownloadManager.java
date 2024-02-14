@@ -1,5 +1,7 @@
 package com.abiddarris.lanfileviewer.actions.runnables;
 
+import static com.abiddarris.lanfileviewer.file.Requests.*;
+
 import android.content.Context;
 import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.actions.ActionDialog;
@@ -7,24 +9,29 @@ import com.abiddarris.lanfileviewer.explorer.Explorer;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.utils.CacheManager;
 import com.gretta.util.Randoms;
 import com.gretta.util.log.Log;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DownloadManager extends CacheManager<FilePointer, FilePointer>{
     
-    private static DownloadManager downloadManager;
-    
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Explorer explorer;
     private Context context;
+    private NetworkFileSource source;
     
-    public DownloadManager(Context context) {
+    public DownloadManager(Context context, NetworkFileSource source) {
         this.context = context;
+        this.source = source;
     }
     
     public void get(FilePointer item, Explorer explorer, OnDownloadedListener listener) {
@@ -109,13 +116,58 @@ public class DownloadManager extends CacheManager<FilePointer, FilePointer>{
         return downloadFolder;
     }
     
-    public static DownloadManager getDownloadManager(Context context) {
-        if(downloadManager == null) {
-            downloadManager = new DownloadManager(context);
+
+    @Override
+    protected void onSave(Map<FilePointer, FilePointer> caches) throws Exception {
+        super.onSave(caches);
+        
+        File downloadFolder = getDownloadFolder(context);
+        File downloadData = FileSource.createFile(context, downloadFolder, source.getServerId() + "-data");
+        
+        FileSource.freeFiles(downloadFolder);
+        
+        BufferedWriter writer = new BufferedWriter(downloadData.newWriter());
+        
+        FileSource.freeFiles(downloadData);
+        
+        for(FilePointer key : caches.keySet()) {
+            FilePointer value = caches.get(key);
+            
+            writer.write(key.getPath());
+            writer.newLine();
+            writer.write(value.getPath());
+            writer.newLine();
         }
-        return downloadManager;
+        writer.flush();
+        writer.close();
     }
-    
-    
-    
+
+    @Override
+    protected Map<FilePointer, FilePointer> onLoad() throws Exception {
+        Map<FilePointer, FilePointer> caches = new HashMap<>();
+        
+        File downloadFolder = getDownloadFolder(context);
+        File downloadData = FileSource.createFile(context, downloadFolder, source.getServerId() + "-data");
+        
+        FileSource.freeFiles(downloadFolder);
+        
+        downloadData.updateDataSync(REQUEST_EXISTS);
+        if(!downloadData.exists()) return caches;
+        
+        BufferedReader reader = new BufferedReader(downloadData.newReader());
+        
+        FileSource.freeFiles(downloadData);
+        
+        String data;
+        while((data = reader.readLine()) != null) {
+            FilePointer key = source.getFilePointer(data);
+            FilePointer value = source.getFilePointer(
+                reader.readLine());
+            
+            caches.put(key, value);
+        }
+        reader.close();
+        
+        return caches;
+    }
 }

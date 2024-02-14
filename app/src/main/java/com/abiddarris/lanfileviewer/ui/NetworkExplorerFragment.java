@@ -20,7 +20,6 @@ import com.abiddarris.lanfileviewer.explorer.LocalFilesSelectorActivity;
 import com.abiddarris.lanfileviewer.explorer.SortByDialog;
 import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
-
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
 
 public class NetworkExplorerFragment extends ExplorerFragment implements SharedPreferences.OnSharedPreferenceChangeListener {

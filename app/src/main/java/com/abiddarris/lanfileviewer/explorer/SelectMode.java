@@ -158,7 +158,6 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
         
     }
     
-
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         this.view = mode;
@@ -278,7 +277,7 @@ public class SelectMode extends BottomToolbarMode implements ActionMode.Callback
             case R.id.downloadAndOpen :
                 File file = checked.toArray(new File[0])[0];
                 Context context = getExplorer().getContext();
-                DownloadManager.getDownloadManager(context)
+                getExplorer().getDownloadManager()
                     .get(file.getFilePointer(), getExplorer(), (resultPointer) -> {
                         File result = resultPointer.get();
                         result.updateDataSync(REQUEST_ABSOLUTE_PATH, REQUEST_GET_MIME_TYPE);   

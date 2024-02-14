@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.explorer;
 
+import com.abiddarris.lanfileviewer.actions.runnables.DownloadManager;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import static com.abiddarris.lanfileviewer.file.Requests.*;
 
@@ -30,6 +31,7 @@ public class Explorer {
 
     private boolean loading;
     private boolean error;
+    private DownloadManager downloadManager;
     private ExplorerFragment fragment;
     private FileSorter sorter = FileSorter.createSorter(FileSorter.NAME | FileSorter.ASCENDING);
     private FragmentFileExplorerBinding ui;
@@ -258,5 +260,13 @@ public class Explorer {
         
         void onUpdated(Explorer e);
         
+    }
+
+    public DownloadManager getDownloadManager() {
+        return this.downloadManager;
+    }
+    
+    public void setDownloadManager(DownloadManager downloadManager) {
+        this.downloadManager = downloadManager;
     }
 }

@@ -55,8 +55,13 @@ public abstract class CacheManager<K,V> {
         }
         loaded = true;
         loading = true;
-            
-        caches = onLoad();
+           
+        try {
+        	caches = onLoad();
+        } catch(Exception err) {
+        	throw new RuntimeException(err);
+        } 
+        
         loading = false;
             
         if(caches == null) {
@@ -76,7 +81,7 @@ public abstract class CacheManager<K,V> {
     
     protected abstract boolean validate(K key, V value);
     
-    protected Map<K,V> onLoad() {
+    protected Map<K,V> onLoad() throws Exception {
         return new HashMap<>();
     }
     

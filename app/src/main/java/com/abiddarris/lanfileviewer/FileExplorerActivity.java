@@ -1,23 +1,15 @@
 package com.abiddarris.lanfileviewer;
 
-import android.app.Application;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
-import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TextView;
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentFactory;
 import com.abiddarris.lanfileviewer.ConnectionService.ConnectionServiceBridge;
+import com.abiddarris.lanfileviewer.actions.runnables.DownloadManager;
 import com.abiddarris.lanfileviewer.databinding.LayoutFileExplorerBinding;
 import com.abiddarris.lanfileviewer.explorer.ExplorerActivity;
 import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
@@ -26,8 +18,6 @@ import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
 import com.abiddarris.lanfileviewer.ui.NetworkExplorerFragment;
-import com.abiddarris.lanfileviewer.file.sharing.NetworkFile;
-
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -58,9 +48,8 @@ public class FileExplorerActivity extends ExplorerActivity
                         Class<? extends Fragment> fragmentClass = loadFragmentClass(loader,name);
                         if(fragmentClass == NetworkExplorerFragment.class) {
                             ApplicationCore core = (ApplicationCore)getApplication();
-                            ExplorerFragment fragment = new NetworkExplorerFragment(core.getCurrentFileSource());
-                            fragment.addOnExplorerCreatedListener((f,e) -> pathFragment.setExplorer(e));
-                        
+                            ExplorerFragment fragment = create(core.getCurrentFileSource());
+                            
                             return fragment;
                         }   
                             
@@ -107,22 +96,29 @@ public class FileExplorerActivity extends ExplorerActivity
                 NetworkFileSource source = info.openConnection(this);
                 Log.debug.log(TAG, "server id " + source.getServerId());
                     
-                NetworkExplorerFragment fragment = new NetworkExplorerFragment(source);    
-                fragment.addOnExplorerCreatedListener((f,e) -> pathFragment.setExplorer(e));
-                    
                 getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.fragmentContainer, fragment)
+                    .add(R.id.fragmentContainer, create(source))
                     .commit();
-                
-                ((ApplicationCore) getApplication())
-                    .setCurrentFileSource(source);
             } catch(Exception e) {
                 new ExceptionDialog(e)
                     .show(getSupportFragmentManager(), null);
                 Log.debug.log(TAG, e);
             }
         });
+    }
+    
+    private NetworkExplorerFragment create(NetworkFileSource source) {
+        NetworkExplorerFragment fragment = new NetworkExplorerFragment(source);    
+        fragment.addOnExplorerCreatedListener((f,e) -> {
+            pathFragment.setExplorer(e);
+            e.setDownloadManager(new DownloadManager(this, source)); 
+        });
+         
+        ((ApplicationCore) getApplication())
+            .setCurrentFileSource(source);
+        
+        return fragment;
     }
 
     @Override

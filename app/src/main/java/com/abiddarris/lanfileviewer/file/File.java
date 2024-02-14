@@ -9,15 +9,17 @@ import com.gretta.util.log.Log;
 import com.gretta.util.recycler.Poolable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Future;
-import org.json.JSONObject;
 
 public abstract class File extends Poolable implements Requests {
     
@@ -50,7 +52,7 @@ public abstract class File extends Poolable implements Requests {
         return get(key, null);
     }
     
-    @SuppressLint("unchecked")
+    @SuppressWarnings("unchecked")
     protected <T> T get(String key, String requestKey) {
         checkNotFreed();
         Value value = values.get(key);
@@ -109,7 +111,8 @@ public abstract class File extends Poolable implements Requests {
     public final TaskResult updateData(String... requests) {
         return updateData(e -> handleDefaultResult(e), requests);
     }
-
+    
+    @SuppressWarnings("unchecked")
     public final TaskResult updateData(Callback callback, String... requests) {
         checkNotFreed();
         return new TaskResult(getSource().runOnBackground(new BaseRunnable(c -> {
@@ -281,6 +284,14 @@ public abstract class File extends Poolable implements Requests {
     public final String getPath() {
         return path != null ? path : parent + 
             "/" + getName();
+    }
+    
+    public Reader newReader() throws IOException {
+        return new InputStreamReader(newInputStream());
+    }
+    
+    public Writer newWriter() throws IOException {
+        return new OutputStreamWriter(newOutputStream());
     }
     
     public final Progress copy(File dest) {
