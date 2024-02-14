@@ -12,6 +12,7 @@ import android.net.nsd.NsdServiceInfo;
 import android.util.Base64;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
+import com.abiddarris.lanfileviewer.settings.Settings;
 import com.abiddarris.lanfileviewer.utils.Thumbnails;
 import com.abiddarris.lanfileviewer.utils.Timer;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -215,6 +216,8 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         } else if(key.equalsIgnoreCase(REQUEST_REMOVE_PROGRESS)) {
            int id = request.optInt(KEY_PROGRESS_ID);
            progresses.remove(id);
+        } else if(key.equalsIgnoreCase(REQUEST_CONNECT)) {
+            response.put(KEY_SERVER_ID, Settings.getId(context));
         }
     }
     

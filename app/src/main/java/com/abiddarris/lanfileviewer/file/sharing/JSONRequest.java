@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 public final class JSONRequest implements Requests {
     
+    public static final String REQUEST_CONNECT = "requestConnect";
     public static final String REQUEST_GET_TOP_DIRECTORY_FILES = "requestGetTopDirectoryFiles";
     public static final String REQUEST_MAKE_DIRECTORIES = "requestMakeDirectories";
     public static final String REQUEST_COPY = "requestCopy";
@@ -26,6 +27,7 @@ public final class JSONRequest implements Requests {
     public static final String KEY_EXCEPTION = "exception";
     public static final String KEY_NEW_NAME = "newName";
     public static final String KEY_SUCESS = "sucess";
+    public static final String KEY_SERVER_ID = "serverId";
     
     public static JSONArray createRequest(String... requestKeys) {
         JSONArray requests = new JSONArray();

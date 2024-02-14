@@ -27,6 +27,7 @@ public class NetworkFileSource extends FileSource {
    
     private RootFile root;
     private SharingDevice device;
+    private String serverId;
     private URL server;
     
     public static final String TAG = Log.getTag(NetworkFileSource.class);
@@ -40,8 +41,13 @@ public class NetworkFileSource extends FileSource {
             ":" + device.getPort() + "/fetch");
         
         JSONObject request = new JSONObject()
-            .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_GET_TOP_DIRECTORY_FILES));
+            .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_CONNECT));
         JSONObject response = sendRequest(request);
+        serverId = response.getString(KEY_SERVER_ID);
+        
+        request = new JSONObject()
+            .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_GET_TOP_DIRECTORY_FILES));
+        response = sendRequest(request);
         JSONArray jsonTopDirectoryFiles = response.optJSONArray(KEY_TOP_DIRECTORY_FILES);
         
         for(int i = 0; i < jsonTopDirectoryFiles.length(); ++i) {
@@ -126,10 +132,14 @@ public class NetworkFileSource extends FileSource {
             return e;
         }
     }
-
+    
     @Override
     protected File newFile(String parent, String name) {
         return new NetworkFile(this, parent, null, name);
+    }
+    
+    public String getServerId() {
+    	return serverId;
     }
     
     public SharingDevice getDevice() {

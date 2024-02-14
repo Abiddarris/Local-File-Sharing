@@ -6,6 +6,8 @@ import android.os.Build;
 import androidx.preference.PreferenceManager;
 import com.abiddarris.lanfileviewer.file.local.LocalFileSource;
 import com.bumptech.glide.Glide;
+import com.gretta.util.RandomString;
+import com.gretta.util.Randoms;
 import com.gretta.util.log.Log;
 import java.io.File;
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import java.util.Set;
 public class Settings {
     
     public static final String TAG = Log.getTag(Settings.class);
+    
+    private static final String ID = "id";
     
     public static String getDefaultName(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -47,6 +51,22 @@ public class Settings {
     
     public static List<File> getDefaultRoots(Context context) {
     	return toList(createDefaultRoots(context));
+    }
+    
+    public static String getId(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String id = preferences.getString(ID, null);
+        
+        if(id == null) {
+            id = Randoms.getRandomString()
+                .get(16);
+            
+            preferences.edit()
+                .putString(ID, id)
+                .commit();
+        }
+        
+        return id;
     }
     
     private static List<File> toList(Set<String> paths) {

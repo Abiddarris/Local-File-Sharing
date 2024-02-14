@@ -105,6 +105,8 @@ public class FileExplorerActivity extends ExplorerActivity
         executor.submit(() -> {
             try {
                 NetworkFileSource source = info.openConnection(this);
+                Log.debug.log(TAG, "server id " + source.getServerId());
+                    
                 NetworkExplorerFragment fragment = new NetworkExplorerFragment(source);    
                 fragment.addOnExplorerCreatedListener((f,e) -> pathFragment.setExplorer(e));
                     
