@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public abstract class CacheManager<K,V> {
@@ -13,6 +14,7 @@ public abstract class CacheManager<K,V> {
     private volatile boolean loading;
     private volatile Map<K,V> caches; 
     private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledFuture future;
     
     protected final String TAG = Log.getTag(getClass());
     
@@ -68,7 +70,7 @@ public abstract class CacheManager<K,V> {
             throw new IllegalArgumentException("onLoad() cannot return null");
         }    
             
-        scheduleSave(executor, new BaseRunnable((c) -> save()));
+        future = scheduleSave(executor, new BaseRunnable((c) -> save()));
     }
     
     public final void save() throws Exception{
@@ -76,6 +78,11 @@ public abstract class CacheManager<K,V> {
     }
     
     public void clear() {}
+    
+    public void quit() {
+        if(future != null)
+            future.cancel(true);
+    }
     
     protected abstract V create(K key);
     
@@ -87,9 +94,10 @@ public abstract class CacheManager<K,V> {
     
     protected void onSave(Map<K,V> caches) throws Exception {}
     
-    protected void scheduleSave(ScheduledExecutorService executor, BaseRunnable runnable) {
+    protected ScheduledFuture scheduleSave(ScheduledExecutorService executor, BaseRunnable runnable) {
         Log.debug.log(TAG, "scheduling...");
-        executor.scheduleWithFixedDelay(runnable, 0, 1, TimeUnit.MINUTES);
+        return executor.scheduleWithFixedDelay(runnable, 0, 1, TimeUnit.MINUTES);
     }
+    
     
 }

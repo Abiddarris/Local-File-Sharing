@@ -258,6 +258,10 @@ public class Explorer implements DefaultLifecycleObserver {
         getAdapter()
             .setFiles(new File[0]);
         FileSource.freeFiles(parent);
+        
+        DownloadManager manager = getDownloadManager();
+        if(manager != null) 
+            manager.quit();
     }
     
     public static interface OnExplorerUpdatedListener {
