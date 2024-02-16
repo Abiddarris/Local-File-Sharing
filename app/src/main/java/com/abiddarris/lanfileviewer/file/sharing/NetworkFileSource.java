@@ -6,6 +6,7 @@ import android.content.Context;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.RootFile;
+import com.abiddarris.lanfileviewer.settings.Settings;
 import com.gretta.util.log.Log;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -41,7 +42,10 @@ public class NetworkFileSource extends FileSource {
             ":" + device.getPort() + "/fetch");
         
         JSONObject request = new JSONObject()
-            .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_CONNECT));
+            .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_CONNECT))
+            .put(KEY_CLIENT_ID, Settings.getId(context))
+            .put(KEY_CLIENT_NAME, Settings.getDefaultName(context));
+        
         JSONObject response = sendRequest(request);
         serverId = response.getString(KEY_SERVER_ID);
         

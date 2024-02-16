@@ -28,6 +28,8 @@ public final class JSONRequest implements Requests {
     public static final String KEY_NEW_NAME = "newName";
     public static final String KEY_SUCESS = "sucess";
     public static final String KEY_SERVER_ID = "serverId";
+    public static final String KEY_CLIENT_ID = "clientId";
+    public static final String KEY_CLIENT_NAME = "clientName";
     
     public static JSONArray createRequest(String... requestKeys) {
         JSONArray requests = new JSONArray();

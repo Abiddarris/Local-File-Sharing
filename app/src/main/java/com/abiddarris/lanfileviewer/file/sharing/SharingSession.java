@@ -217,6 +217,11 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
            int id = request.optInt(KEY_PROGRESS_ID);
            progresses.remove(id);
         } else if(key.equalsIgnoreCase(REQUEST_CONNECT)) {
+            String clientId = request.optString(KEY_CLIENT_ID);
+            String clientName = request.optString(KEY_CLIENT_NAME);
+            
+            Log.debug.log(TAG, "clientId : " + clientId + ", clientName : " + clientName);
+            
             response.put(KEY_SERVER_ID, Settings.getId(context));
         }
     }
