@@ -29,6 +29,7 @@ public class NetworkFileSource extends FileSource {
     private RootFile root;
     private SharingDevice device;
     private String serverId;
+    private String session;
     private URL server;
     
     public static final String TAG = Log.getTag(NetworkFileSource.class);
@@ -38,8 +39,7 @@ public class NetworkFileSource extends FileSource {
         
         this.device = device;
         
-        server = new URL("http://" + device.getHost().getHostName() +
-            ":" + device.getPort() + "/fetch");
+        server = new URL(getBaseURL() + "/connect");
         
         JSONObject request = new JSONObject()
             .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_CONNECT))
@@ -48,6 +48,10 @@ public class NetworkFileSource extends FileSource {
         
         JSONObject response = sendRequest(request);
         serverId = response.getString(KEY_SERVER_ID);
+        session = response.getString(KEY_SESSION);
+        
+        server = new URL(getBaseURL() + 
+            String.format("/fetch?%s=%s", SharingSession.SESSION, session));
         
         request = new JSONObject()
             .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_GET_TOP_DIRECTORY_FILES));
@@ -60,6 +64,15 @@ public class NetworkFileSource extends FileSource {
          
             registerToRoot(child);
         }
+    }
+    
+    String getBaseURL() {
+        return "http://" + device.getHost().getHostName() +
+            ":" + device.getPort();
+    }
+    
+    String getSession(){
+        return session;
     }
     
     public JSONObject sendRequest(JSONObject json) throws RequestException {

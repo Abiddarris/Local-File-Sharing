@@ -17,6 +17,7 @@ import com.abiddarris.lanfileviewer.utils.Thumbnails;
 import com.abiddarris.lanfileviewer.utils.Timer;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.gretta.util.Randoms;
 import com.gretta.util.log.Log;
 import fi.iki.elonen.NanoHTTPD;
 import java.io.BufferedInputStream;
@@ -26,9 +27,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -42,11 +46,13 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     private Context context;
     private FileSource source;
     private ExecutorService executor = Executors.newCachedThreadPool();
+    private Set<String> sessions = new HashSet<>();
     private Map<Integer, File.Progress> progresses = new HashMap<>();
     private NsdManager nsdManager;
     
     private static final String TAG = Log.getTag(SharingSession
         .class);
+    static final String SESSION = "session";
     
     public SharingSession(Context context, FileSource source) {
         super(0);
@@ -85,10 +91,16 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     @Override
     public Response serve(IHTTPSession session) {
         try {
+            if(session.getMethod() == Method.POST &&
+                session.getUri().startsWith("/connect")) {
+                    return handleFetch(session);
+            }
+            Response unauthorizedResponse = checkSession(session);
+            if(unauthorizedResponse != null) return unauthorizedResponse;
+            
             if(session.getMethod() == Method.GET) {
                 return getFile(session);
-            }
-            if(session.getMethod() == Method.POST) {
+            } else if(session.getMethod() == Method.POST) {
                 return handlePost(session);
             }
             return null;
@@ -114,6 +126,24 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             
             return newFixedLengthResponse(Response.Status.INTERNAL_ERROR, "application/octet-stream", inputStream, size);
         }
+    }
+    
+    private Response checkSession(IHTTPSession iSession) {
+        String session = iSession.getParms().get(SESSION);
+        if(session == null || !sessions.contains(session)) return newFixedLengthResponse(Response.Status.UNAUTHORIZED, "text/plain", "Session params not found");
+        
+        return null;
+    }
+    
+    private String createSession() {
+        String session = Randoms.getRandomString()
+            .get(12);
+        if(sessions.contains(session)) {
+            return createSession();
+        }
+        
+        sessions.add(session);
+        return session;
     }
 
     private Response handlePost(IHTTPSession session) throws Exception {
@@ -171,6 +201,10 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         String path = request.optString(KEY_PATH);
         for(int i = 0; i < requestKeys.length(); ++i) {
         	String key = requestKeys.getString(i);
+            if(!key.equalsIgnoreCase(REQUEST_CONNECT)) {
+                Response unauthorizedResponse = checkSession(session);
+                if(unauthorizedResponse != null) return unauthorizedResponse;
+            }
             if(path != null) {
                 fetchFileRelated(request,response,key,path);
             }
@@ -222,7 +256,10 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             
             Log.debug.log(TAG, "clientId : " + clientId + ", clientName : " + clientName);
             
+            
+            
             response.put(KEY_SERVER_ID, Settings.getId(context));
+            response.put(KEY_SESSION, createSession());
         }
     }
     
@@ -421,4 +458,5 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             lock.countDown();
         }
     }
+        
 }

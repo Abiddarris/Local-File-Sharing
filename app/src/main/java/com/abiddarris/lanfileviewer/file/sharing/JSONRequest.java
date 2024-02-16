@@ -30,6 +30,7 @@ public final class JSONRequest implements Requests {
     public static final String KEY_SERVER_ID = "serverId";
     public static final String KEY_CLIENT_ID = "clientId";
     public static final String KEY_CLIENT_NAME = "clientName";
+    public static final String KEY_SESSION = "session";
     
     public static JSONArray createRequest(String... requestKeys) {
         JSONArray requests = new JSONArray();

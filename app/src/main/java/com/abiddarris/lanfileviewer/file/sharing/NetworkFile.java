@@ -89,9 +89,9 @@ public class NetworkFile extends File {
         checkNotFreed();
         
         SharingDevice device = source.getDevice();
-        String uri = String.format("http://%s:%s%s", 
-            device.getHost().getHostAddress(), device.getPort(),
-            encodePath(getPath()));
+        String uri = String.format("%s%s?%s=%s", 
+            source.getBaseURL(),encodePath(getPath()),
+            SharingSession.SESSION, source.getSession());
         
         return Uri.parse(uri);
     }
@@ -106,6 +106,8 @@ public class NetworkFile extends File {
                     .append("/");
             }       
 
+            if(builder.length() != 0 && builder.charAt(builder.length() - 1) == '/')
+                builder.deleteCharAt(builder.length() - 1);
             return builder.toString();
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("cannot create uri for this file", e);
@@ -153,8 +155,9 @@ public class NetworkFile extends File {
         }
         SharingDevice device = source.getDevice();
         URL outputStreamURL = new URL(String.format(
-                "http://%s:%s/upload?path=%s", device.getHost().getHostAddress(), 
-                device.getPort(), URLEncoder.encode(getPath(), "UTF-8")));
+                "%s/upload?path=%s&%s=%s", source.getBaseURL(),
+                 URLEncoder.encode(getPath(), "UTF-8"), 
+                 SharingSession.SESSION, source.getSession()));
         
         NetworkOutputStream stream = new NetworkOutputStream(outputStreamURL);
         stream.setName("stream");
@@ -286,11 +289,9 @@ public class NetworkFile extends File {
     public void createThumbnail(ThumbnailCallback callback) {
         checkNotFreed();
         
-        SharingDevice device = source.getDevice();
-        String host = device.getHost().getHostAddress();
-        int port = device.getPort();
-        
-        Uri uri = Uri.parse(String.format("http://%s:%s%s?type=thumbnail", host, port, encodePath(getPath())));
+        Uri uri = Uri.parse(String.format("%s%s?type=thumbnail&%s=%s",
+                source.getBaseURL(), encodePath(getPath()), 
+                SharingSession.SESSION, source.getSession()));
         callback.onThumbnailCreated(uri);
     }
   
