@@ -262,6 +262,12 @@ public class Explorer implements DefaultLifecycleObserver {
         DownloadManager manager = getDownloadManager();
         if(manager != null) 
             manager.quit();
+        
+        try {
+            manager.save();
+        } catch (Exception e) {
+            Log.err.log(TAG, e);
+        }
     }
     
     public static interface OnExplorerUpdatedListener {
