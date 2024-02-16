@@ -15,6 +15,8 @@ public abstract class ActionRunnable extends BaseRunnable implements Handler.Cal
 
     private ActionDialog dialog;
     private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper(), this));
+    private long maxProgress;
+    private int percentage;
     
     private static final String KEY_NAME = "name";
     private static final String KEY_INDEX = "index";
@@ -68,19 +70,15 @@ public abstract class ActionRunnable extends BaseRunnable implements Handler.Cal
                 data = message.getData();
                 
                 long progress = data.getLong(KEY_PROGRESS);
-                int max = getView().progressIndicator.getMax();
-                double oldProgress = getView().progressIndicator.getProgress();
-                double oldPercentage = Math.floor(oldProgress / max * 100);
-        
-                int percentage = (int)Math.floor((double)progress / max * 100);
-                Log.debug.log(getTag(), "try to update progress with max : " + max + ", oldProgress : " + oldProgress + ", old percentage : " + oldPercentage + ", percentage : " + percentage);
-                if(percentage > oldPercentage) {
-                    getView().progressIndicator.setProgress((int) progress);
-                    getView().progressPercent.setText(percentage + "%");
+                int percentage = data.getInt(KEY_PERCENTAGE);
             
-                    Log.debug.log(getTag(), "updating progress progress : " + progress + ", percentage : " + percentage);
-                }
-        }
+                getView().progressIndicator.setProgress((int) progress);
+                getView().progressPercent.setText(percentage + "%");
+            
+                Log.debug.log(getTag(), "updating progress progress : " + progress + ", percentage : " + percentage);
+            
+        }        
+                
         return true;
     }
     
@@ -99,6 +97,8 @@ public abstract class ActionRunnable extends BaseRunnable implements Handler.Cal
     }
     
     protected void setMaxProgress(long maxProgress) {
+        this.maxProgress = maxProgress;
+        
         Bundle bundle = new Bundle();
         bundle.putLong(KEY_MAX_PROGRESS, maxProgress);
         
@@ -112,11 +112,17 @@ public abstract class ActionRunnable extends BaseRunnable implements Handler.Cal
     protected void updateProgress(long progress) {
         Message message = handler.obtainMessage();
         
-        Bundle bundle = message.getData();
-        bundle.putLong(KEY_PROGRESS, progress);
-        
-        message.what = UPDATE_PROGRESS;
-        handler.sendMessage(message);
+        int percentage = (int)Math.floor((double)progress / maxProgress * 100.0);
+        Log.debug.log(getTag(), "try to update progress with max : " + maxProgress + ", old percentage : " + this.percentage + ", percentage : " + percentage);
+        if(percentage > this.percentage) {
+            Bundle bundle = message.getData();
+            bundle.putLong(KEY_PROGRESS, progress);
+            bundle.putInt(KEY_PERCENTAGE, percentage);
+            
+            message.what = UPDATE_PROGRESS;
+            handler.sendMessage(message);
+        }
+        this.percentage = percentage;
     }
 
     protected void start() {
