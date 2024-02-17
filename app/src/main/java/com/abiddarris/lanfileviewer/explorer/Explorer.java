@@ -260,8 +260,9 @@ public class Explorer implements DefaultLifecycleObserver {
         FileSource.freeFiles(parent);
         
         DownloadManager manager = getDownloadManager();
-        if(manager != null) 
-            manager.quit();
+        if(manager == null) return;
+        
+        manager.quit();
         
         try {
             manager.save();
