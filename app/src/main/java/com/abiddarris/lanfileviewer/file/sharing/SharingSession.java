@@ -436,27 +436,5 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     public void onServiceUnregistered(NsdServiceInfo info) {
         Log.debug.log(TAG, "Sucess unregistering service");
     }
-    
-    private static class LoadTarget extends CustomTarget<java.io.File> {
-
-        private CountDownLatch lock = new CountDownLatch(1);
-        private volatile java.io.File thumbnail;        
-
-        @Override
-        public void onLoadCleared(Drawable arg0) {}
-
-        @Override
-        public void onResourceReady(java.io.File thumbnail, Transition<? super java.io.File> arg1) {
-            this.thumbnail = thumbnail;
-            Log.debug.log("ThumbnailLoader", "success ");
-            lock.countDown();
-        }
-
-        @Override
-        public void onLoadFailed(Drawable drawable) {
-                        Log.debug.log("ThumbnailLoader", "failed ");
-            lock.countDown();
-        }
-    }
         
 }
