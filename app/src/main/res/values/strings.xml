@@ -97,4 +97,6 @@
     <string name="go_to">Go to</string>
     <string name="go">Go</string>
     <string name="cannot_open_message">Cannot open %s</string>
+    <string name="confirm_connect_request">Confirm connect request</string>
+    <string name="confirm_connect_request_desc">Show a notification when client tries to connect to your server</string>
 </resources>

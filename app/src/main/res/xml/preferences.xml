@@ -30,6 +30,10 @@
     <PreferenceCategory
         app:title="@string/permission">
         
+        <SwitchPreferenceCompat
+            app:key="confirmConnectRequest"
+            app:title="@string/confirm_connect_request"
+            app:summary="@string/confirm_connect_request_desc"/>
          <ListPreference
             app:defaultValue="1"
             app:entries="@array/modify_permission"
