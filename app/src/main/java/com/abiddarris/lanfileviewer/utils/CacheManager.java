@@ -74,7 +74,8 @@ public abstract class CacheManager<K,V> {
     }
     
     public final void save() throws Exception{
-        onSave(caches);
+        if(caches != null)
+            onSave(caches);
     }
     
     public void clear() {}
