@@ -57,8 +57,9 @@ public class DownloadManager extends CacheManager<FilePointer, FilePointer>{
         FileSource.freeFiles(downloadFolder);
         
         dest.makeDirs();
+        dest.updateDataSync(REQUEST_EXISTS);
         
-        Log.debug.log(TAG, "download dest : " + dest.getPath());
+        Log.debug.log(TAG, "download dest : " + dest.getPath() + " " + dest.exists());
         AtomicBoolean done = new AtomicBoolean(false);
         
         ApplicationCore.getMainHandler()

@@ -104,7 +104,8 @@ public class LocalFile extends File {
         checkNotFreed();
         source.getSecurityManager().checkWrite(this);
         
-        if (file.getParentFile() != null & file.getParentFile().canWrite()) {
+        java.io.File parentFile = file.getParentFile();
+        if (parentFile != null && (!parentFile.exists() || parentFile.canWrite())) {
             return file.mkdirs();
         }
 
