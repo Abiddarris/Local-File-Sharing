@@ -99,4 +99,8 @@
     <string name="cannot_open_message">Cannot open %s</string>
     <string name="confirm_connect_request">Confirm connect request</string>
     <string name="confirm_connect_request_desc">Show a notification when client tries to connect to your server</string>
+    <string name="confirm_connect_request_channel">Confirm connect request notification</string>
+    <string name="confirm_connect_request_channel_desc">Confirm connect request notification channel</string>
+    <string name="confirm_connect_request_notification_title">%s wants to connect to your device</string>
+    <string name="confirm_connect_request_notification_desc">Click for more information</string>
 </resources>

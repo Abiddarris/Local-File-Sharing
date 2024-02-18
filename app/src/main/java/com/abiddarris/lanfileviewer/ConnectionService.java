@@ -28,8 +28,10 @@ import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 import com.abiddarris.lanfileviewer.file.sharing.SharingSession;
 import com.abiddarris.lanfileviewer.settings.Settings;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
+import com.gretta.util.Randoms;
 import com.gretta.util.log.Log;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,11 +39,13 @@ public class ConnectionService extends Service implements ScanningSession.Callba
     
     private ConnectionServiceBridge bridge = new ConnectionServiceBridge();
     private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
+    private Random random = new Random();
     private ServerListAdapter adapter;
     private ScanningSession session;
     private SharingSession sharingSession;
     
     private static final String NOTIFICATION_CHANNEL_ID = "mainNotification";
+    private static final String CONFIRM_CONNECT_REQUEST = "confirmConnectRequest";
     private static final String SERVICE_TYPE = "_http._tcp.";
     private static final String TAG = Log.getTag(ConnectionService.class);
 
@@ -104,6 +108,13 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         
         NotificationManagerCompat manager = NotificationManagerCompat.from(this);
         manager.createNotificationChannel(channel);
+        
+        channel = new NotificationChannelCompat.Builder(CONFIRM_CONNECT_REQUEST, NotificationManagerCompat.IMPORTANCE_HIGH)
+            .setName(getString(R.string.confirm_connect_request_channel))
+            .setDescription(getString(R.string.confirm_connect_request_channel_desc))
+            .build();
+        
+        manager.createNotificationChannel(channel);
     }
     
     public ServerListAdapter getAdapter() {
@@ -126,6 +137,23 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         String name = Settings.getDefaultName(this);
         
         sharingSession = FileSharing.share(this, source);
+        sharingSession.setConnectListener((clientId, clientName) -> {
+            if(!Settings.isConfirmConnectRequest(this)) return true;
+                
+            String title = getString(R.string.confirm_connect_request_notification_title);
+                
+            Notification notification = new NotificationCompat.Builder(this, CONFIRM_CONNECT_REQUEST)
+                .setSmallIcon(R.drawable.icons8_folder)
+                .setContentTitle(String.format(title, clientName))
+                .setContentText(getString(R.string.confirm_connect_request_notification_desc))
+                .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
+                .build();
+                
+            NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+            manager.notify(random.nextInt(), notification);
+        
+            return true;
+        });
         try {
             sharingSession.start(name);
         } catch (Exception e) {

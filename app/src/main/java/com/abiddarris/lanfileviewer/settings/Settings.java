@@ -20,6 +20,7 @@ public class Settings {
     public static final String TAG = Log.getTag(Settings.class);
     
     private static final String ID = "id";
+    private static final String CONFIRM_CONNECT_REQUEST = "confirmConnectRequest";
     
     public static String getDefaultName(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -67,6 +68,11 @@ public class Settings {
         }
         
         return id;
+    }
+    
+    public static boolean isConfirmConnectRequest(Context context) {
+    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getBoolean(CONFIRM_CONNECT_REQUEST, false);
     }
     
     private static List<File> toList(Set<String> paths) {

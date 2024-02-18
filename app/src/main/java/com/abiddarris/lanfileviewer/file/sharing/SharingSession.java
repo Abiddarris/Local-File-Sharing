@@ -44,6 +44,7 @@ import org.json.JSONObject;
 public final class SharingSession extends NanoHTTPD implements RegistrationListener {
     
     private Context context;
+    private ConnectListener connectListener;
     private FileSource source;
     private ExecutorService executor = Executors.newCachedThreadPool();
     private Set<String> sessions = new HashSet<>();
@@ -256,7 +257,9 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             
             Log.debug.log(TAG, "clientId : " + clientId + ", clientName : " + clientName);
             
-            
+            if(connectListener != null) {
+                boolean accept = connectListener.accept(clientId, clientName);
+            }
             
             response.put(KEY_SERVER_ID, Settings.getId(context));
             response.put(KEY_SESSION, createSession());
@@ -436,5 +439,13 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     public void onServiceUnregistered(NsdServiceInfo info) {
         Log.debug.log(TAG, "Sucess unregistering service");
     }
-        
+      
+    public ConnectListener getConnectListener() {
+        return this.connectListener;
+    }
+    
+    public void setConnectListener(ConnectListener connectListener) {
+        this.connectListener = connectListener;
+    }
+    
 }
