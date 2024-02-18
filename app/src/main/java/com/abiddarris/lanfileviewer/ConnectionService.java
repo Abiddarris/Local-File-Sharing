@@ -2,6 +2,7 @@ package com.abiddarris.lanfileviewer;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -139,19 +140,25 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         sharingSession = FileSharing.share(this, source);
         sharingSession.setConnectListener((clientId, clientName) -> {
             if(!Settings.isConfirmConnectRequest(this)) return true;
+            
+            int id = random.nextInt();
                 
             String title = getString(R.string.confirm_connect_request_notification_title);
+            Intent intent = new Intent(this, ConfirmConnectRequestActivity
+                    .class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_IMMUTABLE); 
                 
             Notification notification = new NotificationCompat.Builder(this, CONFIRM_CONNECT_REQUEST)
                 .setSmallIcon(R.drawable.icons8_folder)
                 .setContentTitle(String.format(title, clientName))
                 .setContentText(getString(R.string.confirm_connect_request_notification_desc))
                 .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
+                .setContentIntent(pendingIntent)
                 .build();
                 
             NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-            manager.notify(random.nextInt(), notification);
-        
+            manager.notify(id, notification);
+                
             return true;
         });
         try {

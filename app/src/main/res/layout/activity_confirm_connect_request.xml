@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     style="@style/DialogRootLayoutStyle">
+
+    <TextView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:paddingBottom="15dp"
+         android:id="@+id/message" />
+
+    <View
+         android:layout_height="20dp"
+         android:layout_width="1dp"
+         android:layout_below="@id/name"
+         android:layout_centerHorizontal="true"
+         android:id="@+id/divider" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_below="@id/message"
+         android:background="@null"
+         android:layout_toLeftOf="@id/divider"
+         style="@style/Widget.Material3.Button.TextButton"
+         android:layout_alignParentStart="true"
+         android:id="@+id/reject"
+         android:text="@string/reject" />
+
+    <Button
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_below="@id/message"
+         android:background="@null"
+         android:layout_toRightOf="@id/divider"
+         android:layout_alignParentEnd="true"
+         android:enabled="true"
+         style="@style/Widget.Material3.Button.TextButton"
+         android:id="@+id/confirm"
+         android:text="@string/confirm" />
+
+</RelativeLayout>

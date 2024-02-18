@@ -46,6 +46,11 @@
             android:name=".FileExplorerActivity"
             android:exported="true"/>
         
+        <activity
+            android:name=".ConfirmConnectRequestActivity"
+            android:theme="@style/Theme.Material3.DayNight.Dialog"
+            android:exported="true"/>
+        
         <service
             android:name=".ConnectionService"
             android:stopWithTask="false"
