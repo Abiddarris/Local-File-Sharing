@@ -32,7 +32,9 @@ import com.abiddarris.lanfileviewer.settings.Settings;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.gretta.util.Randoms;
 import com.gretta.util.log.Log;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,6 +43,7 @@ public class ConnectionService extends Service implements ScanningSession.Callba
     
     private ConnectionServiceBridge bridge = new ConnectionServiceBridge();
     private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
+    private Map<Integer, Lock> locks = new HashMap<>();
     private Random random = new Random();
     private ServerListAdapter adapter;
     private ScanningSession session;
@@ -149,6 +152,7 @@ public class ConnectionService extends Service implements ScanningSession.Callba
                     .class);
             intent.putExtra(ConfirmConnectRequestActivity.CLIENT_NAME, clientName);
             intent.putExtra(ConfirmConnectRequestActivity.CLIENT_ID, clientId);
+            intent.putExtra(ConfirmConnectRequestActivity.REQUEST_ID, id);
                 
             PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_IMMUTABLE); 
                 
@@ -161,14 +165,36 @@ public class ConnectionService extends Service implements ScanningSession.Callba
                 .build();
                 
             NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-            manager.notify(id, notification);
+            
+            Lock lock = new Lock(); 
+            locks.put(id, lock);
                 
-            return true;
+            manager.notify(id, notification);
+             
+            try {
+                synchronized(lock) {
+                    lock.wait();
+                }
+            } catch(InterruptedException e) {
+            	Log.err.log(TAG, e);
+            }    
+            
+            return lock.accept;
         });
         try {
             sharingSession.start(name);
         } catch (Exception e) {
             Log.err.log(TAG,e);
+        }
+    }
+    
+    public void acceptConnection(int id, boolean accept) {
+    	Lock lock = locks.remove(id);
+        if(lock == null) return;
+        
+        synchronized(lock) {
+            lock.accept = accept;
+            lock.notifyAll();
         }
     }
 
@@ -251,5 +277,9 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         public ConnectionService getService() {
             return ConnectionService.this;
         }
+    }
+    
+    private class Lock {
+        private boolean accept;
     }
 }
