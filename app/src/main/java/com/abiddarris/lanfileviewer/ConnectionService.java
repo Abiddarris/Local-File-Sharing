@@ -10,6 +10,7 @@ import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -146,6 +147,9 @@ public class ConnectionService extends Service implements ScanningSession.Callba
             String title = getString(R.string.confirm_connect_request_notification_title);
             Intent intent = new Intent(this, ConfirmConnectRequestActivity
                     .class);
+            intent.putExtra(ConfirmConnectRequestActivity.CLIENT_NAME, clientName);
+            intent.putExtra(ConfirmConnectRequestActivity.CLIENT_ID, clientId);
+                
             PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_IMMUTABLE); 
                 
             Notification notification = new NotificationCompat.Builder(this, CONFIRM_CONNECT_REQUEST)
