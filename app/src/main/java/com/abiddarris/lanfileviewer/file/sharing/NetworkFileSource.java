@@ -46,7 +46,7 @@ public class NetworkFileSource extends FileSource {
             .put(KEY_CLIENT_ID, Settings.getId(context))
             .put(KEY_CLIENT_NAME, Settings.getDefaultName(context));
         
-        JSONObject response = sendRequest(request);
+        JSONObject response = sendRequest(request, 5000, 30000);
         serverId = response.getString(KEY_SERVER_ID);
         session = response.getString(KEY_SESSION);
         
@@ -76,11 +76,15 @@ public class NetworkFileSource extends FileSource {
     }
     
     public JSONObject sendRequest(JSONObject json) throws RequestException {
+        return sendRequest(json, 5000, 5000);
+    }
+    
+    private JSONObject sendRequest(JSONObject json, int connectTimeout, int readTimeout) throws RequestException {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) server.openConnection();
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
+            connection.setConnectTimeout(connectTimeout);
+            connection.setReadTimeout(readTimeout);
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "application/json; charset=\"UTF-8\"");
