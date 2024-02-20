@@ -162,6 +162,8 @@ public class ConnectionService extends Service implements ScanningSession.Callba
                 .setContentText(getString(R.string.confirm_connect_request_notification_desc))
                 .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
                 .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setOngoing(true)
                 .build();
                 
             NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
