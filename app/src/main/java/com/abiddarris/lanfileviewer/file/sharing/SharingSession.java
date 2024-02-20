@@ -261,7 +261,10 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
                 boolean accept = connectListener.accept(clientId, clientName);
                  
                 Log.debug.log(TAG, "clientId : " + clientId + ", clientName : " + clientName + ", accepted : " + accept);
-            
+                
+                if(!accept) {
+                	return;
+                }
             }
             
             response.put(KEY_SERVER_ID, Settings.getId(context));
