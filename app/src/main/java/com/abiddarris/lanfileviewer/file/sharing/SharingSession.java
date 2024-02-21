@@ -53,6 +53,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     
     private static final String TAG = Log.getTag(SharingSession
         .class);
+    
     static final String SESSION = "session";
     
     public SharingSession(Context context, FileSource source) {
@@ -263,10 +264,12 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
                 Log.debug.log(TAG, "clientId : " + clientId + ", clientName : " + clientName + ", accepted : " + accept);
                 
                 if(!accept) {
+                    response.put(KEY_RESULT, RESULT_REJECTED);
                 	return;
                 }
             }
             
+            response.put(KEY_RESULT, RESULT_SUCCESS);
             response.put(KEY_SERVER_ID, Settings.getId(context));
             response.put(KEY_SESSION, createSession());
         }
