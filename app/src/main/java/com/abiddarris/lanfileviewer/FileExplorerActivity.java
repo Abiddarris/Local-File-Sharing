@@ -16,6 +16,7 @@ import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
 import com.abiddarris.lanfileviewer.explorer.ExplorerPathFragment;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
+import com.abiddarris.lanfileviewer.ui.ConnectingDialog;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
 import com.abiddarris.lanfileviewer.ui.NetworkExplorerFragment;
 import com.gretta.util.log.Log;
@@ -91,9 +92,13 @@ public class FileExplorerActivity extends ExplorerActivity
                 return;
         }
         
+        ConnectingDialog dialog = new ConnectingDialog();
+        dialog.show(getSupportFragmentManager(), null);
         executor.submit(() -> {
             try {
                 NetworkFileSource source = info.openConnection(this);
+                dialog.dismiss();
+                    
                 Log.debug.log(TAG, "server id " + source.getServerId());
                     
                 getSupportFragmentManager().beginTransaction()

@@ -106,4 +106,6 @@
     <string name="confirm">Confirm</string>
     <string name="reject">Reject</string>
     <string name="confirm_connect_request_activity_desc">%s [%s] wants to connect to your device</string>
+    <string name="connecting_dialog_title">Connecting</string>
+    <string name="connecting_dialog_desc">Connecting to server...</string>
 </resources>
