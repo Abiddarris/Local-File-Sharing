@@ -9,6 +9,10 @@
             app:key="name"
             app:title="@string/name"/>
         
+         <EditTextPreference
+            app:key="password"
+            app:title="@string/password"/>
+        
         <ListPreference
             app:defaultValue="0"
             app:entries="@array/theme_labels"
