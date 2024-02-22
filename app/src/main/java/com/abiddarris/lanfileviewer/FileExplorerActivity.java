@@ -97,8 +97,7 @@ public class FileExplorerActivity extends ExplorerActivity
         executor.submit(() -> {
             try {
                 NetworkFileSource source = info.openConnection(this);
-                dialog.dismiss();
-                    
+                
                 Log.debug.log(TAG, "server id " + source.getServerId());
                     
                 getSupportFragmentManager().beginTransaction()
@@ -109,6 +108,8 @@ public class FileExplorerActivity extends ExplorerActivity
                 new ExceptionDialog(e)
                     .show(getSupportFragmentManager(), null);
                 Log.debug.log(TAG, e);
+            } finally {
+                dialog.dismiss();
             }
         });
     }
