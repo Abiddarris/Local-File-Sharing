@@ -142,6 +142,7 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         String name = Settings.getDefaultName(this);
         
         sharingSession = FileSharing.share(this, source);
+        sharingSession.setPassword(Settings.getPassword(this));
         sharingSession.setConnectListener((clientId, clientName) -> {
             if(!Settings.isConfirmConnectRequest(this)) return true;
             

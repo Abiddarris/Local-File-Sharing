@@ -50,6 +50,8 @@ public class NetworkFileSource extends FileSource {
         int code = response.getInt(KEY_RESULT);
         if(code == RESULT_REJECTED) {
             throw new AccessRejectedException();
+        } else if(code == RESULT_UNAUTHORIZED) {
+            throw new UnauthorizedException();
         }
         
         serverId = response.getString(KEY_SERVER_ID);

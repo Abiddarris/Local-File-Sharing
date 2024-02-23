@@ -31,10 +31,11 @@ public final class JSONRequest implements Requests {
     public static final String KEY_CLIENT_ID = "clientId";
     public static final String KEY_CLIENT_NAME = "clientName";
     public static final String KEY_SESSION = "session";
-    
+    public static final String KEY_PASSWORD = "password";
     
     public static final int RESULT_SUCCESS = 0;
     public static final int RESULT_REJECTED = 1;
+    public static final int RESULT_UNAUTHORIZED = 2;
     public static final String KEY_RESULT = "result";
     
     public static JSONArray createRequest(String... requestKeys) {

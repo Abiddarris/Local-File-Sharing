@@ -48,6 +48,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
     private FileSource source;
     private ExecutorService executor = Executors.newCachedThreadPool();
     private Set<String> sessions = new HashSet<>();
+    private String password;
     private Map<Integer, File.Progress> progresses = new HashMap<>();
     private NsdManager nsdManager;
     
@@ -258,6 +259,15 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             
             Log.debug.log(TAG, "clientId : " + clientId + ", clientName : " + clientName);
             
+            String password = getPassword();
+            if(password != null) {
+                String clientPassword = request.optString(KEY_PASSWORD);
+                if(clientPassword == null || !password.equals(clientPassword)) {
+                    response.put(KEY_RESULT, RESULT_UNAUTHORIZED);
+                    return;
+                }
+            }
+            
             if(connectListener != null) {
                 boolean accept = connectListener.accept(clientId, clientName);
                  
@@ -457,4 +467,11 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         this.connectListener = connectListener;
     }
     
+    public String getPassword() {
+        return this.password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
