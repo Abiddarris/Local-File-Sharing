@@ -21,6 +21,7 @@ public class Settings {
     
     private static final String ID = "id";
     private static final String CONFIRM_CONNECT_REQUEST = "confirmConnectRequest";
+    private static final String PASSWORD = "password";
     
     public static String getDefaultName(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -73,6 +74,12 @@ public class Settings {
     public static boolean isConfirmConnectRequest(Context context) {
     	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getBoolean(CONFIRM_CONNECT_REQUEST, false);
+    }
+    
+    public static String getPassword(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String password = preferences.getString(PASSWORD, "");
+        return password == null ? null : (password.equals("") ? null : password);
     }
     
     private static List<File> toList(Set<String> paths) {

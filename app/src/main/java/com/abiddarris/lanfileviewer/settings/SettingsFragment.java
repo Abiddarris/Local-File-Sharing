@@ -25,6 +25,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         final ListPreference writeAccess = findPreference("writeAccess");
         final ListPreference deleteAccess = findPreference("deleteAccess");
         EditTextPreference name = findPreference("name");
+        EditTextPreference password = findPreference("password");
+        
         name.setDefaultValue(Settings.getDefaultName(getContext()));
         name.setSummaryProvider(p -> Settings.getDefaultName(getContext()));
         name.setOnBindEditTextListener((e) -> {
@@ -36,6 +38,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         theme.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
         writeAccess.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
         deleteAccess.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
+        password.setSummaryProvider(p -> {
+            String passwordValue = Settings.getPassword(getContext());
+            return passwordValue == null ? getString(R.string.no_password) : passwordValue; 
+        });
     }
     
     @Override

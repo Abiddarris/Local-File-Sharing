@@ -109,4 +109,5 @@
     <string name="connecting_dialog_title">Connecting</string>
     <string name="connecting_dialog_desc">Connecting to server...</string>
     <string name="password">Password</string>
+    <string name="no_password">No password</string>
 </resources>
