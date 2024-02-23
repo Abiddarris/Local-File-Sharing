@@ -110,4 +110,6 @@
     <string name="connecting_dialog_desc">Connecting to server...</string>
     <string name="password">Password</string>
     <string name="no_password">No password</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="login">Login</string>
 </resources>

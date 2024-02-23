@@ -17,7 +17,11 @@ public class SharingDevice {
     }
     
     public NetworkFileSource openConnection(Context context) throws Exception {
-        return new NetworkFileSource(this, context);
+        return openConnection(context, null);
+    }
+    
+    public NetworkFileSource openConnection(Context context, String password) throws Exception {
+        return new NetworkFileSource(this, context, password);
     }
 
     public InetAddress getHost() {

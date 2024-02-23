@@ -16,8 +16,10 @@ import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
 import com.abiddarris.lanfileviewer.explorer.ExplorerPathFragment;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
+import com.abiddarris.lanfileviewer.file.sharing.UnauthorizedException;
 import com.abiddarris.lanfileviewer.ui.ConnectingDialog;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
+import com.abiddarris.lanfileviewer.ui.FillPasswordDialog;
 import com.abiddarris.lanfileviewer.ui.NetworkExplorerFragment;
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
@@ -30,6 +32,7 @@ public class FileExplorerActivity extends ExplorerActivity
     private LayoutFileExplorerBinding binding;
     private ConnectionService bridge;
     private ExplorerPathFragment pathFragment;
+    private SharingDevice info;
     
     private static final String TAG = Log.getTag(FileExplorerActivity.class);
     public static final String SERVER_NAME = "serverName";
@@ -85,33 +88,14 @@ public class FileExplorerActivity extends ExplorerActivity
         bridge = ((ConnectionServiceBridge) binder).getService();
         Log.debug.log(TAG, "Finding server with name : " + name);
         
-        SharingDevice info = bridge.getAdapter().getServer(name);
+        info = bridge.getAdapter().getServer(name);
         
         for(Fragment fragment : getSupportFragmentManager().getFragments()) {
         	if(fragment.getClass() == NetworkExplorerFragment.class)
                 return;
         }
         
-        ConnectingDialog dialog = new ConnectingDialog();
-        dialog.show(getSupportFragmentManager(), null);
-        executor.submit(() -> {
-            try {
-                NetworkFileSource source = info.openConnection(this);
-                
-                Log.debug.log(TAG, "server id " + source.getServerId());
-                    
-                getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .add(R.id.fragmentContainer, create(source))
-                    .commit();
-            } catch(Exception e) {
-                new ExceptionDialog(e)
-                    .show(getSupportFragmentManager(), null);
-                Log.debug.log(TAG, e);
-            } finally {
-                dialog.dismiss();
-            }
-        });
+        connectAsync(null);
     }
     
     private NetworkExplorerFragment create(NetworkFileSource source) {
@@ -125,6 +109,34 @@ public class FileExplorerActivity extends ExplorerActivity
             .setCurrentFileSource(source);
         
         return fragment;
+    }
+    
+    public void connectAsync(String password) {
+        executor.submit(() -> connect(password));
+    }
+    
+    private void connect(String password) {
+        ConnectingDialog dialog = new ConnectingDialog();
+        dialog.show(getSupportFragmentManager(), null);
+        try {
+            NetworkFileSource source = password == null ? info.openConnection(this) : info.openConnection(this, password);
+                
+            Log.debug.log(TAG, "server id " + source.getServerId());
+                    
+            getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.fragmentContainer, create(source))
+                .commit();
+        } catch (UnauthorizedException e) {
+            new FillPasswordDialog()
+                .show(getSupportFragmentManager(), null);
+        } catch(Exception e) {
+            new ExceptionDialog(e)
+                .show(getSupportFragmentManager(), null);
+            Log.debug.log(TAG, e);
+        } finally {
+            dialog.dismiss();
+        }
     }
 
     @Override
