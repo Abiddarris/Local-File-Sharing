@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentFactory;
@@ -95,7 +96,7 @@ public class FileExplorerActivity extends ExplorerActivity
                 return;
         }
         
-        connectAsync(null);
+        connectAsync(null, true);
     }
     
     private NetworkExplorerFragment create(NetworkFileSource source) {
@@ -112,10 +113,14 @@ public class FileExplorerActivity extends ExplorerActivity
     }
     
     public void connectAsync(String password) {
-        executor.submit(() -> connect(password));
+        connectAsync(password, false);
     }
     
-    private void connect(String password) {
+    public void connectAsync(String password, boolean firstTry) {
+        executor.submit(() -> connect(password, firstTry));
+    }
+    
+    private void connect(String password, boolean firstTry) {
         ConnectingDialog dialog = new ConnectingDialog();
         dialog.show(getSupportFragmentManager(), null);
         try {
@@ -128,6 +133,11 @@ public class FileExplorerActivity extends ExplorerActivity
                 .add(R.id.fragmentContainer, create(source))
                 .commit();
         } catch (UnauthorizedException e) {
+            if(!firstTry) {
+                runOnUiThread(() -> Toast.makeText(
+                    this, R.string.wrong_password, Toast.LENGTH_SHORT
+                ).show());
+            }
             new FillPasswordDialog()
                 .show(getSupportFragmentManager(), null);
         } catch(Exception e) {
