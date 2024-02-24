@@ -9,6 +9,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentFactory;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import com.abiddarris.lanfileviewer.ConnectionService.ConnectionServiceBridge;
 import com.abiddarris.lanfileviewer.actions.runnables.DownloadManager;
 import com.abiddarris.lanfileviewer.databinding.LayoutFileExplorerBinding;
@@ -30,6 +34,7 @@ public class FileExplorerActivity extends ExplorerActivity
         implements ServiceConnection {
 
     private ExecutorService executor = Executors.newFixedThreadPool(1);
+    private ExplorerViewModel viewModel;
     private LayoutFileExplorerBinding binding;
     private ConnectionService bridge;
     private ExplorerPathFragment pathFragment;
@@ -43,8 +48,14 @@ public class FileExplorerActivity extends ExplorerActivity
         binding = LayoutFileExplorerBinding.inflate(getLayoutInflater());
         setSupportActionBar(binding.toolbar);
         setContentView(binding.getRoot());
-        
+       
         pathFragment = new ExplorerPathFragment();
+        
+        viewModel = new ViewModelProvider(this)
+            .get(ExplorerViewModel.class);
+        if(bundle == null) {
+            onFirstCreate();
+        }
         
         getSupportFragmentManager().setFragmentFactory(new FragmentFactory(){
                     @Override
@@ -68,15 +79,22 @@ public class FileExplorerActivity extends ExplorerActivity
             .setReorderingAllowed(true)
             .add(R.id.pathFragment, pathFragment)
             .commit();
-        
-        bindService(new Intent(this, ConnectionService.class), this, 0);
     }
     
+    private void onFirstCreate() {
+        viewModel.getFileSource(this)
+            .observe(this, source -> {
+                getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragmentContainer, create(source))
+                    .commit();
+            });
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        
         Log.debug.log(TAG, "Destroying Explorer Activity");
     }
 
@@ -91,12 +109,8 @@ public class FileExplorerActivity extends ExplorerActivity
         
         info = bridge.getAdapter().getServer(name);
         
-        for(Fragment fragment : getSupportFragmentManager().getFragments()) {
-        	if(fragment.getClass() == NetworkExplorerFragment.class)
-                return;
-        }
-        
         connectAsync(null, true);
+        unbindService(this);
     }
     
     private NetworkExplorerFragment create(NetworkFileSource source) {
@@ -127,11 +141,7 @@ public class FileExplorerActivity extends ExplorerActivity
             NetworkFileSource source = password == null ? info.openConnection(this) : info.openConnection(this, password);
                 
             Log.debug.log(TAG, "server id " + source.getServerId());
-                    
-            getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .add(R.id.fragmentContainer, create(source))
-                .commit();
+            viewModel.source.postValue(source);      
         } catch (UnauthorizedException e) {
             if(!firstTry) {
                 runOnUiThread(() -> Toast.makeText(
@@ -151,4 +161,17 @@ public class FileExplorerActivity extends ExplorerActivity
 
     @Override
     public void onServiceDisconnected(ComponentName component) {}
+    
+    public static class ExplorerViewModel extends ViewModel {
+        
+        private MutableLiveData<NetworkFileSource> source;
+        
+        public LiveData<NetworkFileSource> getFileSource(FileExplorerActivity activity) {
+            if(source == null) {
+                source = new MutableLiveData<>();
+                activity.bindService(new Intent(activity, ConnectionService.class), activity, 0);
+            } 
+            return source;
+        }
+    }
 }
