@@ -23,6 +23,10 @@ public class FillPasswordDialog extends DialogFragment {
                     .getText().toString());
             dismiss();    
         });
+        binding.cancel.setOnClickListener(v -> {
+            getActivity().finish();
+            dismiss();    
+        });
         
         AlertDialog dialog = new MaterialAlertDialogBuilder(getContext())
             .setView(binding.getRoot())
