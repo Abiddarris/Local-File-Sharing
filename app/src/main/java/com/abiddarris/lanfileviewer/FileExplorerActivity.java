@@ -26,6 +26,7 @@ import com.abiddarris.lanfileviewer.ui.ConnectingDialog;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
 import com.abiddarris.lanfileviewer.ui.FillPasswordDialog;
 import com.abiddarris.lanfileviewer.ui.NetworkExplorerFragment;
+import com.abiddarris.lanfileviewer.utils.FragmentFactoryUtils;
 import com.gretta.util.log.Log;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -57,21 +58,16 @@ public class FileExplorerActivity extends ExplorerActivity
             onFirstCreate();
         }
         
-        getSupportFragmentManager().setFragmentFactory(new FragmentFactory(){
-                    @Override
-                    @NonNull
-                    public Fragment instantiate(ClassLoader loader, String name) {
-                        Class<? extends Fragment> fragmentClass = loadFragmentClass(loader,name);
-                        if(fragmentClass == NetworkExplorerFragment.class) {
-                            ApplicationCore core = (ApplicationCore)getApplication();
-                            ExplorerFragment fragment = create(core.getCurrentFileSource());
+        getSupportFragmentManager()
+            .setFragmentFactory(FragmentFactoryUtils.createFactory(fragmentClass -> {
+                if(fragmentClass == NetworkExplorerFragment.class) {
+                    ExplorerFragment fragment = create(viewModel.source.getValue());
                             
-                            return fragment;
-                        }   
+                    return fragment;
+                }   
                             
-                        return super.instantiate(loader, name);
-                    }
-                });
+                return null;
+            }));
      
         super.onCreate(bundle);
         
@@ -119,9 +115,6 @@ public class FileExplorerActivity extends ExplorerActivity
             pathFragment.setExplorer(e);
             e.setDownloadManager(new DownloadManager(this, source)); 
         });
-         
-        ((ApplicationCore) getApplication())
-            .setCurrentFileSource(source);
         
         return fragment;
     }
@@ -174,4 +167,5 @@ public class FileExplorerActivity extends ExplorerActivity
             return source;
         }
     }
+    
 }

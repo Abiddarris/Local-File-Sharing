@@ -22,8 +22,6 @@ public class ApplicationCore extends Application {
     private static ApplicationCore core;
     private static HandlerLogSupport mainHandler;
 
-    private NetworkFileSource currentFileSource;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -72,11 +70,4 @@ public class ApplicationCore extends Application {
         
     }
 
-    public NetworkFileSource getCurrentFileSource() {
-        return this.currentFileSource;
-    }
-
-    public void setCurrentFileSource(NetworkFileSource currentFileSource) {
-        this.currentFileSource = currentFileSource;
-    }
 }
