@@ -1,6 +1,7 @@
 package com.abiddarris.lanfileviewer.ui;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import com.abiddarris.lanfileviewer.FileExplorerActivity;
@@ -27,6 +28,8 @@ public class FillPasswordDialog extends DialogFragment {
             getActivity().finish();
             dismiss();    
         });
+        binding.textInput.getEditText()
+            .setSingleLine(true);
         
         AlertDialog dialog = new MaterialAlertDialogBuilder(getContext())
             .setView(binding.getRoot())
