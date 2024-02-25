@@ -7,6 +7,7 @@ import androidx.fragment.app.DialogFragment;
 import com.abiddarris.lanfileviewer.FileExplorerActivity;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.DialogTextInputBinding;
+import com.abiddarris.lanfileviewer.utils.NonBlankTextValidator;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class FillPasswordDialog extends DialogFragment {
@@ -17,7 +18,6 @@ public class FillPasswordDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle bundle) {
         binding = DialogTextInputBinding.inflate(getLayoutInflater());
         binding.positiveAction.setText(R.string.login);
-        binding.positiveAction.setEnabled(true);
         binding.positiveAction.setOnClickListener(v -> {
             ((FileExplorerActivity)getActivity())
                 .connectAsync(binding.textInput.getEditText()
@@ -30,6 +30,9 @@ public class FillPasswordDialog extends DialogFragment {
         });
         binding.textInput.getEditText()
             .setSingleLine(true);
+        binding.textInput.getEditText()
+            .addTextChangedListener(
+                new NonBlankTextValidator(binding.positiveAction));
         
         AlertDialog dialog = new MaterialAlertDialogBuilder(getContext())
             .setView(binding.getRoot())
