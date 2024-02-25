@@ -19,9 +19,11 @@ import com.abiddarris.lanfileviewer.databinding.LayoutFileExplorerBinding;
 import com.abiddarris.lanfileviewer.explorer.ExplorerActivity;
 import com.abiddarris.lanfileviewer.explorer.ExplorerFragment;
 import com.abiddarris.lanfileviewer.explorer.ExplorerPathFragment;
+import com.abiddarris.lanfileviewer.file.sharing.AccessRejectedException;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 import com.abiddarris.lanfileviewer.file.sharing.UnauthorizedException;
+import com.abiddarris.lanfileviewer.ui.AccessRejectedDialog;
 import com.abiddarris.lanfileviewer.ui.ConnectingDialog;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
 import com.abiddarris.lanfileviewer.ui.FillPasswordDialog;
@@ -142,6 +144,9 @@ public class FileExplorerActivity extends ExplorerActivity
                 ).show());
             }
             new FillPasswordDialog()
+                .show(getSupportFragmentManager(), null);
+        } catch(AccessRejectedException e) {
+            new AccessRejectedDialog()
                 .show(getSupportFragmentManager(), null);
         } catch(Exception e) {
             new ExceptionDialog(e)
