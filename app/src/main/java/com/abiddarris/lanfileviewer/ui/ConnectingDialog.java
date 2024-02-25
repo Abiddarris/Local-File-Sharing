@@ -37,6 +37,8 @@ public class ConnectingDialog extends DialogFragment {
             .setMessage(formatMessage())
             .create();
         
+        setCancelable(false);
+        
         handler.postDelayed(new CountdownRunnable(), 1000);
         
         return dialog;
@@ -55,7 +57,7 @@ public class ConnectingDialog extends DialogFragment {
             seconds--;
             dialog.setMessage(formatMessage());
             
-            if(seconds >= 0)
+            if(seconds > 0)
                 handler.postDelayed(this, 1000);
         }
         
