@@ -14,6 +14,7 @@ public class SharingDevice {
         host = info.getHost();
         port = info.getPort();
         name = info.getServiceName();
+        name = name = name.substring(0, name.length() - "_FILEV".length());
     }
     
     public NetworkFileSource openConnection(Context context) throws Exception {

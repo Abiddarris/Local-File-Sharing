@@ -72,7 +72,6 @@ public class ServerListAdapter extends BaseAdapter {
         SharingDevice device = servers.get(position);
         
         String name = device.getName();
-        name = name.substring(0, name.length() - "_FILEV".length());
         binder.name.setText(name);
 
         return binder.getRoot();
