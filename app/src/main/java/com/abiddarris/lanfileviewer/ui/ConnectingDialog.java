@@ -55,7 +55,8 @@ public class ConnectingDialog extends DialogFragment {
             seconds--;
             dialog.setMessage(formatMessage());
             
-            handler.postDelayed(this, 1000);
+            if(seconds >= 0)
+                handler.postDelayed(this, 1000);
         }
         
     }
