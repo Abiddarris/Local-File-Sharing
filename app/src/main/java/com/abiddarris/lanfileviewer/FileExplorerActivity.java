@@ -130,7 +130,11 @@ public class FileExplorerActivity extends ExplorerActivity
     }
     
     private void connect(String password, boolean firstTry) {
+        Bundle bundle = new Bundle();
+        bundle.putString(ConnectingDialog.NAME, info.getName());
+        
         ConnectingDialog dialog = new ConnectingDialog();
+        dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), null);
         try {
             NetworkFileSource source = password == null ? info.openConnection(this) : info.openConnection(this, password);

@@ -21,7 +21,6 @@
     <item name="windowActionModeOverlay">true</item>
   </style>
     
-    
   <style name="DialogActivity" parent="Base.DialogActivity"/>
     
   <style name="DialogRootLayoutStyle">

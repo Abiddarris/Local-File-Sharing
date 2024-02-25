@@ -107,7 +107,7 @@
     <string name="reject">Reject</string>
     <string name="confirm_connect_request_activity_desc">%s [%s] wants to connect to your device</string>
     <string name="connecting_dialog_title">Connecting</string>
-    <string name="connecting_dialog_desc">Connecting to server...</string>
+    <string name="connecting_dialog_desc">Connecting to %s...</string>
     <string name="password">Password</string>
     <string name="no_password">No password</string>
     <string name="enter_password">Enter Password</string>

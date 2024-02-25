@@ -22,7 +22,7 @@ public class Settings {
     private static final String ID = "id";
     private static final String CONFIRM_CONNECT_REQUEST = "confirmConnectRequest";
     private static final String PASSWORD = "password";
-    
+    private static final String CONNECT_TIMEOUT = "connect_timeout";
     public static String getDefaultName(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString("name", Build.BRAND + " " + Build.DEVICE);
@@ -80,6 +80,11 @@ public class Settings {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String password = preferences.getString(PASSWORD, "");
         return password == null ? null : (password.equals("") ? null : password);
+    }
+    
+    public static int getConnectTimeout(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getInt(CONNECT_TIMEOUT, 30);
     }
     
     private static List<File> toList(Set<String> paths) {
