@@ -35,6 +35,10 @@ public class ConnectingDialog extends DialogFragment {
         dialog = new MaterialAlertDialogBuilder(getContext())
             .setTitle(R.string.connecting_dialog_title)
             .setMessage(formatMessage())
+            .setNeutralButton(R.string.cancel, (p1,p2) -> {
+                dismiss();
+                getActivity().finish();
+            })
             .create();
         
         setCancelable(false);

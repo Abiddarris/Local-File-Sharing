@@ -93,6 +93,8 @@ public class FileExplorerActivity extends ExplorerActivity
     protected void onDestroy() {
         super.onDestroy();
         
+        executor.shutdownNow();
+        
         Log.debug.log(TAG, "Destroying Explorer Activity");
     }
 
