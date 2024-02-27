@@ -102,7 +102,7 @@
     <string name="confirm_connect_request_channel">Confirm connect request notification</string>
     <string name="confirm_connect_request_channel_desc">Confirm connect request notification channel</string>
     <string name="confirm_connect_request_notification_title">%s wants to connect to your device</string>
-    <string name="confirm_connect_request_notification_desc">Click for more information</string>
+    <string name="confirm_connect_request_notification_desc">Click for more information (%s%s)</string>
     <string name="confirm">Confirm</string>
     <string name="reject">Reject</string>
     <string name="confirm_connect_request_activity_desc">%s [%s] wants to connect to your device</string>

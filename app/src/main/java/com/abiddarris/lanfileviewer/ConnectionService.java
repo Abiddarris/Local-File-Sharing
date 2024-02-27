@@ -29,6 +29,7 @@ import com.abiddarris.lanfileviewer.file.sharing.ScanningSession;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 import com.abiddarris.lanfileviewer.file.sharing.SharingSession;
 import com.abiddarris.lanfileviewer.settings.Settings;
+import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.gretta.util.Randoms;
 import com.gretta.util.log.Log;
@@ -157,24 +158,23 @@ public class ConnectionService extends Service implements ScanningSession.Callba
                 
             PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_IMMUTABLE); 
                 
-            Notification notification = new NotificationCompat.Builder(this, CONFIRM_CONNECT_REQUEST)
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CONFIRM_CONNECT_REQUEST)
                 .setSmallIcon(R.drawable.icons8_folder)
                 .setContentTitle(String.format(title, client.getClient()))
-                .setContentText(getString(R.string.confirm_connect_request_notification_desc))
                 .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setOngoing(true)
-                .setTimeoutAfter(client.getClientTimeout())
-                .build();
+                .setOnlyAlertOnce(true)
+                .setTimeoutAfter(client.getClientTimeout());
                 
-            NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
             
             Lock lock = new Lock(); 
             locks.put(id, lock);
                 
-            manager.notify(id, notification);
-             
+            handler.post(new NotificationCountdown(
+                builder, client.getClientTimeout() / 1000, id));
+                
             try {
                 synchronized(lock) {
                     lock.wait();
@@ -281,6 +281,36 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         public ConnectionService getService() {
             return ConnectionService.this;
         }
+    }
+    
+    private class NotificationCountdown extends BaseRunnable {
+        
+        private NotificationCompat.Builder builder;
+        private long countDown;
+        private int id;
+        private String text = getString(R.string.confirm_connect_request_notification_desc);
+        private String second = getString(R.string.second);
+        private NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+            
+        public NotificationCountdown(NotificationCompat.Builder builder, long countDown, int id) {
+            this.builder = builder;
+            this.countDown = countDown;
+            this.id = id;
+        }
+        
+        @Override
+        public void onExecute(BaseRunnable context) throws Exception {
+            super.onExecute(context);
+            
+            builder.setContentText(String.format(text,countDown,second));
+            
+            manager.notify(id, builder.build());
+            
+            countDown--;
+            if(countDown >= 0) 
+                handler.postDelayed(this, 1000);
+        }
+        
     }
     
     private class Lock {
