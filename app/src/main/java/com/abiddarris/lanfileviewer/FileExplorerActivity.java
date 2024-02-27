@@ -23,6 +23,7 @@ import com.abiddarris.lanfileviewer.file.sharing.AccessRejectedException;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 import com.abiddarris.lanfileviewer.file.sharing.UnauthorizedException;
+import com.abiddarris.lanfileviewer.settings.Settings;
 import com.abiddarris.lanfileviewer.ui.AccessRejectedDialog;
 import com.abiddarris.lanfileviewer.ui.ConnectingDialog;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
@@ -139,7 +140,7 @@ public class FileExplorerActivity extends ExplorerActivity
         dialog.setArguments(bundle);
         dialog.show(getSupportFragmentManager(), null);
         try {
-            NetworkFileSource source = password == null ? info.openConnection(this) : info.openConnection(this, password);
+            NetworkFileSource source = info.openConnection(this, password, Settings.getConnectTimeout(this) * 1000L);
                 
             Log.debug.log(TAG, "server id " + source.getServerId());
             viewModel.source.postValue(source);      

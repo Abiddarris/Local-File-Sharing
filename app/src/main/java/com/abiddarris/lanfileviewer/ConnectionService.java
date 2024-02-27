@@ -143,7 +143,7 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         
         sharingSession = FileSharing.share(this, source);
         sharingSession.setPassword(Settings.getPassword(this));
-        sharingSession.setConnectListener((clientId, clientName) -> {
+        sharingSession.setConnectListener(client -> {
             if(!Settings.isConfirmConnectRequest(this)) return true;
             
             int id = random.nextInt();
@@ -151,20 +151,21 @@ public class ConnectionService extends Service implements ScanningSession.Callba
             String title = getString(R.string.confirm_connect_request_notification_title);
             Intent intent = new Intent(this, ConfirmConnectRequestActivity
                     .class);
-            intent.putExtra(ConfirmConnectRequestActivity.CLIENT_NAME, clientName);
-            intent.putExtra(ConfirmConnectRequestActivity.CLIENT_ID, clientId);
+            intent.putExtra(ConfirmConnectRequestActivity.CLIENT_NAME, client.getClient());
+            intent.putExtra(ConfirmConnectRequestActivity.CLIENT_ID, client.getClientId());
             intent.putExtra(ConfirmConnectRequestActivity.REQUEST_ID, id);
                 
             PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_IMMUTABLE); 
                 
             Notification notification = new NotificationCompat.Builder(this, CONFIRM_CONNECT_REQUEST)
                 .setSmallIcon(R.drawable.icons8_folder)
-                .setContentTitle(String.format(title, clientName))
+                .setContentTitle(String.format(title, client.getClient()))
                 .setContentText(getString(R.string.confirm_connect_request_notification_desc))
                 .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setOngoing(true)
+                .setTimeoutAfter(client.getClientTimeout())
                 .build();
                 
             NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);

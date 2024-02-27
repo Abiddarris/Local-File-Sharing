@@ -34,7 +34,8 @@ public class NetworkFileSource extends FileSource {
     
     public static final String TAG = Log.getTag(NetworkFileSource.class);
     
-    NetworkFileSource(SharingDevice device, Context context, String password) throws Exception {
+    NetworkFileSource(SharingDevice device, Context context,
+         String password, long timeout) throws Exception {
         super(context);
         
         this.device = device;
@@ -44,7 +45,8 @@ public class NetworkFileSource extends FileSource {
         JSONObject request = new JSONObject()
             .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_CONNECT))
             .put(KEY_CLIENT_ID, Settings.getId(context))
-            .put(KEY_CLIENT_NAME, Settings.getDefaultName(context));
+            .put(KEY_CLIENT_NAME, Settings.getDefaultName(context))
+            .put(KEY_TIMEOUT, timeout);
         
         if(password != null) {
         	request.put(KEY_PASSWORD, password);

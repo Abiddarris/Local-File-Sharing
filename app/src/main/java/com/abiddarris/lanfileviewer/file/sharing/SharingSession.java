@@ -256,6 +256,9 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
         } else if(key.equalsIgnoreCase(REQUEST_CONNECT)) {
             String clientId = request.optString(KEY_CLIENT_ID);
             String clientName = request.optString(KEY_CLIENT_NAME);
+            long timeout = request.optLong(KEY_TIMEOUT);
+            
+            Client client = new Client(clientId, clientName, timeout);
             
             Log.debug.log(TAG, "clientId : " + clientId + ", clientName : " + clientName);
             
@@ -269,7 +272,7 @@ public final class SharingSession extends NanoHTTPD implements RegistrationListe
             }
             
             if(connectListener != null) {
-                boolean accept = connectListener.accept(clientId, clientName);
+                boolean accept = connectListener.accept(client);
                  
                 Log.debug.log(TAG, "clientId : " + clientId + ", clientName : " + clientName + ", accepted : " + accept);
                 
