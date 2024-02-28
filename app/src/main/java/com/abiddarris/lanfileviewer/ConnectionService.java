@@ -312,6 +312,8 @@ public class ConnectionService extends Service implements ScanningSession.Callba
                 .notificationCountdown
                 .stop();
             
+            acceptConnection(id, false);
+            
             manager.cancel(id);
         }
         
