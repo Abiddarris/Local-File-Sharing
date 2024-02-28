@@ -4,7 +4,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
@@ -17,6 +20,7 @@ import android.os.Looper;
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
@@ -42,9 +46,11 @@ import java.util.concurrent.Executors;
 
 public class ConnectionService extends Service implements ScanningSession.Callback {
     
+    private CancelNotificationReceiver cancelNotificationReceiver = new CancelNotificationReceiver();
     private ConnectionServiceBridge bridge = new ConnectionServiceBridge();
     private HandlerLogSupport handler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
     private Map<Integer, Lock> locks = new HashMap<>();
+    private NotificationManager manager;
     private Random random = new Random();
     private ServerListAdapter adapter;
     private ScanningSession session;
@@ -54,7 +60,9 @@ public class ConnectionService extends Service implements ScanningSession.Callba
     private static final String CONFIRM_CONNECT_REQUEST = "confirmConnectRequest";
     private static final String SERVICE_TYPE = "_http._tcp.";
     private static final String TAG = Log.getTag(ConnectionService.class);
-
+    private static final String CANCEL_NOTIFICATION = "cancel_notification";
+    private static final String NOTIFICATION_ID = "notificationId";
+    
     @Override
     public IBinder onBind(Intent intent) {
         Log.debug.log(TAG, "Service binded");
@@ -67,7 +75,11 @@ public class ConnectionService extends Service implements ScanningSession.Callba
 
         Log.debug.log(TAG, "Service Created");
         
+        manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        
         createNotificationChannel();
+        
+        registerReceiver(cancelNotificationReceiver, new IntentFilter(CANCEL_NOTIFICATION), RECEIVER_NOT_EXPORTED);
         
         Log.debug.log(TAG, adapter);
         
@@ -101,7 +113,10 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         super.onDestroy();
 
         Log.debug.log(TAG, "Service Destroy");
-
+        
+        LocalBroadcastManager.getInstance(this)
+            .unregisterReceiver(cancelNotificationReceiver);
+        
         stopScanServer();
         unregisterServer();
     }
@@ -156,24 +171,27 @@ public class ConnectionService extends Service implements ScanningSession.Callba
             intent.putExtra(ConfirmConnectRequestActivity.CLIENT_ID, client.getClientId());
             intent.putExtra(ConfirmConnectRequestActivity.REQUEST_ID, id);
                 
+            Intent deleteIntent = new Intent(CANCEL_NOTIFICATION);
+            deleteIntent.putExtra(NOTIFICATION_ID, id);
+                
             PendingIntent pendingIntent = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_IMMUTABLE); 
+            PendingIntent deletePendingIntent = PendingIntent.getBroadcast(this, id, deleteIntent, PendingIntent.FLAG_IMMUTABLE); 
                 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CONFIRM_CONNECT_REQUEST)
                 .setSmallIcon(R.drawable.icons8_folder)
                 .setContentTitle(String.format(title, client.getClient()))
                 .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
                 .setContentIntent(pendingIntent)
+                .setDeleteIntent(deletePendingIntent)
                 .setAutoCancel(true)
-                .setOngoing(true)
-                .setOnlyAlertOnce(true)
-                .setTimeoutAfter(client.getClientTimeout());
-                
+                .setOnlyAlertOnce(true);
             
             Lock lock = new Lock(); 
+            lock.notificationCountdown = new NotificationCountdown(
+                builder, client.getClientTimeout() / 1000, id);
             locks.put(id, lock);
                 
-            handler.post(new NotificationCountdown(
-                builder, client.getClientTimeout() / 1000, id));
+            handler.post(lock.notificationCountdown);
                 
             try {
                 synchronized(lock) {
@@ -283,6 +301,22 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         }
     }
     
+    private class CancelNotificationReceiver extends BroadcastReceiver {
+        
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(!CANCEL_NOTIFICATION.equals(intent.getAction())) return;
+            
+            int id = intent.getIntExtra(NOTIFICATION_ID, 0);
+            locks.get(id)
+                .notificationCountdown
+                .stop();
+            
+            manager.cancel(id);
+        }
+        
+    }
+    
     private class NotificationCountdown extends BaseRunnable {
         
         private NotificationCompat.Builder builder;
@@ -290,8 +324,7 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         private int id;
         private String text = getString(R.string.confirm_connect_request_notification_desc);
         private String second = getString(R.string.second);
-        private NotificationManager manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-            
+        
         public NotificationCountdown(NotificationCompat.Builder builder, long countDown, int id) {
             this.builder = builder;
             this.countDown = countDown;
@@ -302,18 +335,28 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         public void onExecute(BaseRunnable context) throws Exception {
             super.onExecute(context);
             
+            if(countDown == 0) {
+                manager.cancel(id);
+                return;
+            }
+            
             builder.setContentText(String.format(text,countDown,second));
             
             manager.notify(id, builder.build());
             
             countDown--;
-            if(countDown >= 0) 
-                handler.postDelayed(this, 1000);
+          
+            handler.postDelayed(this, 1000);
+        }
+        
+        public void stop() {
+            countDown = 0;
         }
         
     }
     
     private class Lock {
         private boolean accept;
+        private NotificationCountdown notificationCountdown;
     }
 }
