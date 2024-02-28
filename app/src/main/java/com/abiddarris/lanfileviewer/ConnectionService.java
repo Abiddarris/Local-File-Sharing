@@ -219,6 +219,14 @@ public class ConnectionService extends Service implements ScanningSession.Callba
             lock.notifyAll();
         }
     }
+    
+    public void cancelNotification(int id) {
+        locks.get(id)
+            .notificationCountdown
+            .stop();
+        
+        manager.cancel(id);
+    }
 
     public void unregisterServer() {
         if (sharingSession == null) return;
@@ -308,13 +316,10 @@ public class ConnectionService extends Service implements ScanningSession.Callba
             if(!CANCEL_NOTIFICATION.equals(intent.getAction())) return;
             
             int id = intent.getIntExtra(NOTIFICATION_ID, 0);
-            locks.get(id)
-                .notificationCountdown
-                .stop();
+            
+            cancelNotification(id);
             
             acceptConnection(id, false);
-            
-            manager.cancel(id);
         }
         
     }

@@ -12,6 +12,7 @@ public class ConfirmConnectRequestActivity extends AppCompatActivity implements 
    
     private ActivityConfirmConnectRequestBinding binding;
     private ConnectionService service;
+    private int id;
     
     public static final String CLIENT_NAME = "clientName";
     public static final String CLIENT_ID = "clientId";
@@ -22,7 +23,7 @@ public class ConfirmConnectRequestActivity extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         
         Bundle extras = getIntent().getExtras();
-        int id = extras.getInt(REQUEST_ID);
+        id = extras.getInt(REQUEST_ID);
         
         binding = ActivityConfirmConnectRequestBinding.inflate(getLayoutInflater());
         binding.message.setText(String.format(
@@ -55,6 +56,7 @@ public class ConfirmConnectRequestActivity extends AppCompatActivity implements 
     public void onServiceConnected(ComponentName component, IBinder iBinder) {
         service = ((ConnectionService.ConnectionServiceBridge)iBinder)
             .getService();
+        service.cancelNotification(id);
     }
     
     @Override
