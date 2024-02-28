@@ -17,6 +17,7 @@ import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -51,8 +52,17 @@ public class NetworkFileSource extends FileSource {
         if(password != null) {
         	request.put(KEY_PASSWORD, password);
         }
+        JSONObject response;
+        try {
+            response = sendRequest(request, 5000, 30000);
+        } catch (RequestException e) {
+            Throwable cause = e.getCause();
+            if(cause != null && cause.getClass() == SocketTimeoutException.class) {
+                throw new TimeoutException(e);
+            }
+            throw e;
+        }
         
-        JSONObject response = sendRequest(request, 5000, 30000);
         int code = response.getInt(KEY_RESULT);
         if(code == RESULT_REJECTED) {
             throw new AccessRejectedException();

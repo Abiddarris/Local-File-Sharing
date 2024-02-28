@@ -6,9 +6,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentFactory;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -22,10 +19,11 @@ import com.abiddarris.lanfileviewer.explorer.ExplorerPathFragment;
 import com.abiddarris.lanfileviewer.file.sharing.AccessRejectedException;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
+import com.abiddarris.lanfileviewer.file.sharing.TimeoutException;
 import com.abiddarris.lanfileviewer.file.sharing.UnauthorizedException;
 import com.abiddarris.lanfileviewer.settings.Settings;
-import com.abiddarris.lanfileviewer.ui.AccessRejectedDialog;
 import com.abiddarris.lanfileviewer.ui.ConnectingDialog;
+import com.abiddarris.lanfileviewer.ui.ConnectionFailedDialog;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
 import com.abiddarris.lanfileviewer.ui.FillPasswordDialog;
 import com.abiddarris.lanfileviewer.ui.NetworkExplorerFragment;
@@ -153,8 +151,9 @@ public class FileExplorerActivity extends ExplorerActivity
             new FillPasswordDialog()
                 .show(getSupportFragmentManager(), null);
         } catch(AccessRejectedException e) {
-            new AccessRejectedDialog()
-                .show(getSupportFragmentManager(), null);
+            showConnectionFailedDialog(getString(R.string.access_denied));
+        } catch(TimeoutException e) {
+            showConnectionFailedDialog(getString(R.string.timeout));
         } catch(Exception e) {
             new ExceptionDialog(e)
                 .show(getSupportFragmentManager(), null);
@@ -162,6 +161,15 @@ public class FileExplorerActivity extends ExplorerActivity
         } finally {
             dialog.dismiss();
         }
+    }
+    
+    private void showConnectionFailedDialog(String message) {
+        Bundle bundle = new Bundle();
+        bundle.putString(ConnectionFailedDialog.MESSAGE, message);
+        
+        ConnectionFailedDialog dialog = new ConnectionFailedDialog();
+        dialog.setArguments(bundle);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
     @Override

@@ -1,5 +1,4 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
-public class AccessRejectedException extends RuntimeException {
-    
+public class AccessRejectedException extends LoginException {
 }

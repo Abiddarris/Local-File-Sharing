@@ -113,6 +113,8 @@
     <string name="enter_password">Enter Password</string>
     <string name="login">Login</string>
     <string name="wrong_password">Wrong password</string>
+    <string name="connection_failed">Connection failed</string>
     <string name="access_denied">Access denied</string>
+    <string name="timeout">Timeout</string>
     <string name="second">s</string>
 </resources>

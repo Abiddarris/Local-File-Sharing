@@ -1,4 +1,4 @@
 package com.abiddarris.lanfileviewer.file.sharing;
 
-public class UnauthorizedException extends RuntimeException {
+public class UnauthorizedException extends LoginException {
 }
