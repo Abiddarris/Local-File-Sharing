@@ -59,9 +59,7 @@ public class FileExplorerActivity extends ExplorerActivity
         viewModel = new ViewModelProvider(this)
             .get(ExplorerViewModel.class);
         viewModel.activity = this;
-        if(bundle == null) {
-            onFirstCreate();
-        }
+        observeFileSource();
         
         getSupportFragmentManager()
             .setFragmentFactory(FragmentFactoryUtils.createFactory(fragmentClass -> {
@@ -82,7 +80,8 @@ public class FileExplorerActivity extends ExplorerActivity
             .commit();
     }
     
-    private void onFirstCreate() {
+    private void observeFileSource() {
+        if(viewModel.getFileSource(this).getValue() != null) return;
         viewModel.getFileSource(this)
             .observe(this, source -> {
                 getSupportFragmentManager().beginTransaction()
