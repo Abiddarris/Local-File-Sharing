@@ -6,10 +6,13 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.abiddarris.lanfileviewer.ConnectionService.ConnectionServiceBridge;
 import com.abiddarris.lanfileviewer.actions.runnables.DownloadManager;
 import com.abiddarris.lanfileviewer.databinding.LayoutFileExplorerBinding;
@@ -29,13 +32,13 @@ import com.abiddarris.lanfileviewer.ui.FillPasswordDialog;
 import com.abiddarris.lanfileviewer.ui.NetworkExplorerFragment;
 import com.abiddarris.lanfileviewer.utils.FragmentFactoryUtils;
 import com.gretta.util.log.Log;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class FileExplorerActivity extends ExplorerActivity
         implements ServiceConnection {
 
-    private ExecutorService executor = Executors.newFixedThreadPool(1);
     private ExplorerViewModel viewModel;
     private LayoutFileExplorerBinding binding;
     private ConnectionService bridge;
@@ -55,6 +58,7 @@ public class FileExplorerActivity extends ExplorerActivity
         
         viewModel = new ViewModelProvider(this)
             .get(ExplorerViewModel.class);
+        viewModel.activity = this;
         if(bundle == null) {
             onFirstCreate();
         }
@@ -92,8 +96,6 @@ public class FileExplorerActivity extends ExplorerActivity
     protected void onDestroy() {
         super.onDestroy();
         
-        executor.shutdownNow();
-        
         Log.debug.log(TAG, "Destroying Explorer Activity");
     }
 
@@ -127,49 +129,7 @@ public class FileExplorerActivity extends ExplorerActivity
     }
     
     public void connectAsync(String password, boolean firstTry) {
-        executor.submit(() -> connect(password, firstTry));
-    }
-    
-    private void connect(String password, boolean firstTry) {
-        Bundle bundle = new Bundle();
-        bundle.putString(ConnectingDialog.NAME, info.getName());
-        
-        ConnectingDialog dialog = new ConnectingDialog();
-        dialog.setArguments(bundle);
-        dialog.show(getSupportFragmentManager(), null);
-        try {
-            NetworkFileSource source = info.openConnection(this, password, Settings.getConnectTimeout(this) * 1000L);
-                
-            Log.debug.log(TAG, "server id " + source.getServerId());
-            viewModel.source.postValue(source);      
-        } catch (UnauthorizedException e) {
-            if(!firstTry) {
-                runOnUiThread(() -> Toast.makeText(
-                    this, R.string.wrong_password, Toast.LENGTH_SHORT
-                ).show());
-            }
-            new FillPasswordDialog()
-                .show(getSupportFragmentManager(), null);
-        } catch(AccessRejectedException e) {
-            showConnectionFailedDialog(getString(R.string.access_denied));
-        } catch(TimeoutException e) {
-            showConnectionFailedDialog(getString(R.string.timeout));
-        } catch(Exception e) {
-            new ExceptionDialog(e)
-                .show(getSupportFragmentManager(), null);
-            Log.debug.log(TAG, e);
-        } finally {
-            dialog.dismiss();
-        }
-    }
-    
-    private void showConnectionFailedDialog(String message) {
-        Bundle bundle = new Bundle();
-        bundle.putString(ConnectionFailedDialog.MESSAGE, message);
-        
-        ConnectionFailedDialog dialog = new ConnectionFailedDialog();
-        dialog.setArguments(bundle);
-        dialog.show(getSupportFragmentManager(), null);
+        viewModel.executor.submit(() -> viewModel.connect(password, firstTry));
     }
 
     @Override
@@ -177,7 +137,9 @@ public class FileExplorerActivity extends ExplorerActivity
     
     public static class ExplorerViewModel extends ViewModel {
         
+        private FileExplorerActivity activity;
         private MutableLiveData<NetworkFileSource> source;
+        private ExecutorService executor = Executors.newFixedThreadPool(1);
         
         public LiveData<NetworkFileSource> getFileSource(FileExplorerActivity activity) {
             if(source == null) {
@@ -186,6 +148,59 @@ public class FileExplorerActivity extends ExplorerActivity
             } 
             return source;
         }
+        
+        private void connect(String password, boolean firstTry) {
+            Bundle bundle = new Bundle();
+            bundle.putString(ConnectingDialog.NAME, activity.info.getName());
+        
+            ConnectingDialog dialog = new ConnectingDialog();
+            dialog.setArguments(bundle);
+            dialog.show(activity.getSupportFragmentManager(), null);
+            
+            try {
+                NetworkFileSource source = activity.info.openConnection(
+                    activity.getApplicationContext(), password, Settings.getConnectTimeout(activity) * 1000L);
+                
+                Log.debug.log(TAG, "server id " + source.getServerId());
+                this.source.postValue(source);      
+            } catch (UnauthorizedException e) {
+                if(!firstTry) {
+                    activity.runOnUiThread(() -> Toast.makeText(
+                    activity, R.string.wrong_password, Toast.LENGTH_SHORT
+                    ).show());
+                }
+                new FillPasswordDialog().show(activity.getSupportFragmentManager(), null);
+            } catch(AccessRejectedException e) {
+                showConnectionFailedDialog(activity.getString(R.string.access_denied));
+            } catch(TimeoutException e) {
+                showConnectionFailedDialog(activity.getString(R.string.timeout));
+            } catch(Exception e) {
+                new ExceptionDialog(e)
+                    .show(activity.getSupportFragmentManager(), null);
+                Log.debug.log(TAG, e);
+            } finally {
+                dialog.dismiss();
+            }
+        }
+        
+        private void showConnectionFailedDialog(String message) {
+            Bundle bundle = new Bundle();
+            bundle.putString(ConnectionFailedDialog.MESSAGE, message);
+        
+            ConnectionFailedDialog dialog = new ConnectionFailedDialog();
+            dialog.setArguments(bundle);
+            dialog.show(activity.getSupportFragmentManager(), null);
+        }
+        
+        @Override
+        protected void onCleared() {
+            super.onCleared();
+            
+            activity = null;
+            executor.shutdownNow();
+        }
+        
+    
     }
     
 }
