@@ -8,6 +8,8 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -152,9 +154,11 @@ public class FileExplorerActivity extends ExplorerActivity
             Bundle bundle = new Bundle();
             bundle.putString(ConnectingDialog.NAME, activity.info.getName());
         
+            final String CONNECT_DIALOG = "connectDialog";
+            
             ConnectingDialog dialog = new ConnectingDialog();
             dialog.setArguments(bundle);
-            dialog.show(activity.getSupportFragmentManager(), null);
+            dialog.show(activity.getSupportFragmentManager(), CONNECT_DIALOG);
             
             try {
                 NetworkFileSource source = activity.info.openConnection(
@@ -178,6 +182,10 @@ public class FileExplorerActivity extends ExplorerActivity
                     .show(activity.getSupportFragmentManager(), null);
                 Log.debug.log(TAG, e);
             } finally {
+                Fragment fragment = activity.getSupportFragmentManager()
+                    .findFragmentByTag(CONNECT_DIALOG);
+                if(!(fragment instanceof DialogFragment)) return;
+                dialog = (ConnectingDialog) fragment;
                 dialog.dismiss();
             }
         }
