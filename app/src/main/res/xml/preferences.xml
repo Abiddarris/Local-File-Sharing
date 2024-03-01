@@ -9,9 +9,13 @@
             app:key="name"
             app:title="@string/name"/>
         
-         <EditTextPreference
+        <EditTextPreference
             app:key="password"
             app:title="@string/password"/>
+        
+        <EditTextPreference
+            app:key="connect_timeout"
+            app:title="@string/timeout"/>
         
         <ListPreference
             app:defaultValue="0"

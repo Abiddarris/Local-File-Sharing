@@ -2,6 +2,7 @@ package com.abiddarris.lanfileviewer.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -26,6 +27,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         final ListPreference deleteAccess = findPreference("deleteAccess");
         EditTextPreference name = findPreference("name");
         EditTextPreference password = findPreference("password");
+        EditTextPreference connectTimeout = findPreference("connect_timeout");
         
         name.setDefaultValue(Settings.getDefaultName(getContext()));
         name.setSummaryProvider(p -> Settings.getDefaultName(getContext()));
@@ -42,6 +44,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             String passwordValue = Settings.getPassword(getContext());
             return passwordValue == null ? getString(R.string.no_password) : passwordValue; 
         });
+        connectTimeout.setOnBindEditTextListener(e -> e.setInputType(InputType.TYPE_CLASS_NUMBER));
     }
     
     @Override

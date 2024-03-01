@@ -84,7 +84,11 @@ public class Settings {
     
     public static int getConnectTimeout(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getInt(CONNECT_TIMEOUT, 30);
+        String timeout = preferences.getString(CONNECT_TIMEOUT, "30");
+        if(timeout.equalsIgnoreCase("0") || timeout.isBlank())
+            timeout = "30";
+        
+        return Integer.parseInt(timeout);
     }
     
     private static List<File> toList(Set<String> paths) {
