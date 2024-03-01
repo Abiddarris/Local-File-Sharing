@@ -45,6 +45,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             return passwordValue == null ? getString(R.string.no_password) : passwordValue; 
         });
         connectTimeout.setOnBindEditTextListener(e -> e.setInputType(InputType.TYPE_CLASS_NUMBER));
+        connectTimeout.setSummaryProvider(p -> Settings.getConnectTimeout(getContext()) + getString(R.string.second));
     }
     
     @Override
