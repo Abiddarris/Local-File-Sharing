@@ -162,7 +162,7 @@ public class FileExplorerActivity extends ExplorerActivity
             
             try {
                 NetworkFileSource source = activity.info.openConnection(
-                    activity.getApplicationContext(), password, Settings.getConnectTimeout(activity) * 1000L);
+                    activity.getApplicationContext(), password, Settings.getConnectTimeout(activity) * 1000);
                 
                 Log.debug.log(TAG, "server id " + source.getServerId());
                 this.source.postValue(source);      

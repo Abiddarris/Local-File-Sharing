@@ -17,11 +17,11 @@ public class SharingDevice {
         name = name = name.substring(0, name.length() - "_FILEV".length());
     }
     
-    public NetworkFileSource openConnection(Context context, long timeout) throws Exception {
+    public NetworkFileSource openConnection(Context context, int timeout) throws Exception {
         return openConnection(context, null, timeout);
     }
     
-    public NetworkFileSource openConnection(Context context, String password, long timeout) throws Exception {
+    public NetworkFileSource openConnection(Context context, String password, int timeout) throws Exception {
         return new NetworkFileSource(this, context, password, timeout);
     }
 

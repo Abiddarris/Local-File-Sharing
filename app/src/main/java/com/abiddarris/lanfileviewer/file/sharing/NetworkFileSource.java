@@ -36,7 +36,7 @@ public class NetworkFileSource extends FileSource {
     public static final String TAG = Log.getTag(NetworkFileSource.class);
     
     NetworkFileSource(SharingDevice device, Context context,
-         String password, long timeout) throws Exception {
+         String password, int timeout) throws Exception {
         super(context);
         
         this.device = device;
@@ -54,7 +54,7 @@ public class NetworkFileSource extends FileSource {
         }
         JSONObject response;
         try {
-            response = sendRequest(request, 5000, 30000);
+            response = sendRequest(request, 5000, timeout);
         } catch (RequestException e) {
             Throwable cause = e.getCause();
             if(cause != null && cause.getClass() == SocketTimeoutException.class) {
