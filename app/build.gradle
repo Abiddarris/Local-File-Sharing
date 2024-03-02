@@ -46,6 +46,7 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.preference:preference:1.2.0")
     implementation 'com.quiph.ui:recyclerviewfastscroller:1.0.0'
+    implementation project(":preferences")
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
  

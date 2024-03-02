@@ -7,6 +7,8 @@ import android.os.Looper;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.abiddarris.lanfileviewer.utils.Theme;
+
+
 import com.gretta.util.log.FilesLog;
 import com.gretta.util.log.Log;
 
@@ -25,7 +27,7 @@ public class ApplicationCore extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        
         core = this;
 
         Theme.apply(this);

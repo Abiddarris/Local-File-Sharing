@@ -5,15 +5,15 @@
     <PreferenceCategory
         app:title="@string/general">
         
-        <EditTextPreference
+        <com.abiddarris.preferences.MaterialEditTextPreference
             app:key="name"
             app:title="@string/name"/>
         
-        <EditTextPreference
+        <com.abiddarris.preferences.MaterialEditTextPreference
             app:key="password"
             app:title="@string/password"/>
         
-        <EditTextPreference
+        <com.abiddarris.preferences.MaterialEditTextPreference
             app:key="connect_timeout"
             app:title="@string/timeout"/>
         
