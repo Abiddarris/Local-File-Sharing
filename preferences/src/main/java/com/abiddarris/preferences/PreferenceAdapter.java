@@ -44,7 +44,10 @@ public class PreferenceAdapter extends Adapter<PreferenceAdapter.PreferenceHolde
     @Override
     public void onBindViewHolder(PreferenceHolder holder, int index) {
         holder.layout.removeAllViews();
-        holder.layout.addView(preferences[index].getView());
+        holder.layout.addView(preferences[index].getView(), new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT     
+        ));
     }
 
     @Override
