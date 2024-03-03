@@ -10,6 +10,8 @@ public class Preference {
     private Context context;
     private String key;
     private String title;
+    private String summary = "";
+    private SummaryProvider summaryProvider;
     private View view;
 
     public Preference(Context context, String key) {
@@ -29,26 +31,53 @@ public class Preference {
         setTitle(context.getString(resId));
     }
 
+    public String getSummary() {
+        return this.summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
     public Context getContext() {
         return this.context;
     }
-    
-    protected View createView() {
-        return LayoutPreferenceBinding.inflate(LayoutInflater
-            .from(getContext()))
-            .getRoot();
+
+    public String getKey() {
+        return this.key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
     
+    public SummaryProvider getSummaryProvider() {
+        return this.summaryProvider;
+    }
+
+    public void setSummaryProvider(SummaryProvider summaryProvider) {
+        this.summaryProvider = summaryProvider;
+    }
+
+    protected View createView() {
+        return LayoutPreferenceBinding.inflate(LayoutInflater.from(getContext())).getRoot();
+    }
+
     protected void fillView(View view) {
+        if(getSummaryProvider() != null)
+            setSummary(getSummaryProvider().getSummary(this));
+        
         LayoutPreferenceBinding binding = LayoutPreferenceBinding.bind(view);
-        binding.title.setText(title);
+        binding.title.setText(getTitle());
+        binding.summary.setText(getSummary());
     }
 
     View getView() {
-        if(view == null) {
+        if (view == null) {
             view = createView();
         }
         fillView(view);
         return view;
     }
+    
 }

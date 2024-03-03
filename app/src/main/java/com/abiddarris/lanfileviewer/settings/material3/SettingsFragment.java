@@ -11,6 +11,7 @@ public class SettingsFragment extends PreferenceFragment {
     public Preference[] onCreatePreference() {
         Preference preference = new Preference(getContext(), "name");
         preference.setTitle(R.string.name);
+        preference.setSummary("test");
         
         PreferenceCategory category = new PreferenceCategory(getContext(), "general");
         category.setTitle(R.string.general);
