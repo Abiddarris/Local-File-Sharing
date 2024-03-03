@@ -3,7 +3,7 @@ package com.abiddarris.lanfileviewer;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-import com.abiddarris.lanfileviewer.settings.SettingsFragment;
+import com.abiddarris.lanfileviewer.settings.material3.SettingsFragment;
 import com.abiddarris.lanfileviewer.ui.HomeFragment;
 import com.abiddarris.lanfileviewer.ui.ScanFragment;
 
