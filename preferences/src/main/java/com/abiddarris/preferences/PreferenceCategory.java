@@ -1,6 +1,9 @@
 package com.abiddarris.preferences;
 
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import com.abiddarris.preferences.databinding.LayoutCategoryBinding;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -23,6 +26,19 @@ public class PreferenceCategory extends Preference {
     
     public Preference[] getPreferences() {
         return preferences.toArray(new Preference[0]);
+    }
+    
+    @Override
+    protected View createView() {
+        return LayoutCategoryBinding.inflate(LayoutInflater
+            .from(getContext()))
+            .getRoot();
+    }
+    
+    @Override
+    protected void fillView(View view) {
+        LayoutCategoryBinding binding = LayoutCategoryBinding.bind(view);
+        binding.title.setText(getTitle());
     }
     
 }
