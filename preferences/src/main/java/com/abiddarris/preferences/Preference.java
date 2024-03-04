@@ -7,15 +7,15 @@ import com.abiddarris.preferences.databinding.LayoutPreferenceBinding;
 
 public class Preference {
 
-    private Context context;
+    private PreferenceFragment fragment;
     private String key;
     private String title;
     private String summary = "";
     private SummaryProvider summaryProvider;
     private View view;
 
-    public Preference(Context context, String key) {
-        this.context = context;
+    public Preference(PreferenceFragment fragment, String key) {
+        this.fragment = fragment;
         this.key = key;
     }
 
@@ -28,7 +28,7 @@ public class Preference {
     }
 
     public void setTitle(int resId) {
-        setTitle(context.getString(resId));
+        setTitle(getFragment().getString(resId));
     }
 
     public String getSummary() {
@@ -39,8 +39,8 @@ public class Preference {
         this.summary = summary;
     }
 
-    public Context getContext() {
-        return this.context;
+    public PreferenceFragment getFragment() {
+        return this.fragment;
     }
 
     public String getKey() {
@@ -50,7 +50,7 @@ public class Preference {
     public void setKey(String key) {
         this.key = key;
     }
-    
+
     public SummaryProvider getSummaryProvider() {
         return this.summaryProvider;
     }
@@ -60,24 +60,28 @@ public class Preference {
     }
 
     protected View createView() {
-        return LayoutPreferenceBinding.inflate(LayoutInflater.from(getContext())).getRoot();
+        return LayoutPreferenceBinding.inflate(LayoutInflater.from(getFragment().getContext())).getRoot();
     }
 
     protected void fillView(View view) {
-        if(getSummaryProvider() != null)
-            setSummary(getSummaryProvider().getSummary(this));
-        
+        if (getSummaryProvider() != null) setSummary(getSummaryProvider().getSummary(this));
+
         LayoutPreferenceBinding binding = LayoutPreferenceBinding.bind(view);
         binding.title.setText(getTitle());
         binding.summary.setText(getSummary());
     }
 
+    protected void onClick() {}
+
     View getView() {
         if (view == null) {
             view = createView();
         }
+        view.setClickable(true);
+        view.setOnClickListener(v -> onClick());
         fillView(view);
         return view;
     }
+
     
 }

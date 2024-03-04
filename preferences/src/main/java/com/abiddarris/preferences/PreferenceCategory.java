@@ -10,12 +10,11 @@ import java.util.List;
 
 public class PreferenceCategory extends Preference {
 
-    private Context context;
     private List<Preference> preferences = new ArrayList<>();
     private String category;
 
-    public PreferenceCategory(Context context, String key) {
-        super(context, key);
+    public PreferenceCategory(PreferenceFragment fragment, String key) {
+        super(fragment, key);
     }
     
     public void addPreference(Preference preference) {
@@ -31,7 +30,7 @@ public class PreferenceCategory extends Preference {
     @Override
     protected View createView() {
         return LayoutCategoryBinding.inflate(LayoutInflater
-            .from(getContext()))
+            .from(getFragment().getContext()))
             .getRoot();
     }
     
