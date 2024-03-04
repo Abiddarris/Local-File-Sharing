@@ -93,6 +93,11 @@ public class Preference {
         }
         throw new NullPointerException("Fragment DataStore is null!");
     }
+    
+    protected void storeString(String value) {
+        getNonNullDataStore()
+            .store(getKey(), value);
+    }
 
     protected void onClick() {}
 

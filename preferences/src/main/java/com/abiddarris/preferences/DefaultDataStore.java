@@ -16,4 +16,12 @@ public class DefaultDataStore implements DataStore {
     public String getString(String key) {
         return preferences.getString(key, null);
     }
+    
+    @Override
+    public void store(String key, String value) {
+        preferences.edit()
+            .putString(key, value)
+            .commit();
+    }
+    
 }

@@ -6,22 +6,31 @@ import android.widget.Toast;
 import com.abiddarris.preferences.databinding.LayoutEditTextBinding;
 
 public class EditTextPreference extends DialogPreference {
+   
+    private LayoutEditTextBinding binding;
     
     public EditTextPreference(PreferenceFragment fragment, String key) {
         super(fragment, key);
     }
     
     @Override
-    protected View createDialogView(LayoutInflater inflater) {
+    protected View onCreateView(LayoutInflater inflater) {
         String value = getNonNullDataStore()
-                .getString(getKey());
+            .getString(getKey());
+        binding = LayoutEditTextBinding.inflate(inflater);
         
-        LayoutEditTextBinding binding = LayoutEditTextBinding.inflate(inflater);
         binding.textInput.getEditText()
             .setText(value);
         
         return binding.getRoot();
     }
     
+    @Override
+    protected void onSave() {
+        super.onSave();
+        
+        storeString(binding.textInput.getEditText()
+            .getText().toString());
+    }
     
 }
