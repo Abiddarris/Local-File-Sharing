@@ -19,5 +19,4 @@ public class DialogFragmentPreference extends DialogFragment {
         return preference.onCreateDialog();
     }
     
-    
 }

@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    
+  <style name="DialogRootLayoutStyle">
+        <item name="android:paddingLeft">@dimen/abc_dialog_padding_material</item>
+        <item name="android:paddingRight">@dimen/abc_dialog_padding_material</item>
+        <item name="android:paddingTop">@dimen/abc_dialog_padding_top_material</item>
+  </style>
+    
+</resources>
