@@ -33,7 +33,13 @@ public abstract class DialogPreference extends Preference {
     protected Dialog onCreateDialog() {
         return new MaterialAlertDialogBuilder(getFragment().getContext())
             .setTitle(getKey())
+            .setNegativeButton(android.R.string.cancel, (p1,p2) -> onCancel())
+            .setPositiveButton(android.R.string.ok, (p1,p2) -> onApply())
             .create();
     }
+    
+    protected void onCancel() {}
+    
+    protected void onApply() {}
     
 }
