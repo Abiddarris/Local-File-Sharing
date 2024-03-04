@@ -9,6 +9,7 @@
      android:foreground="?android:attr/selectableItemBackground">
 
     <TextView
+         android:textColor="?android:attr/textColorPrimary"
          android:layout_height="wrap_content"
          android:layout_width="match_parent"
          android:textSize="@dimen/title_text_size"
