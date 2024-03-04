@@ -7,6 +7,7 @@ import com.abiddarris.preferences.databinding.LayoutPreferenceBinding;
 
 public class Preference {
 
+    private DataStore dataStore;
     private PreferenceFragment fragment;
     private String key;
     private String title;
@@ -60,7 +61,8 @@ public class Preference {
     }
 
     protected View createView() {
-        return LayoutPreferenceBinding.inflate(LayoutInflater.from(getFragment().getContext())).getRoot();
+        return LayoutPreferenceBinding.inflate(LayoutInflater.from(getFragment().getContext()))
+                .getRoot();
     }
 
     protected void fillView(View view) {
@@ -69,6 +71,27 @@ public class Preference {
         LayoutPreferenceBinding binding = LayoutPreferenceBinding.bind(view);
         binding.title.setText(getTitle());
         binding.summary.setText(getSummary());
+    }
+    
+    public DataStore getDataStore() {
+        return this.dataStore;
+    }
+
+    public void setDataStore(DataStore dataStore) {
+        this.dataStore = dataStore;
+    }
+    
+    public DataStore getNonNullDataStore() {
+        DataStore dataStore = getDataStore();
+        if(dataStore != null) {
+            return dataStore;
+        }
+        dataStore = getFragment()
+            .getDefaultDataStore();
+        if(dataStore != null) {
+            return dataStore;
+        }
+        throw new NullPointerException("Fragment DataStore is null!");
     }
 
     protected void onClick() {}

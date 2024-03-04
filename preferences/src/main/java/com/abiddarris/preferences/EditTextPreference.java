@@ -2,6 +2,8 @@ package com.abiddarris.preferences;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
+import com.abiddarris.preferences.databinding.LayoutEditTextBinding;
 
 public class EditTextPreference extends DialogPreference {
     
@@ -11,7 +13,14 @@ public class EditTextPreference extends DialogPreference {
     
     @Override
     protected View createDialogView(LayoutInflater inflater) {
-        return inflater.inflate(R.layout.layout_edit_text, null);
+        String value = getNonNullDataStore()
+                .getString(getKey());
+        
+        LayoutEditTextBinding binding = LayoutEditTextBinding.inflate(inflater);
+        binding.textInput.getEditText()
+            .setText(value);
+        
+        return binding.getRoot();
     }
     
     
