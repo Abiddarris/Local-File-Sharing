@@ -22,4 +22,8 @@ public class DialogCommunicator extends ViewModel {
         return null;
     }
     
+    void clear() {
+        preferences.clear();
+    }
+    
 }

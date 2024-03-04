@@ -2,8 +2,10 @@ package com.abiddarris.preferences;
 
 import android.os.Bundle;
 import android.view.View;
+import androidx.annotation.CallSuper;
 import androidx.annotation.MainThread;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.abiddarris.preferences.databinding.PreferenceFragmentBinding;
 
@@ -29,6 +31,18 @@ public abstract class PreferenceFragment extends Fragment {
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(adapter);
     }
+    
+    @Override
+    @MainThread
+    @CallSuper
+    public void onDestroy() {
+        super.onDestroy();
+        
+        new ViewModelProvider(requireActivity())
+            .get(DialogCommunicator.class)
+            .clear();
+    }
+    
     
     public DataProvider getProvider() {
         return this.provider;
