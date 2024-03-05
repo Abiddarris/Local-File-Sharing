@@ -12,7 +12,7 @@ public class SettingsFragment extends PreferenceFragment {
     public Preference[] onCreatePreference() {
         EditTextPreference preference = new EditTextPreference(this, "name");
         preference.setTitle(R.string.name);
-        preference.setSummary("test");
+        preference.setSummaryProvider(EditTextPreference.EditTextSummaryProvider.getInstance());
         
         PreferenceCategory category = new PreferenceCategory(this, "general");
         category.setTitle(R.string.general);
