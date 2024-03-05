@@ -6,6 +6,8 @@
      android:layout_width="match_parent">
 
     <TextView
+         android:paddingTop="@dimen/preference_padding"
+         android:paddingBottom="@dimen/preference_padding"
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
          android:textSize="@dimen/category_text_size"

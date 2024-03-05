@@ -9,6 +9,7 @@
      android:foreground="?android:attr/selectableItemBackground">
 
     <TextView
+         android:paddingTop="@dimen/preference_padding"
          android:textColor="?android:attr/textColorPrimary"
          android:layout_height="wrap_content"
          android:layout_width="match_parent"
@@ -17,6 +18,7 @@
          android:id="@+id/title" />
 
     <TextView
+         android:paddingBottom="@dimen/preference_padding"
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
          android:layout_below="@id/title"
