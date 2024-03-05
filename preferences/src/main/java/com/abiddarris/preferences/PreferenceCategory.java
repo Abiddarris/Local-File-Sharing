@@ -17,10 +17,13 @@ public class PreferenceCategory extends Preference {
         super(fragment, key);
     }
     
-    public void addPreference(Preference preference) {
-        if(preference instanceof PreferenceCategory) 
-            throw new IllegalArgumentException("preference cannot be category!");
-        preferences.add(preference);
+    public void addPreference(Preference... preferences) {
+        for(Preference preference : preferences) {
+            if(preference instanceof PreferenceCategory) 
+                throw new IllegalArgumentException("preference cannot be category!");
+            
+            this.preferences.add(preference);
+        }
     }
     
     public Preference[] getPreferences() {

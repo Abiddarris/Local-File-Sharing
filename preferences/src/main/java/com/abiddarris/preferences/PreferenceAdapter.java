@@ -23,6 +23,7 @@ public class PreferenceAdapter extends Adapter<PreferenceAdapter.PreferenceHolde
         List<Preference> preferencesList = new ArrayList<>();
         for(Preference preference : preferences) {
             preferencesList.add(preference);
+            
             if(preference instanceof PreferenceCategory) {
                 PreferenceCategory category = (PreferenceCategory)preference;
                 for(Preference preference0 : category.getPreferences()) {
@@ -30,6 +31,7 @@ public class PreferenceAdapter extends Adapter<PreferenceAdapter.PreferenceHolde
                 }
             }
         }
+        
         this.preferences = preferencesList.toArray(new Preference[0]);
         
         inflater = LayoutInflater.from(context);
