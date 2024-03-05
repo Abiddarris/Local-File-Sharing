@@ -55,6 +55,15 @@ public class PreferenceAdapter extends Adapter<PreferenceAdapter.PreferenceHolde
         return preferences.length;
     }
     
+    void refresh(Preference preference) {
+        for(int i = 0; i < preferences.length; i++) {
+            if(preferences[i] == preference) {
+                notifyItemChanged(i);
+                return;
+            }
+        }
+    }
+    
     public static class PreferenceHolder extends ViewHolder {
         
         private LinearLayout layout;

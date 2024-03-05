@@ -13,8 +13,7 @@ public class Preference {
     private String title;
     private String summary = "";
     private SummaryProvider summaryProvider;
-    private View view;
-
+    
     public Preference(PreferenceFragment fragment, String key) {
         this.fragment = fragment;
         this.key = key;
@@ -59,19 +58,6 @@ public class Preference {
     public void setSummaryProvider(SummaryProvider summaryProvider) {
         this.summaryProvider = summaryProvider;
     }
-
-    protected View createView() {
-        return LayoutPreferenceBinding.inflate(LayoutInflater.from(getFragment().getContext()))
-                .getRoot();
-    }
-
-    protected void fillView(View view) {
-        if (getSummaryProvider() != null) setSummary(getSummaryProvider().getSummary(this));
-
-        LayoutPreferenceBinding binding = LayoutPreferenceBinding.bind(view);
-        binding.title.setText(getTitle());
-        binding.summary.setText(getSummary());
-    }
     
     public DataStore getDataStore() {
         return this.dataStore;
@@ -93,18 +79,33 @@ public class Preference {
         }
         throw new NullPointerException("Fragment DataStore is null!");
     }
+
+    protected View createView() {
+        return LayoutPreferenceBinding.inflate(LayoutInflater.from(getFragment().getContext()))
+                .getRoot();
+    }
+
+    protected void fillView(View view) {
+        if (getSummaryProvider() != null) setSummary(getSummaryProvider().getSummary(this));
+
+        LayoutPreferenceBinding binding = LayoutPreferenceBinding.bind(view);
+        binding.title.setText(getTitle());
+        binding.summary.setText(getSummary());
+    }
     
     protected void storeString(String value) {
         getNonNullDataStore()
             .store(getKey(), value);
+        
+        getFragment()
+            .getAdapter()
+            .refresh(this);
     }
 
     protected void onClick() {}
 
     View getView() {
-        if (view == null) {
-            view = createView();
-        }
+        View view = createView();
         view.setClickable(true);
         view.setOnClickListener(v -> onClick());
         fillView(view);

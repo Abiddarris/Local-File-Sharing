@@ -12,7 +12,8 @@ import com.abiddarris.preferences.databinding.PreferenceFragmentBinding;
 public abstract class PreferenceFragment extends Fragment {
 
     private DataStore defaultDataStore;
-
+    private PreferenceAdapter adapter;
+    
     public PreferenceFragment() {
         super(R.layout.preference_fragment);
     }
@@ -30,9 +31,10 @@ public abstract class PreferenceFragment extends Fragment {
     @MainThread
     public final void onViewCreated(View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
+        
+        adapter = new PreferenceAdapter(getContext(), onCreatePreference());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        PreferenceAdapter adapter = new PreferenceAdapter(getContext(), onCreatePreference());
         PreferenceFragmentBinding binding = PreferenceFragmentBinding.bind(view);
 
         binding.recyclerView.setLayoutManager(layoutManager);
@@ -62,4 +64,7 @@ public abstract class PreferenceFragment extends Fragment {
 
     public abstract Preference[] onCreatePreference();
     
+    PreferenceAdapter getAdapter() {
+        return adapter;
+    }
 }
