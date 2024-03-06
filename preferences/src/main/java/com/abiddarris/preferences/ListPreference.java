@@ -6,6 +6,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ListPreference extends DialogPreference {
 
+    private int selection;
     private ListEntry[] entries = new ListEntry[0];
     private String defaultValue;
 
@@ -15,6 +16,10 @@ public class ListPreference extends DialogPreference {
 
     public void setEntries(ListEntry... entries) {
         this.entries = entries;
+    }
+    
+    public ListEntry[] getEntries() {
+        return entries;
     }
 
     @Override
@@ -32,10 +37,17 @@ public class ListPreference extends DialogPreference {
 
         return new MaterialAlertDialogBuilder(getFragment().getContext())
                 .setTitle(getTitle())
-                .setSingleChoiceItems(choices, selection, (dialog, which) -> {})
+                .setSingleChoiceItems(choices, selection, (dialog, which) -> this.selection = which)
                 .setNegativeButton(android.R.string.cancel, (p1, p2) -> onCancel())
                 .setPositiveButton(android.R.string.ok, (p1, p2) -> onSave())
                 .create();
+    }
+    
+    @Override
+    protected void onSave() {
+        super.onSave();
+        
+        storeString(getEntries()[selection].getValue());
     }
 
     public String getDefaultValue() {
