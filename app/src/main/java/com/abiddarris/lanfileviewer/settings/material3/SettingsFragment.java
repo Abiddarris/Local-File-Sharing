@@ -41,8 +41,27 @@ public class SettingsFragment extends PreferenceFragment {
         PreferenceCategory files = new PreferenceCategory(this, "files");
         files.setTitle(R.string.files);
         
+        ListEntry[] accessPermissions = {
+            new ListEntry(getString(R.string.allow), "0"),
+            new ListEntry(getString(R.string.disallow), "1"),
+            new ListEntry(getString(R.string.ask), "2")
+        };
+        
+        ListPreference writeAccess = new ListPreference(this, "writeAccess");
+        writeAccess.setDefaultValue("1");
+        writeAccess.setSummaryProvider(ListPreference.ListPreferenceSummaryProvider.getInstance());
+        writeAccess.setTitle(R.string.write_access);
+        writeAccess.setEntries(accessPermissions);
+        
+        ListPreference deleteAccess = new ListPreference(this, "deleteAccess");
+        deleteAccess.setDefaultValue("1");
+        deleteAccess.setSummaryProvider(ListPreference.ListPreferenceSummaryProvider.getInstance());
+        deleteAccess.setTitle(R.string.delete_access);
+        deleteAccess.setEntries(accessPermissions);
+        
         PreferenceCategory permission = new PreferenceCategory(this, "permission");
         permission.setTitle(R.string.permission);
+        permission.addPreference(writeAccess, deleteAccess);
         
         PreferenceCategory cache = new PreferenceCategory(this, "cache");
         cache.setTitle(R.string.cache);
