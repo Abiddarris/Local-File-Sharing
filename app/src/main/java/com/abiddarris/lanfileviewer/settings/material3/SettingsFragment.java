@@ -24,17 +24,18 @@ public class SettingsFragment extends PreferenceFragment {
         connectTimeout.setTitle(R.string.timeout);
         connectTimeout.setSummaryProvider(EditTextPreference.EditTextSummaryProvider.getInstance());
         
-        ListPreference preference = new ListPreference(this, "theme");
-        preference.setTitle(R.string.theme);
-        preference.setEntries(
+        ListPreference themes = new ListPreference(this, "theme");
+        themes.setTitle(R.string.theme);
+        themes.setEntries(
             new ListEntry(getString(R.string.dark), "0"),
             new ListEntry(getString(R.string.light), "1"),
             new ListEntry(getString(R.string.follow_system), "2")
         );
+        themes.setDefaultValue("0");
         
         PreferenceCategory general = new PreferenceCategory(this, "general");
         general.setTitle(R.string.general);
-        general.addPreference(name, password, connectTimeout, preference);
+        general.addPreference(name, password, connectTimeout, themes);
         
         PreferenceCategory files = new PreferenceCategory(this, "files");
         files.setTitle(R.string.files);
