@@ -24,13 +24,14 @@ public class ListPreference extends DialogPreference {
 
     @Override
     protected Dialog onCreateDialog() {
-        String defaultValue = getDefaultValue();
+        String value = getValueOrDefault();
+        
         String[] choices = new String[entries.length];
         int selection = -1;
         for (int i = 0; i < choices.length; i++) {
             choices[i] = entries[i].getTitle();
             
-            if(selection == -1 && entries[i].getValue().equalsIgnoreCase(defaultValue)) {
+            if(selection == -1 && entries[i].getValue().equals(value)) {
                 selection = i;
             }
         }
@@ -49,6 +50,16 @@ public class ListPreference extends DialogPreference {
         
         storeString(getEntries()[selection].getValue());
     }
+    
+    public String getValue() {
+        return getNonNullDataStore().getString(getKey());
+    }
+    
+    public String getValueOrDefault() {
+        String value = getValue();
+        
+        return value != null ? value : getDefaultValue();
+    }
 
     public String getDefaultValue() {
         return this.defaultValue;
@@ -56,5 +67,28 @@ public class ListPreference extends DialogPreference {
 
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
+    }
+    
+    public static class ListPreferenceSummaryProvider implements SummaryProvider {
+       
+        private static final ListPreferenceSummaryProvider provider = new ListPreferenceSummaryProvider();
+        
+        @Override
+        public String getSummary(Preference preference) {
+            ListPreference listPreferences = ((ListPreference)preference);
+            String value = listPreferences.getValueOrDefault();
+            
+            for(ListEntry entry : listPreferences.getEntries()) {
+            	if(entry.getValue().equals(value)) {
+                    return entry.getTitle();
+                }
+            }
+            return "";
+        }
+        
+        public static ListPreferenceSummaryProvider getInstance() {
+        	return provider;
+        }
+        
     }
 }

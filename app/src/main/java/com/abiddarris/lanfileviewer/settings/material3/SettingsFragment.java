@@ -32,6 +32,7 @@ public class SettingsFragment extends PreferenceFragment {
             new ListEntry(getString(R.string.follow_system), "2")
         );
         themes.setDefaultValue("0");
+        themes.setSummaryProvider(ListPreference.ListPreferenceSummaryProvider.getInstance());
         
         PreferenceCategory general = new PreferenceCategory(this, "general");
         general.setTitle(R.string.general);
