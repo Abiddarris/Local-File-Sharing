@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent"
+     android:orientation="horizontal"
+     android:id="@+id/coordinator">
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_centerVertical="true"
+         android:layout_alignParentEnd="true"
+         android:id="@+id/materialSwitch"
+         android:text=" " />
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="wrap_content"
+         android:layout_toLeftOf="@id/materialSwitch">
+
+        <include
+             layout="@layout/layout_preference" />
+
+    </LinearLayout>
+
+</RelativeLayout>

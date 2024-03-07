@@ -3,25 +3,27 @@
      xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:app="http://schemas.android.com/apk/res-auto"
      android:layout_height="wrap_content"
-     android:layout_width="match_parent"
+     android:layout_width="wrap_content"
      android:background="?android:attr/selectableItemBackground"
      android:clickable="true"
      android:foreground="?android:attr/selectableItemBackground">
 
     <TextView
-         android:paddingTop="@dimen/preference_padding"
-         android:textColor="?android:attr/textColorPrimary"
          android:layout_height="wrap_content"
-         android:layout_width="match_parent"
+         android:layout_width="wrap_content"
+         android:layout_alignParentEnd="true"
          android:textSize="@dimen/title_text_size"
+         android:textColor="?android:attr/textColorPrimary"
          android:layout_marginLeft="@dimen/preference_text_left_margin"
+         android:layout_alignParentStart="true"
+         android:paddingTop="@dimen/preference_padding"
          android:id="@+id/title" />
 
     <TextView
-         android:paddingBottom="@dimen/preference_padding"
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
          android:layout_below="@id/title"
+         android:paddingBottom="@dimen/preference_padding"
          android:textSize="@dimen/summary_text_size"
          android:layout_marginLeft="@dimen/preference_text_left_margin"
          android:id="@+id/summary" />

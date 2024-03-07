@@ -7,6 +7,7 @@ import com.abiddarris.preferences.ListPreference;
 import com.abiddarris.preferences.Preference;
 import com.abiddarris.preferences.PreferenceCategory;
 import com.abiddarris.preferences.PreferenceFragment;
+import com.abiddarris.preferences.SwitchPreference;
 
 public class SettingsFragment extends PreferenceFragment {
 
@@ -41,6 +42,10 @@ public class SettingsFragment extends PreferenceFragment {
         PreferenceCategory files = new PreferenceCategory(this, "files");
         files.setTitle(R.string.files);
         
+        SwitchPreference confirmConnectRequest = new SwitchPreference(this, "confirmConnectRequest");
+        confirmConnectRequest.setTitle(R.string.confirm_connect_request);
+        confirmConnectRequest.setSummary(getString(R.string.confirm_connect_request_desc));
+        
         ListEntry[] accessPermissions = {
             new ListEntry(getString(R.string.allow), "0"),
             new ListEntry(getString(R.string.disallow), "1"),
@@ -61,7 +66,7 @@ public class SettingsFragment extends PreferenceFragment {
         
         PreferenceCategory permission = new PreferenceCategory(this, "permission");
         permission.setTitle(R.string.permission);
-        permission.addPreference(writeAccess, deleteAccess);
+        permission.addPreference(writeAccess, deleteAccess, confirmConnectRequest);
         
         PreferenceCategory cache = new PreferenceCategory(this, "cache");
         cache.setTitle(R.string.cache);

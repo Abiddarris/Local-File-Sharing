@@ -3,6 +3,7 @@ package com.abiddarris.preferences;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 import com.abiddarris.preferences.databinding.LayoutPreferenceBinding;
 
 public class Preference {
@@ -88,9 +89,11 @@ public class Preference {
     protected void fillView(View view) {
         if (getSummaryProvider() != null) setSummary(getSummaryProvider().getSummary(this));
 
-        LayoutPreferenceBinding binding = LayoutPreferenceBinding.bind(view);
-        binding.title.setText(getTitle());
-        binding.summary.setText(getSummary());
+        TextView title = view.findViewById(R.id.title);
+        TextView summary = view.findViewById(R.id.summary);
+        
+        title.setText(getTitle());
+        summary.setText(getSummary());
     }
     
     protected void storeString(String value) {
