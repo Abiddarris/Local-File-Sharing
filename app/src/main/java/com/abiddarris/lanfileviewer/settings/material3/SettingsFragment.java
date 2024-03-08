@@ -66,7 +66,7 @@ public class SettingsFragment extends PreferenceFragment {
         
         PreferenceCategory permission = new PreferenceCategory(this, "permission");
         permission.setTitle(R.string.permission);
-        permission.addPreference(writeAccess, deleteAccess, confirmConnectRequest);
+        permission.addPreference(confirmConnectRequest, writeAccess, deleteAccess);
         
         PreferenceCategory cache = new PreferenceCategory(this, "cache");
         cache.setTitle(R.string.cache);
