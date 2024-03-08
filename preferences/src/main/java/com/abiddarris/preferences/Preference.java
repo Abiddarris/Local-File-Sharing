@@ -1,9 +1,12 @@
 package com.abiddarris.preferences;
 
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.core.content.ContextCompat;
 import com.abiddarris.preferences.databinding.LayoutPreferenceBinding;
 
 public class Preference {
@@ -111,6 +114,14 @@ public class Preference {
         View view = createView();
         view.setClickable(true);
         view.setOnClickListener(v -> onClick());
+        
+        TypedValue value = new TypedValue();
+        view.getContext()
+            .getTheme()
+            .resolveAttribute(android.R.attr.selectableItemBackground, value, true);
+ 
+        view.setBackgroundResource(value.resourceId);
+        
         fillView(view);
         return view;
     }
