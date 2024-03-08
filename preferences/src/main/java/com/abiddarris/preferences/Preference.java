@@ -108,12 +108,17 @@ public class Preference {
             .refresh(this);
     }
 
+    @Deprecated
     protected void onClick() {}
 
+    protected void onClick(View view) {
+    	onClick();
+    }
+    
     View getView() {
         View view = createView();
         view.setClickable(true);
-        view.setOnClickListener(v -> onClick());
+        view.setOnClickListener(v -> onClick(view));
         
         TypedValue value = new TypedValue();
         view.getContext()
