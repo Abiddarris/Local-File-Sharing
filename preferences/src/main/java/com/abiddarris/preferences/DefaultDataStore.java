@@ -18,9 +18,21 @@ public class DefaultDataStore implements DataStore {
     }
     
     @Override
+    public boolean getBoolean(String key) {
+        return preferences.getBoolean(key, false);
+    }
+    
+    @Override
     public void store(String key, String value) {
         preferences.edit()
             .putString(key, value)
+            .commit();
+    }
+    
+    @Override
+    public void store(String key, boolean value) {
+        preferences.edit()
+            .putBoolean(key, value)
             .commit();
     }
     

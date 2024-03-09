@@ -107,6 +107,15 @@ public class Preference {
             .getAdapter()
             .refresh(this);
     }
+    
+    protected void storeBoolean(boolean value) {
+        getNonNullDataStore()
+            .store(getKey(), value);
+        
+        getFragment()
+            .getAdapter()
+            .refresh(this);
+    }
 
     @Deprecated
     protected void onClick() {}
