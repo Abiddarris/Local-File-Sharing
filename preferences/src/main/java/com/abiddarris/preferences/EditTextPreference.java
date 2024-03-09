@@ -28,7 +28,8 @@ public class EditTextPreference extends DialogPreference {
         super.onSave();
 
         storeString(binding.textInput.getEditText().getText().toString());
-    }
+        refillView();
+      }
 
     public static class EditTextSummaryProvider implements SummaryProvider {
 

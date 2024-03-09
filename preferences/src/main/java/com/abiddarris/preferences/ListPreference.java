@@ -49,6 +49,7 @@ public class ListPreference extends DialogPreference {
         super.onSave();
         
         storeString(getEntries()[selection].getValue());
+        refillView();
     }
     
     public String getValue() {

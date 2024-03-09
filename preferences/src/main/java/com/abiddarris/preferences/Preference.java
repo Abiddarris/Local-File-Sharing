@@ -17,6 +17,7 @@ public class Preference {
     private String title;
     private String summary = "";
     private SummaryProvider summaryProvider;
+    private View view;
     
     public Preference(PreferenceFragment fragment, String key) {
         this.fragment = fragment;
@@ -102,19 +103,15 @@ public class Preference {
     protected void storeString(String value) {
         getNonNullDataStore()
             .store(getKey(), value);
-        
-        getFragment()
-            .getAdapter()
-            .refresh(this);
     }
     
     protected void storeBoolean(boolean value) {
         getNonNullDataStore()
             .store(getKey(), value);
-        
-        getFragment()
-            .getAdapter()
-            .refresh(this);
+    }
+    
+    protected void refillView() {
+        if(view != null) fillView(view);
     }
 
     @Deprecated
@@ -125,7 +122,7 @@ public class Preference {
     }
     
     View getView() {
-        View view = createView();
+        view = createView();
         view.setClickable(true);
         view.setOnClickListener(v -> onClick(view));
         
