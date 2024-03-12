@@ -34,6 +34,7 @@ public class SettingsFragment extends PreferenceFragment {
         connectTimeout.setSummaryProvider(EditTextPreference.EditTextSummaryProvider.getInstance());
         connectTimeout.setDefaultValue("30");
         connectTimeout.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
+        connectTimeout.setSummaryProvider(p -> Settings.getConnectTimeout(getContext()) + getString(R.string.second));
         
         ListPreference themes = new ListPreference(this, "theme");
         themes.setTitle(R.string.theme);
