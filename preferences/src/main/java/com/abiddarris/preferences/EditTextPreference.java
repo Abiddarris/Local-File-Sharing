@@ -20,7 +20,9 @@ public class EditTextPreference extends DialogPreference {
         binding = LayoutEditTextBinding.inflate(inflater);
 
         binding.textInput.getEditText().setText(value);
-
+        binding.textInput.getEditText()
+            .requestFocus();
+        
         return binding.getRoot();
     }
 
