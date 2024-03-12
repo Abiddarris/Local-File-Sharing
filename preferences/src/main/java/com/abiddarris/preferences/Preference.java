@@ -12,13 +12,14 @@ import com.abiddarris.preferences.databinding.LayoutPreferenceBinding;
 public class Preference {
 
     private DataStore dataStore;
+    private OnSavePreference onSavePreference;
     private PreferenceFragment fragment;
     private String key;
     private String title;
     private String summary = "";
     private SummaryProvider summaryProvider;
     private View view;
-    
+
     public Preference(PreferenceFragment fragment, String key) {
         this.fragment = fragment;
         this.key = key;
@@ -63,7 +64,7 @@ public class Preference {
     public void setSummaryProvider(SummaryProvider summaryProvider) {
         this.summaryProvider = summaryProvider;
     }
-    
+
     public DataStore getDataStore() {
         return this.dataStore;
     }
@@ -71,15 +72,14 @@ public class Preference {
     public void setDataStore(DataStore dataStore) {
         this.dataStore = dataStore;
     }
-    
+
     public DataStore getNonNullDataStore() {
         DataStore dataStore = getDataStore();
-        if(dataStore != null) {
+        if (dataStore != null) {
             return dataStore;
         }
-        dataStore = getFragment()
-            .getDefaultDataStore();
-        if(dataStore != null) {
+        dataStore = getFragment().getDefaultDataStore();
+        if (dataStore != null) {
             return dataStore;
         }
         throw new NullPointerException("Fragment DataStore is null!");
@@ -95,47 +95,61 @@ public class Preference {
 
         TextView title = view.findViewById(R.id.title);
         TextView summary = view.findViewById(R.id.summary);
-        
+
         title.setText(getTitle());
         summary.setText(getSummary());
     }
-    
+
     protected void storeString(String value) {
-        getNonNullDataStore()
-            .store(getKey(), value);
+        if(getOnSavePreference() != null &&
+            !getOnSavePreference().save(this, value)) return;
+        
+        getNonNullDataStore().store(getKey(), value);
     }
-    
+
     protected void storeBoolean(boolean value) {
-        getNonNullDataStore()
-            .store(getKey(), value);
+        if(getOnSavePreference() != null &&
+            !getOnSavePreference().save(this, value)) return;
+        
+        getNonNullDataStore().store(getKey(), value);
     }
-    
+
     protected void refillView() {
-        if(view != null) fillView(view);
+        if (view != null) fillView(view);
     }
 
     @Deprecated
     protected void onClick() {}
 
     protected void onClick(View view) {
-    	onClick();
+        onClick();
     }
-    
+
     View getView() {
         view = createView();
         view.setClickable(true);
         view.setOnClickListener(v -> onClick(view));
-        
+
         TypedValue value = new TypedValue();
         view.getContext()
-            .getTheme()
-            .resolveAttribute(android.R.attr.selectableItemBackground, value, true);
- 
+                .getTheme()
+                .resolveAttribute(android.R.attr.selectableItemBackground, value, true);
+
         view.setBackgroundResource(value.resourceId);
-        
+
         fillView(view);
         return view;
     }
 
-    
+    public static interface OnSavePreference {
+        boolean save(Preference preference, Object newValue);
+    }
+
+    public OnSavePreference getOnSavePreference() {
+        return this.onSavePreference;
+    }
+
+    public void setOnSavePreference(OnSavePreference onSavePreference) {
+        this.onSavePreference = onSavePreference;
+    }
 }

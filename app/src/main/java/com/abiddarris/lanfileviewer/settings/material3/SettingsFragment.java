@@ -18,6 +18,8 @@ public class SettingsFragment extends PreferenceFragment {
         name.setTitle(R.string.name);
         name.setSummaryProvider(EditTextPreference.EditTextSummaryProvider.getInstance());
         name.setDefaultValue(Settings.getDefaultName(getContext()));
+        name.setOnSavePreference((p, newName) -> !((String)newName)
+            .isBlank());
         
         EditTextPreference password = new EditTextPreference(this, "password");
         password.setTitle(R.string.password);
