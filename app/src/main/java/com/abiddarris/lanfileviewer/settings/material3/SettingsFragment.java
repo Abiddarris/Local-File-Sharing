@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.settings.material3;
 
+import com.abiddarris.lanfileviewer.settings.Settings;
 import com.abiddarris.preferences.EditTextPreference;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.preferences.ListEntry;
@@ -16,6 +17,7 @@ public class SettingsFragment extends PreferenceFragment {
         EditTextPreference name = new EditTextPreference(this, "name");
         name.setTitle(R.string.name);
         name.setSummaryProvider(EditTextPreference.EditTextSummaryProvider.getInstance());
+        name.setDefaultValue(Settings.getDefaultName(getContext()));
         
         EditTextPreference password = new EditTextPreference(this, "password");
         password.setTitle(R.string.password);
@@ -24,6 +26,7 @@ public class SettingsFragment extends PreferenceFragment {
         EditTextPreference connectTimeout = new EditTextPreference(this, "connect_timeout");
         connectTimeout.setTitle(R.string.timeout);
         connectTimeout.setSummaryProvider(EditTextPreference.EditTextSummaryProvider.getInstance());
+        connectTimeout.setDefaultValue("30");
         
         ListPreference themes = new ListPreference(this, "theme");
         themes.setTitle(R.string.theme);

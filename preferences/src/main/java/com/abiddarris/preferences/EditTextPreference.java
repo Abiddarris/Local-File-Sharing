@@ -7,6 +7,7 @@ import com.abiddarris.preferences.databinding.LayoutEditTextBinding;
 
 public class EditTextPreference extends DialogPreference {
 
+    private String defaultValue;
     private LayoutEditTextBinding binding;
 
     public EditTextPreference(PreferenceFragment fragment, String key) {
@@ -15,7 +16,7 @@ public class EditTextPreference extends DialogPreference {
 
     @Override
     protected View onCreateView(LayoutInflater inflater) {
-        String value = getNonNullDataStore().getString(getKey());
+        String value = getValueOrDefault();
         binding = LayoutEditTextBinding.inflate(inflater);
 
         binding.textInput.getEditText().setText(value);
@@ -29,21 +30,35 @@ public class EditTextPreference extends DialogPreference {
 
         storeString(binding.textInput.getEditText().getText().toString());
         refillView();
-      }
+    }
+    
+    public String getValueOrDefault() {
+    	String value = getNonNullDataStore().getString(getKey());
+        return value != null ? value : getDefaultValue();
+    }
 
     public static class EditTextSummaryProvider implements SummaryProvider {
 
-        private static final EditTextSummaryProvider summaryProvider = new EditTextSummaryProvider();
-        
+        private static final EditTextSummaryProvider summaryProvider =
+                new EditTextSummaryProvider();
+
         @Override
         public String getSummary(Preference preference) {
-            String value = preference.getNonNullDataStore()
-                .getString(preference.getKey());
+            EditTextPreference editTextPreference = (EditTextPreference)preference;
+            String value = editTextPreference.getValueOrDefault();
             return value == null ? "" : value;
         }
-        
+
         public static EditTextSummaryProvider getInstance() {
             return summaryProvider;
         }
+    }
+
+    public String getDefaultValue() {
+        return this.defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 }
