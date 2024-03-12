@@ -23,9 +23,14 @@ public class EditTextPreference extends DialogPreference {
 
         binding.textInput.getEditText().setText(value);
         binding.textInput.getEditText().requestFocus();
-
+        
         if(getOnBindEditTextListener() != null)
             getOnBindEditTextListener().onBind(binding.textInput.getEditText());
+        
+        if(value != null) {
+            binding.textInput.getEditText()
+                .setSelection(value.length());
+        }
         
         return binding.getRoot();
     }
