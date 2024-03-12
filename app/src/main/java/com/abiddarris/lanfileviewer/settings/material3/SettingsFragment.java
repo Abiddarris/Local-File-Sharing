@@ -1,5 +1,6 @@
 package com.abiddarris.lanfileviewer.settings.material3;
 
+import android.text.InputType;
 import com.abiddarris.lanfileviewer.settings.Settings;
 import com.abiddarris.preferences.EditTextPreference;
 import com.abiddarris.lanfileviewer.R;
@@ -32,6 +33,7 @@ public class SettingsFragment extends PreferenceFragment {
         connectTimeout.setTitle(R.string.timeout);
         connectTimeout.setSummaryProvider(EditTextPreference.EditTextSummaryProvider.getInstance());
         connectTimeout.setDefaultValue("30");
+        connectTimeout.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
         
         ListPreference themes = new ListPreference(this, "theme");
         themes.setTitle(R.string.theme);

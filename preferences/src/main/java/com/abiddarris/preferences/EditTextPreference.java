@@ -2,12 +2,14 @@ package com.abiddarris.preferences;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.abiddarris.preferences.databinding.LayoutEditTextBinding;
 
 public class EditTextPreference extends DialogPreference {
 
     private String defaultValue;
+    private OnBindEditTextListener onBindEditTextListener;
     private LayoutEditTextBinding binding;
 
     public EditTextPreference(PreferenceFragment fragment, String key) {
@@ -20,8 +22,10 @@ public class EditTextPreference extends DialogPreference {
         binding = LayoutEditTextBinding.inflate(inflater);
 
         binding.textInput.getEditText().setText(value);
-        binding.textInput.getEditText()
-            .requestFocus();
+        binding.textInput.getEditText().requestFocus();
+
+        if(getOnBindEditTextListener() != null)
+            getOnBindEditTextListener().onBind(binding.textInput.getEditText());
         
         return binding.getRoot();
     }
@@ -33,9 +37,9 @@ public class EditTextPreference extends DialogPreference {
         storeString(binding.textInput.getEditText().getText().toString());
         refillView();
     }
-    
+
     public String getValueOrDefault() {
-    	String value = getNonNullDataStore().getString(getKey());
+        String value = getNonNullDataStore().getString(getKey());
         return value != null ? value : getDefaultValue();
     }
 
@@ -46,7 +50,7 @@ public class EditTextPreference extends DialogPreference {
 
         @Override
         public String getSummary(Preference preference) {
-            EditTextPreference editTextPreference = (EditTextPreference)preference;
+            EditTextPreference editTextPreference = (EditTextPreference) preference;
             String value = editTextPreference.getValueOrDefault();
             return value == null ? "" : value;
         }
@@ -56,11 +60,23 @@ public class EditTextPreference extends DialogPreference {
         }
     }
 
+    public static interface OnBindEditTextListener {
+        void onBind(EditText editText);
+    }
+
     public String getDefaultValue() {
         return this.defaultValue;
     }
 
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
+    }
+
+    public OnBindEditTextListener getOnBindEditTextListener() {
+        return this.onBindEditTextListener;
+    }
+
+    public void setOnBindEditTextListener(OnBindEditTextListener onBindEditTextListener) {
+        this.onBindEditTextListener = onBindEditTextListener;
     }
 }
