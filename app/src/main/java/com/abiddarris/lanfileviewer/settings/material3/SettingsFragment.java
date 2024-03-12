@@ -23,7 +23,10 @@ public class SettingsFragment extends PreferenceFragment {
         
         EditTextPreference password = new EditTextPreference(this, "password");
         password.setTitle(R.string.password);
-        password.setSummaryProvider(EditTextPreference.EditTextSummaryProvider.getInstance());
+        password.setSummaryProvider(p -> {
+            String passwordValue = Settings.getPassword(getContext());
+            return passwordValue == null ? getString(R.string.no_password) : passwordValue; 
+        });
         
         EditTextPreference connectTimeout = new EditTextPreference(this, "connect_timeout");
         connectTimeout.setTitle(R.string.timeout);
