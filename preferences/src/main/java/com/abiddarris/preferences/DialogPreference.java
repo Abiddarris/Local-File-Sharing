@@ -60,5 +60,6 @@ public abstract class DialogPreference extends Preference {
 
     protected void onSave() {}
 
+    protected void onDialogDestroy() {}
     
 }

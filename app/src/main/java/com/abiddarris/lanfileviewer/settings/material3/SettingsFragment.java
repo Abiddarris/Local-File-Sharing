@@ -94,8 +94,13 @@ public class SettingsFragment extends PreferenceFragment {
         permission.setTitle(R.string.permission);
         permission.addPreference(confirmConnectRequest, writeAccess, deleteAccess);
         
+        DeleteThumbnailsCachePreference deleteThumbnailsCache = new DeleteThumbnailsCachePreference(this, "thumbnailsCache");
+        deleteThumbnailsCache.setTitle(R.string.thumbnails_cache);
+        deleteThumbnailsCache.setSummary(getString(R.string.delete_thumbnails_cache));
+        
         PreferenceCategory cache = new PreferenceCategory(this, "cache");
         cache.setTitle(R.string.cache);
+        cache.addPreference(deleteThumbnailsCache);
         
         return new Preference[] {general, files, permission, cache};
     }
