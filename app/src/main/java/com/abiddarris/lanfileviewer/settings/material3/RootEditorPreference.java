@@ -48,6 +48,8 @@ public class RootEditorPreference extends DialogPreference {
     
     @Override
     protected void onViewCreated(AlertDialog dialog, View view) {
+        this.dialog = dialog;
+        
         adapter = new RootAdapter(getContext());
         
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
