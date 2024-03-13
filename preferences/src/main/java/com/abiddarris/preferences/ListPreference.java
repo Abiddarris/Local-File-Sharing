@@ -2,6 +2,7 @@ package com.abiddarris.preferences;
 
 import android.app.Dialog;
 import android.widget.Toast;
+import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ListPreference extends DialogPreference {
@@ -23,7 +24,7 @@ public class ListPreference extends DialogPreference {
     }
 
     @Override
-    protected Dialog onCreateDialog() {
+    protected Dialog onCreateDialog(DialogFragment fragment) {
         String value = getValueOrDefault();
         
         String[] choices = new String[entries.length];
@@ -40,7 +41,10 @@ public class ListPreference extends DialogPreference {
                 .setTitle(getTitle())
                 .setSingleChoiceItems(choices, selection, (dialog, which) -> this.selection = which)
                 .setNegativeButton(android.R.string.cancel, (p1, p2) -> onCancel())
-                .setPositiveButton(android.R.string.ok, (p1, p2) -> onSave())
+                .setPositiveButton(android.R.string.ok, (p1, p2) -> {
+                    fragment.dismiss();
+                    onSave();
+                })
                 .create();
     }
     

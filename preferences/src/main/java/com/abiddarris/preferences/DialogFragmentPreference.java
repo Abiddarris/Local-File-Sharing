@@ -16,7 +16,7 @@ public class DialogFragmentPreference extends DialogFragment {
             .get(DialogCommunicator.class)
             .find(key);
         
-        return preference.onCreateDialog();
+        return preference.onCreateDialog(this);
     }
     
 }
