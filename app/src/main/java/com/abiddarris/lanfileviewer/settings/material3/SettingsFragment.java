@@ -1,13 +1,17 @@
 package com.abiddarris.lanfileviewer.settings.material3;
 
 import android.text.InputType;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.preference.PreferenceManager;
 import com.abiddarris.lanfileviewer.settings.Settings;
+import com.abiddarris.lanfileviewer.utils.Theme;
 import com.abiddarris.preferences.EditTextPreference;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.preferences.ListEntry;
 import com.abiddarris.preferences.ListPreference;
 import com.abiddarris.preferences.Preference;
 import com.abiddarris.preferences.PreferenceCategory;
+import com.abiddarris.preferences.PreferenceChangeDelegator;
 import com.abiddarris.preferences.PreferenceFragment;
 import com.abiddarris.preferences.SwitchPreference;
 
@@ -45,6 +49,13 @@ public class SettingsFragment extends PreferenceFragment {
         );
         themes.setDefaultValue("0");
         themes.setSummaryProvider(ListPreference.ListPreferenceSummaryProvider.getInstance());
+        
+        PreferenceChangeDelegator delegator = new PreferenceChangeDelegator(
+            PreferenceManager.getDefaultSharedPreferences(getContext()));
+        delegator.addListener("theme", (sharedPreference, key) -> Theme.apply(getContext()));
+        
+        getLifecycle()
+            .addObserver(delegator);
         
         PreferenceCategory general = new PreferenceCategory(this, "general");
         general.setTitle(R.string.general);
