@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.core.content.ContextCompat;
@@ -16,7 +18,7 @@ public class Preference {
     private PreferenceFragment fragment;
     private String key;
     private String title;
-    private String summary = "";
+    private String summary;
     private SummaryProvider summaryProvider;
     private View view;
 
@@ -100,9 +102,22 @@ public class Preference {
 
         TextView title = view.findViewById(R.id.title);
         TextView summary = view.findViewById(R.id.summary);
-
-        title.setText(getTitle());
-        summary.setText(getSummary());
+        TextView titleInCenter = view.findViewById(R.id.titleInCenter);
+        
+        if(getSummary() == null) {
+            summary.setVisibility(View.INVISIBLE);
+            title.setVisibility(View.INVISIBLE);
+            titleInCenter.setVisibility(View.VISIBLE);
+            
+            titleInCenter.setText(getTitle());
+        } else {
+            summary.setVisibility(View.VISIBLE);
+            title.setVisibility(View.VISIBLE);
+            titleInCenter.setVisibility(View.GONE);
+          
+            title.setText(getTitle());
+            summary.setText(getSummary());
+        }
     }
 
     protected void storeString(String value) {
