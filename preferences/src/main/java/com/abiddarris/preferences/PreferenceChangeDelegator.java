@@ -52,7 +52,7 @@ public class PreferenceChangeDelegator
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        List<PreferenceKeyChangedListener> listeners = this.listeners.get(key);
+        List<PreferenceKeyChangedListener> listeners = getListeners(key);
         for(PreferenceKeyChangedListener listener : listeners) {
         	listener.onPreferenceKeyChanged(sharedPreferences, key);
         }
