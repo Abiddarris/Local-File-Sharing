@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -34,7 +35,7 @@ public abstract class DialogPreference extends Preference {
     protected Dialog onCreateDialog(DialogFragment fragment) {
         View view = onCreateView(getFragment().getLayoutInflater());
         
-        return new MaterialAlertDialogBuilder(getFragment().getContext())
+        AlertDialog dialog = new MaterialAlertDialogBuilder(getFragment().getContext())
                 .setTitle(getTitle())
                 .setView(view)
                 .setNegativeButton(android.R.string.cancel, (p1, p2) -> onCancel())
@@ -43,10 +44,16 @@ public abstract class DialogPreference extends Preference {
                     onSave();
                 })
                 .create();
+        
+        onViewCreated(dialog, view);
+        return dialog;
     }
     
     protected View onCreateView(LayoutInflater inflater) {
         return null;
+    }
+    
+    protected void onViewCreated(AlertDialog dialog, View view) {
     }
 
     protected void onCancel() {}

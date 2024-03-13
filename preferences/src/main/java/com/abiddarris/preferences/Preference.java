@@ -48,6 +48,11 @@ public class Preference {
     public PreferenceFragment getFragment() {
         return this.fragment;
     }
+    
+    public Context getContext() {
+        return getFragment()
+            .getContext();
+    }
 
     public String getKey() {
         return this.key;

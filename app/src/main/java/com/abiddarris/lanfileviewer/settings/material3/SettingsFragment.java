@@ -61,8 +61,12 @@ public class SettingsFragment extends PreferenceFragment {
         general.setTitle(R.string.general);
         general.addPreference(name, password, connectTimeout, themes);
         
+        RootEditorPreference rootEditor = new RootEditorPreference(this, "roots");
+        rootEditor.setTitle(R.string.root_files);
+        
         PreferenceCategory files = new PreferenceCategory(this, "files");
         files.setTitle(R.string.files);
+        files.addPreference(rootEditor);
         
         SwitchPreference confirmConnectRequest = new SwitchPreference(this, "confirmConnectRequest");
         confirmConnectRequest.setTitle(R.string.confirm_connect_request);
