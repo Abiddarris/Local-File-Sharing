@@ -1,18 +1,19 @@
 package com.abiddarris.lanfileviewer.ui;
 
 import android.content.Intent;
-import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.MainThread;
 import androidx.fragment.app.Fragment;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import com.abiddarris.lanfileviewer.ConnectionService;
 import com.abiddarris.lanfileviewer.FileExplorerActivity;
 import com.abiddarris.lanfileviewer.MainActivity;
-import com.abiddarris.lanfileviewer.databinding.FragmentScanBinding;
 import com.abiddarris.lanfileviewer.R;
+import com.abiddarris.lanfileviewer.ScanResult;
+import com.abiddarris.lanfileviewer.databinding.FragmentScanBinding;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 
 public class ScanFragment extends Fragment {
@@ -40,22 +41,29 @@ public class ScanFragment extends Fragment {
             service.stopScanServer();
         });
         
-        binding.sharingDevices.setOnItemClickListener((adapterView,v,index,i) -> {
-            SharingDevice info = (SharingDevice)adapterView.getItemAtPosition(index);
-       
-            binding.scanButton.setText(R.string.start_scan);
-        
-            Intent intent = new Intent(getContext(), FileExplorerActivity.class);
-            intent.putExtra(FileExplorerActivity.SERVER_NAME, info.getName());
-            startActivity(intent);
-        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        binding.sharingDevices.setLayoutManager(layoutManager);
         
         MainActivity activity = (MainActivity)getActivity();
         activity.addConnectedListener((bridge) -> {
             service = bridge;    
-            binding.sharingDevices.setAdapter(service.getAdapter());
+                
+            ScanResult result = service.getScan();
+            ServerListAdapter adapter = new ServerListAdapter(getContext(), result.getResults());
+                
+            result.addUpdatedListener(adapter);
+                
+            adapter.setOnServerSelectedListener(device -> openDevice(device));
+             
+            binding.sharingDevices.setAdapter(adapter);
         });
     }
     
-    
+    private void openDevice(SharingDevice device) {
+        binding.scanButton.setText(R.string.start_scan);
+        
+        Intent intent = new Intent(getContext(), FileExplorerActivity.class);
+        intent.putExtra(FileExplorerActivity.SERVER_NAME, device.getName());
+        startActivity(intent);
+    }
 }

@@ -36,4 +36,27 @@ public class SharingDevice {
     public String getName() {
     	return name;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof SharingDevice)) return false;
+        if(obj == this) return true;
+        
+        SharingDevice device = (SharingDevice)obj;
+        
+        return (name == null ? device.name == null : name.equals(device.name)) &&
+            (host == null ? device.host == null : host.equals(device.host)) &&
+            (port == device.port);
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = hash * 11 + (name == null ? 0 : name.hashCode());
+        hash = hash * 11 + (host == null ? 0 : host.hashCode());
+        hash = hash * 11 + port;
+        
+        return hash;
+    }
+    
 }

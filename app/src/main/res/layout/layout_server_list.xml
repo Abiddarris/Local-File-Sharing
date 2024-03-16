@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent">
+
+    <com.google.android.material.card.MaterialCardView
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:clickable="true"
+         android:layout_margin="@dimen/server_list_margin"
+         app:cardElevation="@dimen/server_list_elevation"
+         app:cardCornerRadius="@dimen/server_list_corner"
+         android:id="@+id/card_view">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:textSize="@dimen/server_list_name_size"
+             android:id="@+id/name" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

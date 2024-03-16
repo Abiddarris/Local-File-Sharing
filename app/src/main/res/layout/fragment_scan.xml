@@ -14,12 +14,10 @@
          android:id="@+id/scan_button"
          android:text="@string/start_scan" />
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
          android:layout_height="match_parent"
          android:layout_width="match_parent"
          android:layout_above="@id/scan_button"
-         android:id="@+id/sharing_devices">
-
-    </ListView>
+         android:id="@+id/sharing_devices"/>
 
 </RelativeLayout>

@@ -9,11 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.nsd.NsdManager;
-import android.net.nsd.NsdServiceInfo;
 import android.os.Binder;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -35,16 +31,13 @@ import com.abiddarris.lanfileviewer.file.sharing.SharingSession;
 import com.abiddarris.lanfileviewer.settings.Settings;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
-import com.gretta.util.Randoms;
 import com.gretta.util.log.Log;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class ConnectionService extends Service implements ScanningSession.Callback {
+public class ConnectionService extends Service {
     
     private CancelNotificationReceiver cancelNotificationReceiver = new CancelNotificationReceiver();
     private ConnectionServiceBridge bridge = new ConnectionServiceBridge();
@@ -52,7 +45,7 @@ public class ConnectionService extends Service implements ScanningSession.Callba
     private Map<Integer, Lock> locks = new HashMap<>();
     private NotificationManager manager;
     private Random random = new Random();
-    private ServerListAdapter adapter;
+    private ScanResult scanResult = new ScanResult();
     private ScanningSession session;
     private SharingSession sharingSession;
     
@@ -72,7 +65,7 @@ public class ConnectionService extends Service implements ScanningSession.Callba
     @Override
     public void onCreate() {
         super.onCreate();
-
+        
         Log.debug.log(TAG, "Service Created");
         
         manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -80,10 +73,6 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         createNotificationChannel();
         
         registerReceiver(cancelNotificationReceiver, new IntentFilter(CANCEL_NOTIFICATION), RECEIVER_NOT_EXPORTED);
-        
-        Log.debug.log(TAG, adapter);
-        
-        adapter = new ServerListAdapter(this);
     }
     
     @Override
@@ -138,8 +127,8 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         manager.createNotificationChannel(channel);
     }
     
-    public ServerListAdapter getAdapter() {
-        return adapter;
+    public ScanResult getScan() {
+        return scanResult;
     }
 
     public boolean isRegistered() {
@@ -246,7 +235,7 @@ public class ConnectionService extends Service implements ScanningSession.Callba
 
         Log.debug.log(TAG, "Scanning for servers");
 
-        session = FileSharing.scan(this, this);
+        session = FileSharing.scan(this, scanResult);
         session.start();
     }
 
@@ -256,23 +245,10 @@ public class ConnectionService extends Service implements ScanningSession.Callba
         Log.debug.log(TAG, "Scanning Stopped");
 
         session.stop();
-        adapter.clear();
+        scanResult.clear();
     }
     
-    @Override
-    public void onError(ScanException exception) {
-        Log.err.log(TAG, exception);
-    }
-    
-    @Override
-    public void onServerFound(SharingDevice device) {
-        handler.post((c) -> adapter.addServer(device));
-    }
-    
-    @Override
-    public void onServerLost(SharingDevice device) {
-        handler.post((c) -> adapter.removeServer(device));
-    }
+   
     
     private class SecurityManagerImpl extends SecurityManager {
         

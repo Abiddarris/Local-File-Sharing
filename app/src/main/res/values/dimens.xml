@@ -12,4 +12,8 @@
     <dimen name="root_editor_name_margin_top">5dp</dimen>
     <dimen name="root_editor_margin_left">5dp</dimen>
     <dimen name="root_editor_name_size">20sp</dimen>
+    <dimen name="server_list_margin">8dp</dimen>
+    <dimen name="server_list_name_size">20sp</dimen>
+    <dimen name="server_list_elevation">10dp</dimen>
+    <dimen name="server_list_corner">15dp</dimen>
 </resources>

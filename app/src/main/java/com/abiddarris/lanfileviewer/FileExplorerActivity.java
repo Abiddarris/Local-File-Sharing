@@ -109,7 +109,8 @@ public class FileExplorerActivity extends ExplorerActivity
         bridge = ((ConnectionServiceBridge) binder).getService();
         Log.debug.log(TAG, "Finding server with name : " + name);
         
-        info = bridge.getAdapter().getServer(name);
+        info = bridge.getScan()
+            .getServer(name);
         
         connectAsync(null, true);
         unbindService(this);
