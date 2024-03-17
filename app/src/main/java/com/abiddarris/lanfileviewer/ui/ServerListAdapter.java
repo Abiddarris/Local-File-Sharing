@@ -57,7 +57,7 @@ public class ServerListAdapter extends Adapter<ServerViewHolder> implements OnRe
     @Override
     public ServerViewHolder onCreateViewHolder(ViewGroup group, int type) {
         return new ServerViewHolder(
-            inflater.inflate(R.layout.layout_server_list, null));
+            inflater.inflate(R.layout.layout_server_list, group, false));
     }
 
     @Override
