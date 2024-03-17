@@ -11,6 +11,7 @@
          android:clickable="true"
          android:layout_margin="@dimen/server_list_margin"
          app:cardElevation="@dimen/server_list_elevation"
+         style="?attr/materialCardViewElevatedStyle"
          app:cardCornerRadius="@dimen/server_list_corner"
          android:id="@+id/card_view">
 
