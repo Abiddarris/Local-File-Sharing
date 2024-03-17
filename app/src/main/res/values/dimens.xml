@@ -16,4 +16,5 @@
     <dimen name="server_list_name_size">20sp</dimen>
     <dimen name="server_list_elevation">10dp</dimen>
     <dimen name="server_list_corner">15dp</dimen>
+    <dimen name="server_list_address">15sp</dimen>
 </resources>

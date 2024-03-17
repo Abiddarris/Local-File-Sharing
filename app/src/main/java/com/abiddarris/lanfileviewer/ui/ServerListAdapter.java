@@ -22,13 +22,16 @@ import java.util.List;
 
 public class ServerListAdapter extends Adapter<ServerViewHolder> implements OnResultUpdatedListener {
 
+    private Context context;
     private LayoutInflater inflater;
     private List<SharingDevice> servers;
     private OnServerSelectedListener onServerSelectedListener;
     
     public ServerListAdapter(Context context, List<SharingDevice> servers) {
-        inflater = LayoutInflater.from(context);
+        this.context = context;
         this.servers = servers;
+        
+        inflater = LayoutInflater.from(context);
     }
     
     @Override
@@ -66,25 +69,30 @@ public class ServerListAdapter extends Adapter<ServerViewHolder> implements OnRe
     public void onBindViewHolder(ServerViewHolder holder, int index) {
         SharingDevice device = servers.get(index);
 
+        String address = context.getString(R.string.server_address);
+        
         String name = device.getName();
         holder.name.setText(name);
         holder.cardView.setOnClickListener(v -> {
             onServerSelectedListener.onSelect(device);
         });
+        holder.address.setText(
+            String.format(address, device.getHost().getHostAddress(), device.getPort()));
     }
     
     public static class ServerViewHolder extends ViewHolder {
         
         private MaterialCardView cardView;
         private TextView name;
+        private TextView address;
         
         public ServerViewHolder(View view) {
             super(view);
             
             name = view.findViewById(R.id.name);
             cardView = view.findViewById(R.id.card_view);
+            address = view.findViewById(R.id.address);
         }
-        
     }
     
     public static interface OnServerSelectedListener {
