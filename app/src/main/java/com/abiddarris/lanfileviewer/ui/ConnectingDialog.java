@@ -4,10 +4,12 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.settings.Settings;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
@@ -32,7 +34,6 @@ public class ConnectingDialog extends DialogFragment {
             .setMessage(viewModel.formatMessage())
             .setNeutralButton(R.string.cancel, (p1,p2) -> {
                 dismiss();
-                getActivity().finish();
             })
             .create();
         

@@ -30,7 +30,6 @@ public class FillPasswordDialog extends DialogFragment {
             dismiss();    
         });
         binding.cancel.setOnClickListener(v -> {
-            getActivity().finish();
             dismiss();    
         });
         binding.textInput.getEditText()
