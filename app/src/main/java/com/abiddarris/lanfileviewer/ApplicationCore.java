@@ -5,29 +5,31 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
+import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.abiddarris.lanfileviewer.utils.Theme;
-
-
+import com.gretta.util.Randoms;
 import com.gretta.util.log.FilesLog;
 import com.gretta.util.log.Log;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ApplicationCore extends Application {
 
     private static final String TAG = Log.getTag(ApplicationCore.class);
-
+    private static final Map<String, NetworkFileSource> CONNECTED_DEVICES = new HashMap<>();
+    private static final Map<SharingDevice, String> CONNECTION_ID = new HashMap<>();
+    
     private static ApplicationCore core;
     private static HandlerLogSupport mainHandler;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        
+
         core = this;
 
         Theme.apply(this);
@@ -43,6 +45,21 @@ public class ApplicationCore extends Application {
             mainHandler = new HandlerLogSupport(new Handler(Looper.getMainLooper()));
         }
         return mainHandler;
+    }
+
+    public static void addConnectedDevice(SharingDevice device, NetworkFileSource source) {
+        final String ID = Randoms.getRandomString()
+            .get(12);
+        CONNECTION_ID.put(device, ID);
+        CONNECTED_DEVICES.put(ID, source);
+    }
+    
+    public static String getConnectionID(SharingDevice device) {
+        return CONNECTION_ID.get(device);
+    }
+
+    public static NetworkFileSource getConnectedDevice(String connectionID) {
+        return CONNECTED_DEVICES.get(connectionID);
     }
 
     private void setupLogger() {
@@ -69,7 +86,6 @@ public class ApplicationCore extends Application {
                     }
                     System.exit(1);
                 });
-        
     }
 
 }

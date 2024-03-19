@@ -1,12 +1,15 @@
 package com.abiddarris.lanfileviewer.ui;
+
 import android.app.Dialog;
 import android.os.Bundle;
-import android.widget.EditText;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import com.abiddarris.lanfileviewer.FileExplorerActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.DialogTextInputBinding;
+import com.abiddarris.lanfileviewer.ui.ScanFragment.ConnectViewModel;
 import com.abiddarris.lanfileviewer.utils.NonBlankTextValidator;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -19,9 +22,11 @@ public class FillPasswordDialog extends DialogFragment {
         binding = DialogTextInputBinding.inflate(getLayoutInflater());
         binding.positiveAction.setText(R.string.login);
         binding.positiveAction.setOnClickListener(v -> {
-            ((FileExplorerActivity)getActivity())
+            new ViewModelProvider(getActivity())    
+                .get(ConnectViewModel.class)
                 .connectAsync(binding.textInput.getEditText()
                     .getText().toString());
+                
             dismiss();    
         });
         binding.cancel.setOnClickListener(v -> {
