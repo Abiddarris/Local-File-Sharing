@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
+import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.ScanResult;
 import com.abiddarris.lanfileviewer.ScanResult.Event;
@@ -42,18 +43,24 @@ public class ServerListAdapter extends Adapter<ServerViewHolder> implements OnRe
                 notifyItemInserted(servers.size() - 1);
                 break;
             case LOST :
-                for(int i = 0; i < servers.size(); ++i) {
-                	if(servers.get(i).equals(device)) {
-                		servers.remove(device);
-                        notifyItemRemoved(i);
-                        break;
-                	}
-                }
-                
+                int index = getIndex(device);
+                if(index >= 0)
+                    notifyItemRemoved(index);
+            
+                servers.remove(device);
                 break;
         }
     }
-
+    
+    public int getIndex(SharingDevice device) {
+        for(int i = 0; i < servers.size(); ++i) {
+        	if(servers.get(i).equals(device)) {
+                return i;
+            }   
+        }
+        return -1;
+    }
+    
     @Override
     public ServerViewHolder onCreateViewHolder(ViewGroup group, int type) {
         return new ServerViewHolder(
@@ -78,6 +85,8 @@ public class ServerListAdapter extends Adapter<ServerViewHolder> implements OnRe
         });
         holder.address.setText(
             String.format(address, device.getHost().getHostAddress(), device.getPort()));
+        holder.connected.setText(context.getString(
+            ApplicationCore.getConnectionID(device) != null ? R.string.connected : R.string.not_connected));
     }
     
     public static class ServerViewHolder extends ViewHolder {
@@ -85,6 +94,7 @@ public class ServerListAdapter extends Adapter<ServerViewHolder> implements OnRe
         private MaterialCardView cardView;
         private TextView name;
         private TextView address;
+        private TextView connected;
         
         public ServerViewHolder(View view) {
             super(view);
@@ -92,6 +102,7 @@ public class ServerListAdapter extends Adapter<ServerViewHolder> implements OnRe
             name = view.findViewById(R.id.name);
             cardView = view.findViewById(R.id.card_view);
             address = view.findViewById(R.id.address);
+            connected = view.findViewById(R.id.connected);
         }
     }
     

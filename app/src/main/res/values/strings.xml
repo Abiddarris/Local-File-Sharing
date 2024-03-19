@@ -118,4 +118,6 @@
     <string name="timeout">Timeout</string>
     <string name="second">s</string>
     <string name="server_address">Host : %s Port : %s</string>
+    <string name="connected">Connected</string>
+    <string name="not_connected">Not connected</string>
 </resources>

@@ -37,6 +37,7 @@ public class ScanFragment extends Fragment {
     private ConnectionService service;
     private ConnectViewModel viewModel;
     private FragmentScanBinding binding;
+    private ServerListAdapter adapter;
     
     private static final String TAG = Log.getTag(ScanFragment.class);
     
@@ -57,6 +58,11 @@ public class ScanFragment extends Fragment {
                 if(source == null) return;
                 
                 ApplicationCore.addConnectedDevice(viewModel.device, source);
+                
+                int index = adapter.getIndex(viewModel.device);
+                if(index >= 0)
+                    adapter.notifyItemRemoved(index);
+                
                 openExplorer(ApplicationCore.getConnectionID(viewModel.device));
                 
                 viewModel.reset();
@@ -81,7 +87,7 @@ public class ScanFragment extends Fragment {
             service = bridge;    
                 
             ScanResult result = service.getScan();
-            ServerListAdapter adapter = new ServerListAdapter(getContext(), result.getResults());
+            adapter = new ServerListAdapter(getContext(), result.getResults());
                 
             result.addUpdatedListener(adapter);
                 

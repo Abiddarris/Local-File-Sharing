@@ -27,13 +27,22 @@
                  android:id="@+id/name" />
 
             <TextView
-                 android:layout_below="@id/name"
                  android:layout_height="wrap_content"
                  android:layout_width="wrap_content"
+                 android:layout_below="@id/name"
                  android:layout_margin="@dimen/server_list_margin"
                  android:textSize="@dimen/server_list_address"
                  android:id="@+id/address" />
-            
+
+            <TextView
+                 android:layout_marginRight="@dimen/server_list_margin"
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="@dimen/server_list_address"
+                 android:layout_alignParentEnd="true"
+                 android:layout_alignBottom="@id/address"
+                 android:id="@+id/connected" />
+
         </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>
