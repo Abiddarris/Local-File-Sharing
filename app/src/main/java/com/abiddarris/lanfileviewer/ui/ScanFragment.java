@@ -145,16 +145,18 @@ public class ScanFragment extends Fragment {
             executor.submit(() -> connect(password, firstTry));
         }
         
+        int i = 0;
+        
         private void connect(String password, boolean firstTry) {
             Bundle bundle = new Bundle();
-            bundle.putString(ConnectingDialog.NAME, device.getName());
+            bundle.putString(ConnectingDialog.NAME, device.getName() + i++);
         
             final String CONNECT_DIALOG = "connectDialog";
             
             ConnectingDialog dialog = new ConnectingDialog();
             dialog.setArguments(bundle);
             dialog.show(activity.getSupportFragmentManager(), CONNECT_DIALOG);
-            
+  
             try {
                 NetworkFileSource source = device.openConnection(
                     activity.getApplicationContext(), password, Settings.getConnectTimeout(activity) * 1000);
@@ -175,11 +177,15 @@ public class ScanFragment extends Fragment {
             } catch(Exception e) {
                 new ExceptionDialog(e)
                     .show(activity.getSupportFragmentManager(), null);
-                Log.debug.log(TAG, e);
+                Log.err.log(TAG, e);
             } finally {
                 Fragment fragment = activity.getSupportFragmentManager()
                     .findFragmentByTag(CONNECT_DIALOG);
-                if(!(fragment instanceof DialogFragment)) return;
+                if(!(fragment instanceof DialogFragment)) {
+                    dialog.dismiss();
+                    return;
+                }
+                
                 dialog = (ConnectingDialog) fragment;
                 dialog.dismiss();
             }
