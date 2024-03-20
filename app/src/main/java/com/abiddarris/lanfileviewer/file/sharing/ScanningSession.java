@@ -2,20 +2,25 @@ package com.abiddarris.lanfileviewer.file.sharing;
 
 import android.content.Context;
 import android.net.nsd.NsdManager;
-import android.net.nsd.NsdServiceInfo;
-import com.gretta.util.log.Log;
 import android.net.nsd.NsdManager.DiscoveryListener;
 import android.net.nsd.NsdManager.ResolveListener;
+import android.net.nsd.NsdServiceInfo;
+
+import com.gretta.util.log.Log;
+
+import java.util.ArrayDeque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 public class ScanningSession implements DiscoveryListener{
     
     private boolean isScanning;
+    private boolean queueLocked;
     private Callback callback;
     private Context context;
     private Map<String,SharingDevice> devices = new HashMap<>();
+    private Queue<NsdServiceInfo> resolveQueue = new ArrayDeque<>();
     private NsdManager nsdManager;
     
     private static final String TAG = Log.getTag(ScanningSession.class);
@@ -43,6 +48,23 @@ public class ScanningSession implements DiscoveryListener{
     public boolean isScanning() {
         return isScanning;
     }
+    
+    private void releaseQueueLock() {
+        resolveQueue.poll();
+        queueLocked = false;
+        runQueue();
+    }
+    
+    private void runQueue() {
+        if(queueLocked) return;
+        
+        NsdServiceInfo service = resolveQueue.peek();
+        if(service == null) return;
+        
+        nsdManager.resolveService(service, new ResolveListenerImpl());
+        queueLocked = true;
+    }
+    
     
     @Override
     public void onDiscoveryStarted(String serverType) {
@@ -73,7 +95,8 @@ public class ScanningSession implements DiscoveryListener{
         Log.debug.log(TAG, info.getServiceType());
         Log.debug.log(TAG, info.getPort());
 
-        nsdManager.resolveService(info, new ResolveListenerImpl());
+        resolveQueue.add(info);
+        runQueue();
     }
 
     @Override
@@ -84,7 +107,9 @@ public class ScanningSession implements DiscoveryListener{
         Log.debug.log(TAG, info.getServiceName());
         Log.debug.log(TAG, info.getServiceType());
         Log.debug.log(TAG, info.getPort());
-            
+        
+        resolveQueue.remove(info);
+        
         SharingDevice device = devices.remove(info.getServiceName());
         callback.onServerLost(device);
     }
@@ -97,20 +122,25 @@ public class ScanningSession implements DiscoveryListener{
             Log.debug.log(TAG, info.getServiceName());
             Log.debug.log(TAG, info.getServiceType());
             Log.debug.log(TAG, info.getPort());
+            Log.debug.log(TAG, info.getHost().getHostAddress());
             
             SharingDevice device = new SharingDevice(info);
+            if(devices.containsValue(device)) return;
+            
             devices.put(info.getServiceName(), device);
             
             callback.onServerFound(device);
+            releaseQueueLock();
         }
 
         @Override
         public void onResolveFailed(NsdServiceInfo info, int code) {
             callback.onError(new ScanException(
-                "Server Failed to Resolve with code : " + code +
-                " its info : \n " + info.getServiceName() + "\n " +
-                info.getServiceType() + "\n" + info.getPort()
+                "Server Failed to Resolve code : " + code +
+                ", name :" + info.getServiceName() + ", type : " +
+                info.getServiceType() + ", port : " + info.getPort()
             ));
+            releaseQueueLock();
         }
     }
     
