@@ -3,27 +3,25 @@ package com.abiddarris.lanfileviewer.file.sharing;
 import static com.abiddarris.lanfileviewer.file.sharing.JSONRequest.*;
 
 import android.content.Context;
+
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.RootFile;
-import com.abiddarris.lanfileviewer.settings.Settings;
 import com.gretta.util.log.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class NetworkFileSource extends FileSource {
    
@@ -36,39 +34,10 @@ public class NetworkFileSource extends FileSource {
     public static final String TAG = Log.getTag(NetworkFileSource.class);
     
     NetworkFileSource(SharingDevice device, Context context,
-         String password, int timeout) throws Exception {
+         JSONObject response) throws Exception {
         super(context);
         
         this.device = device;
-        
-        server = new URL(getBaseURL() + "/connect");
-        
-        JSONObject request = new JSONObject()
-            .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_CONNECT))
-            .put(KEY_CLIENT_ID, Settings.getId(context))
-            .put(KEY_CLIENT_NAME, Settings.getDefaultName(context))
-            .put(KEY_TIMEOUT, timeout);
-        
-        if(password != null) {
-        	request.put(KEY_PASSWORD, password);
-        }
-        JSONObject response;
-        try {
-            response = sendRequest(request, 5000, timeout);
-        } catch (RequestException e) {
-            Throwable cause = e.getCause();
-            if(cause != null && cause.getClass() == SocketTimeoutException.class) {
-                throw new TimeoutException(e);
-            }
-            throw e;
-        }
-        
-        int code = response.getInt(KEY_RESULT);
-        if(code == RESULT_REJECTED) {
-            throw new AccessRejectedException();
-        } else if(code == RESULT_UNAUTHORIZED) {
-            throw new UnauthorizedException();
-        }
         
         serverId = response.getString(KEY_SERVER_ID);
         session = response.getString(KEY_SESSION);
@@ -76,7 +45,7 @@ public class NetworkFileSource extends FileSource {
         server = new URL(getBaseURL() + 
             String.format("/fetch?%s=%s", SharingSession.SESSION, session));
         
-        request = new JSONObject()
+        JSONObject request = new JSONObject()
             .put(KEY_REQUEST, JSONRequest.createRequest(REQUEST_GET_TOP_DIRECTORY_FILES));
         response = sendRequest(request);
         JSONArray jsonTopDirectoryFiles = response.optJSONArray(KEY_TOP_DIRECTORY_FILES);
@@ -90,8 +59,7 @@ public class NetworkFileSource extends FileSource {
     }
     
     String getBaseURL() {
-        return "http://" + device.getHost().getHostName() +
-            ":" + device.getPort();
+        return device.getBaseURL();
     }
     
     String getSession(){
@@ -99,10 +67,10 @@ public class NetworkFileSource extends FileSource {
     }
     
     public JSONObject sendRequest(JSONObject json) throws RequestException {
-        return sendRequest(json, 5000, 5000);
+        return sendRequest(server, json, 5000, 5000);
     } 
-    
-    private JSONObject sendRequest(JSONObject json, int connectTimeout, int readTimeout) throws RequestException {
+   
+    static JSONObject sendRequest(URL server, JSONObject json, int connectTimeout, int readTimeout) throws RequestException {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) server.openConnection();
@@ -147,14 +115,14 @@ public class NetworkFileSource extends FileSource {
         }
     }
 
-    private Throwable getCause(Throwable e) {
+    private static Throwable getCause(Throwable e) {
         Throwable cause = e.getCause();
         if(cause == null) return e;
         
         return getCause(cause);
     }
     
-    public Exception getServerException(HttpURLConnection connection) {
+    private static Exception getServerException(HttpURLConnection connection) {
     	try {
             if(connection.getResponseCode() != HttpURLConnection.HTTP_INTERNAL_ERROR) {
                 return null;

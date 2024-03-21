@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.settings.Settings;
+import com.abiddarris.lanfileviewer.ui.ScanFragment.ConnectViewModel;
 import com.abiddarris.lanfileviewer.utils.BaseRunnable;
 import com.abiddarris.lanfileviewer.utils.HandlerLogSupport;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -24,8 +25,8 @@ public class ConnectingDialog extends DialogFragment {
     
     @Override
     public Dialog onCreateDialog(Bundle bundle) {
-        ConnectViewModel viewModel = new ViewModelProvider(this)
-            .get(ConnectViewModel.class);
+        CountDownViewModel viewModel = new ViewModelProvider(this)
+            .get(CountDownViewModel.class);
         
         viewModel.init(this);
         
@@ -33,6 +34,10 @@ public class ConnectingDialog extends DialogFragment {
             .setTitle(R.string.connecting_dialog_title)
             .setMessage(viewModel.formatMessage())
             .setNeutralButton(R.string.cancel, (p1,p2) -> {
+                new ViewModelProvider(getActivity())    
+                    .get(ConnectViewModel.class)
+                    .cancel();
+                
                 dismiss();
             })
             .create();
@@ -44,7 +49,7 @@ public class ConnectingDialog extends DialogFragment {
         return dialog;
     }
     
-    public static class ConnectViewModel extends ViewModel {
+    public static class CountDownViewModel extends ViewModel {
         
         private AlertDialog dialog;
         private CountdownRunnable runnable;

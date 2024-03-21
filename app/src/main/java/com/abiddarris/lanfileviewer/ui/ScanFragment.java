@@ -22,15 +22,14 @@ import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.ScanResult;
 import com.abiddarris.lanfileviewer.databinding.FragmentScanBinding;
 import com.abiddarris.lanfileviewer.file.sharing.AccessRejectedException;
+import com.abiddarris.lanfileviewer.file.sharing.ConnectProperties;
 import com.abiddarris.lanfileviewer.file.sharing.NetworkFileSource;
 import com.abiddarris.lanfileviewer.file.sharing.SharingDevice;
+import com.abiddarris.lanfileviewer.file.sharing.SharingDevice.CancellationSignal;
 import com.abiddarris.lanfileviewer.file.sharing.TimeoutException;
 import com.abiddarris.lanfileviewer.file.sharing.UnauthorizedException;
 import com.abiddarris.lanfileviewer.settings.Settings;
 import com.gretta.util.log.Log;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ScanFragment extends Fragment {
     
@@ -105,7 +104,7 @@ public class ScanFragment extends Fragment {
         }
         
         viewModel.device = device;
-        viewModel.connectAsync(null, true);
+        viewModel.connect(null, true);
     }
     
     private void openExplorer(String ID) {
@@ -118,14 +117,20 @@ public class ScanFragment extends Fragment {
     
     public static class ConnectViewModel extends ViewModel {
         
+        private CancellationSignal cancellationSignal;
         private MainActivity activity;
         private MutableLiveData<NetworkFileSource> source;
-        private ExecutorService executor = Executors.newFixedThreadPool(1);
         private ScanFragment fragment;
         private SharingDevice device;
         
+        private static final String CONNECT_DIALOG = "connectDialog";
+            
         public void connectAsync(String password) {
-            connectAsync(password, false);
+            connect(password, false);
+        }
+        
+        public void cancel() {
+            cancellationSignal.cancel();
         }
         
         private void init(ScanFragment fragment) {
@@ -141,28 +146,31 @@ public class ScanFragment extends Fragment {
             return source;
         }
         
-        private void connectAsync(String password, boolean firstTry) {
-            executor.submit(() -> connect(password, firstTry));
-        }
-        
-        int i = 0;
-        
         private void connect(String password, boolean firstTry) {
             Bundle bundle = new Bundle();
-            bundle.putString(ConnectingDialog.NAME, device.getName() + i++);
+            bundle.putString(ConnectingDialog.NAME, device.getName());
         
-            final String CONNECT_DIALOG = "connectDialog";
-            
             ConnectingDialog dialog = new ConnectingDialog();
             dialog.setArguments(bundle);
             dialog.show(activity.getSupportFragmentManager(), CONNECT_DIALOG);
   
-            try {
-                NetworkFileSource source = device.openConnection(
-                    activity.getApplicationContext(), password, Settings.getConnectTimeout(activity) * 1000);
+            ConnectProperties properties = new ConnectProperties(activity.getApplicationContext(),
+                Settings.getId(activity), Settings.getDefaultName(activity))
+                .setPassword(password)
+                .setTimeout(Settings.getConnectTimeout(activity) * 1000)
+                .setOnConnectionFailedListener(e -> handleException(e, firstTry, dialog))
+                .setOnConnectedListener(source -> {
+                    Log.debug.log(TAG, "server id " + source.getServerId());
+                    this.source.postValue(source);  
+                    cleanUp(dialog);
+                });
                 
-                Log.debug.log(TAG, "server id " + source.getServerId());
-                this.source.postValue(source);      
+            cancellationSignal = device.openConnection(properties);
+        }
+        
+        private void handleException(Exception exception, boolean firstTry, ConnectingDialog dialog) {
+            try {
+                throw exception;
             } catch (UnauthorizedException e) {
                 if(!firstTry) {
                     activity.runOnUiThread(() -> Toast.makeText(
@@ -179,16 +187,20 @@ public class ScanFragment extends Fragment {
                     .show(activity.getSupportFragmentManager(), null);
                 Log.err.log(TAG, e);
             } finally {
-                Fragment fragment = activity.getSupportFragmentManager()
-                    .findFragmentByTag(CONNECT_DIALOG);
-                if(!(fragment instanceof DialogFragment)) {
-                    dialog.dismiss();
-                    return;
-                }
-                
-                dialog = (ConnectingDialog) fragment;
-                dialog.dismiss();
+                cleanUp(dialog);
             }
+        }
+        
+        private void cleanUp(ConnectingDialog dialog) {
+            Fragment fragment = activity.getSupportFragmentManager()
+                    .findFragmentByTag(CONNECT_DIALOG);
+            if(!(fragment instanceof DialogFragment)) {
+                dialog.dismiss();
+                return;
+            }
+                
+            dialog = (ConnectingDialog) fragment;
+            dialog.dismiss();
         }
         
         private void showConnectionFailedDialog(String message) {
@@ -211,7 +223,6 @@ public class ScanFragment extends Fragment {
             
             activity = null;
             fragment = null;
-            executor.shutdownNow();
         }
     
     }
