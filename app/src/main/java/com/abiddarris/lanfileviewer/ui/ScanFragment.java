@@ -31,6 +31,8 @@ import com.abiddarris.lanfileviewer.file.sharing.UnauthorizedException;
 import com.abiddarris.lanfileviewer.settings.Settings;
 import com.gretta.util.log.Log;
 
+import java.io.InterruptedIOException;
+
 public class ScanFragment extends Fragment {
     
     private ConnectionService service;
@@ -183,9 +185,11 @@ public class ScanFragment extends Fragment {
             } catch(TimeoutException e) {
                 showConnectionFailedDialog(activity.getString(R.string.timeout));
             } catch(Exception e) {
-                new ExceptionDialog(e)
-                    .show(activity.getSupportFragmentManager(), null);
                 Log.err.log(TAG, e);
+                
+                if(e.getCause() != null && e.getCause().getClass() != InterruptedIOException.class)
+                    new ExceptionDialog(e)
+                        .show(activity.getSupportFragmentManager(), null);
             } finally {
                 cleanUp(dialog);
             }
