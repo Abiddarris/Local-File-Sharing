@@ -1,0 +1,3 @@
+[submodule "Common-Library"]
+	path = Common-Library
+	url = git://localhost:7779/Common-Library

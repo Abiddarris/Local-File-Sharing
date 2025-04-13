@@ -16,4 +16,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "LANFileViewer"
 
-include(":app", ":preferences")
+include ':app', ':preferences', ':common', ':common-android'
+
+project(':common').projectDir = file('Common-Library/common')
+project(':common-android').projectDir = file('Common-Library/common-android')
