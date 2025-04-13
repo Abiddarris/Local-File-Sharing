@@ -5,7 +5,7 @@ plugins {
 android {
     namespace 'com.abiddarris.preferences'
     compileSdk 33
-    buildToolsVersion "33.0.3"
+    buildToolsVersion "34.0.0"
 
     defaultConfig {
         minSdk 21
