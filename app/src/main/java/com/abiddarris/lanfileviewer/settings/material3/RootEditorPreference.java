@@ -21,8 +21,8 @@ import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.settings.RootAdapter;
 import com.abiddarris.lanfileviewer.settings.Settings;
-import com.abiddarris.preferences.DialogPreference;
-import com.abiddarris.preferences.PreferenceFragment;
+import com.abiddarris.common.android.preferences.DialogPreference;
+import com.abiddarris.common.android.preferences.PreferenceFragment;
 
 public class RootEditorPreference extends DialogPreference {
     

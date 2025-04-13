@@ -16,8 +16,8 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.file.Files;
 import com.abiddarris.lanfileviewer.utils.Thumbnails;
-import com.abiddarris.preferences.DialogPreference;
-import com.abiddarris.preferences.PreferenceFragment;
+import com.abiddarris.common.android.preferences.DialogPreference;
+import com.abiddarris.common.android.preferences.PreferenceFragment;
 import com.gretta.util.log.Log;
 
 import java.util.ArrayList;

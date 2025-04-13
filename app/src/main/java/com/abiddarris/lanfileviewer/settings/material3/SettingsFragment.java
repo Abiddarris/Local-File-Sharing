@@ -1,19 +1,19 @@
 package com.abiddarris.lanfileviewer.settings.material3;
 
 import android.text.InputType;
-import androidx.lifecycle.LifecycleOwner;
+
 import androidx.preference.PreferenceManager;
 import com.abiddarris.lanfileviewer.settings.Settings;
 import com.abiddarris.lanfileviewer.utils.Theme;
-import com.abiddarris.preferences.EditTextPreference;
+import com.abiddarris.common.android.preferences.EditTextPreference;
 import com.abiddarris.lanfileviewer.R;
-import com.abiddarris.preferences.ListEntry;
-import com.abiddarris.preferences.ListPreference;
-import com.abiddarris.preferences.Preference;
-import com.abiddarris.preferences.PreferenceCategory;
-import com.abiddarris.preferences.PreferenceChangeDelegator;
-import com.abiddarris.preferences.PreferenceFragment;
-import com.abiddarris.preferences.SwitchPreference;
+import com.abiddarris.common.android.preferences.ListEntry;
+import com.abiddarris.common.android.preferences.ListPreference;
+import com.abiddarris.common.android.preferences.Preference;
+import com.abiddarris.common.android.preferences.PreferenceCategory;
+import com.abiddarris.common.android.preferences.PreferenceChangeDelegator;
+import com.abiddarris.common.android.preferences.PreferenceFragment;
+import com.abiddarris.common.android.preferences.SwitchPreference;
 
 public class SettingsFragment extends PreferenceFragment {
 
