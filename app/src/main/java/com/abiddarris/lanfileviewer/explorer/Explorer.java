@@ -13,6 +13,7 @@ import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
 import com.abiddarris.lanfileviewer.sorter.FileSorter;
+import com.abiddarris.common.utils.sorts.Sorter;
 import com.abiddarris.lanfileviewer.ui.ExceptionDialog;
 import com.gretta.util.log.Log;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class Explorer implements DefaultLifecycleObserver {
     private boolean error;
     private DownloadManager downloadManager;
     private ExplorerFragment fragment;
-    private FileSorter sorter = FileSorter.createSorter(FileSorter.NAME | FileSorter.ASCENDING);
+    private Sorter<File> sorter = FileSorter.createSorter(FileSorter.NAME | FileSorter.ASCENDING);
     private FragmentFileExplorerBinding ui;
     private File parent;
     private FileAdapter adapter;
@@ -241,11 +242,11 @@ public class Explorer implements DefaultLifecycleObserver {
         return this.fragment;
     }
 
-    public FileSorter getSorter() {
+    public Sorter<File> getSorter() {
         return this.sorter;
     }
 
-    public void setSorter(FileSorter sorter) {
+    public void setSorter(Sorter<File> sorter) {
         this.sorter = sorter;
     }
     

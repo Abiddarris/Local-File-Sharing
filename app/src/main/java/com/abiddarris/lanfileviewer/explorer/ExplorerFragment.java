@@ -9,24 +9,17 @@ import android.view.View;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ActionMode;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.abiddarris.lanfileviewer.ApplicationCore;
 import com.abiddarris.lanfileviewer.FileExplorerActivity;
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.databinding.FragmentFileExplorerBinding;
 import com.abiddarris.lanfileviewer.file.File;
 import com.abiddarris.lanfileviewer.file.FilePointer;
 import com.abiddarris.lanfileviewer.file.FileSource;
-import com.abiddarris.lanfileviewer.file.sharing.NetworkFile;
-import com.abiddarris.lanfileviewer.sorter.FileSorter;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.abiddarris.common.utils.sorts.Sorter;
 import com.gretta.util.log.Log;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +27,7 @@ import java.util.List;
 public abstract class ExplorerFragment extends Fragment {
 
     private Explorer explorer;
-    private FileSorter sorter;
+    private Sorter<File> sorter;
     private FileSource source;
     private FragmentFileExplorerBinding binding;
     private List<OnExplorerCreatedListener> explorerCreatedListener = new ArrayList<>();
@@ -187,11 +180,11 @@ public abstract class ExplorerFragment extends Fragment {
         return this.explorer;
     }
 
-    public FileSorter getSorter() {
+    public Sorter<File> getSorter() {
         return this.sorter;
     }
 
-    public void setSorter(FileSorter sorter) {
+    public void setSorter(Sorter<File> sorter) {
         this.sorter = sorter;
         
         if(explorer != null) {

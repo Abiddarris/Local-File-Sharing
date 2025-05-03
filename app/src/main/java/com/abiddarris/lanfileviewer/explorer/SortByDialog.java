@@ -1,7 +1,6 @@
 package com.abiddarris.lanfileviewer.explorer;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.MainThread;
@@ -29,7 +28,7 @@ public class SortByDialog extends DialogFragment {
         
         binding = DialogSortBinding.inflate(getLayoutInflater());
         binding.ascending.setChecked(true);
-        binding.decending.setChecked((sortType & FileSorter.DECENDING) != 0);
+        binding.decending.setChecked((sortType & FileSorter.DESCENDING) != 0);
         
         binding.name.setChecked((sortType & FileSorter.NAME) != 0);
         binding.date.setChecked((sortType & FileSorter.DATE) != 0);
@@ -47,7 +46,7 @@ public class SortByDialog extends DialogFragment {
     }
 
     private void onOk() {
-        int sort = binding.ascending.isChecked() ? FileSorter.ASCENDING : FileSorter.DECENDING;
+        int sort = binding.ascending.isChecked() ? FileSorter.ASCENDING : FileSorter.DESCENDING;
         int sortBy = binding.name.isChecked() ? FileSorter.NAME :
              (binding.date.isChecked() ? FileSorter.DATE : 
              (binding.type.isChecked() ? FileSorter.TYPE : FileSorter.SIZE));
