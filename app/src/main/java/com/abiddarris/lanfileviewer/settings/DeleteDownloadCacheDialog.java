@@ -1,15 +1,10 @@
-package com.abiddarris.lanfileviewer.settings.material3;
+package com.abiddarris.lanfileviewer.settings;
 
 import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.lanfileviewer.actions.runnables.DownloadManager;
 import com.abiddarris.lanfileviewer.file.File;
-import com.abiddarris.common.android.preferences.PreferenceFragment;
 
-public class DeleteDownloadCachePreference extends DeleteThumbnailsCachePreference {
-    
-    public DeleteDownloadCachePreference(PreferenceFragment fragment, String key) {
-        super(fragment, key);
-    }
+public class DeleteDownloadCacheDialog extends DeleteThumbnailsCacheDialog {
     
     @Override
     protected int getText() {

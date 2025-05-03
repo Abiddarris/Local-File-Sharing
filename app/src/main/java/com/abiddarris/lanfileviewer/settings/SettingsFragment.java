@@ -1,12 +1,11 @@
-package com.abiddarris.lanfileviewer.settings.material3;
+package com.abiddarris.lanfileviewer.settings;
 
 import android.text.InputType;
 
 import androidx.preference.PreferenceManager;
-import com.abiddarris.lanfileviewer.settings.Settings;
-import com.abiddarris.lanfileviewer.utils.Theme;
+
+import com.abiddarris.common.android.preferences.DialogPreference;
 import com.abiddarris.common.android.preferences.EditTextPreference;
-import com.abiddarris.lanfileviewer.R;
 import com.abiddarris.common.android.preferences.ListEntry;
 import com.abiddarris.common.android.preferences.ListPreference;
 import com.abiddarris.common.android.preferences.Preference;
@@ -14,6 +13,8 @@ import com.abiddarris.common.android.preferences.PreferenceCategory;
 import com.abiddarris.common.android.preferences.PreferenceChangeDelegator;
 import com.abiddarris.common.android.preferences.PreferenceFragment;
 import com.abiddarris.common.android.preferences.SwitchPreference;
+import com.abiddarris.lanfileviewer.R;
+import com.abiddarris.lanfileviewer.utils.Theme;
 
 public class SettingsFragment extends PreferenceFragment {
 
@@ -32,14 +33,14 @@ public class SettingsFragment extends PreferenceFragment {
             String passwordValue = Settings.getPassword(getContext());
             return passwordValue == null ? getString(R.string.no_password) : passwordValue; 
         });
-        
+
         EditTextPreference connectTimeout = new EditTextPreference(this, "connect_timeout");
         connectTimeout.setTitle(R.string.timeout);
         connectTimeout.setSummaryProvider(EditTextPreference.EditTextSummaryProvider.getInstance());
         connectTimeout.setDefaultValue("30");
         connectTimeout.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
         connectTimeout.setSummaryProvider(p -> Settings.getConnectTimeout(getContext()) + getString(R.string.second));
-        
+
         ListPreference themes = new ListPreference(this, "theme");
         themes.setTitle(R.string.theme);
         themes.setEntries(
@@ -60,8 +61,9 @@ public class SettingsFragment extends PreferenceFragment {
         PreferenceCategory general = new PreferenceCategory(this, "general");
         general.setTitle(R.string.general);
         general.addPreference(name, password, connectTimeout, themes);
-        
-        RootEditorPreference rootEditor = new RootEditorPreference(this, "roots");
+
+        DialogPreference rootEditor = new DialogPreference(this, "roots",
+                (preference -> new RootEditorDialog()));
         rootEditor.setTitle(R.string.root_files);
         
         PreferenceCategory files = new PreferenceCategory(this, "files");
@@ -93,12 +95,14 @@ public class SettingsFragment extends PreferenceFragment {
         PreferenceCategory permission = new PreferenceCategory(this, "permission");
         permission.setTitle(R.string.permission);
         permission.addPreference(confirmConnectRequest, writeAccess, deleteAccess);
-        
-        DeleteDownloadCachePreference deleteDownloadCache = new DeleteDownloadCachePreference(this, "downloadCache");
+
+        DialogPreference deleteDownloadCache = new DialogPreference(this, "downloadCache",
+                (preference -> new DeleteDownloadCacheDialog()));
         deleteDownloadCache.setTitle(R.string.download_cache);
         deleteDownloadCache.setSummary(getString(R.string.delete_download_cache));
-        
-        DeleteThumbnailsCachePreference deleteThumbnailsCache = new DeleteThumbnailsCachePreference(this, "thumbnailsCache");
+
+        DialogPreference deleteThumbnailsCache = new DialogPreference(this, "thumbnailsCache",
+                (preference -> new DeleteThumbnailsCacheDialog()));
         deleteThumbnailsCache.setTitle(R.string.thumbnails_cache);
         deleteThumbnailsCache.setSummary(getString(R.string.delete_thumbnails_cache));
         
